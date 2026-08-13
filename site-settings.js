@@ -56,6 +56,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
       });
       
+      // Update video embed iframes from settings
+      const videoIframes = document.querySelectorAll('[data-video-key]');
+      videoIframes.forEach(function(iframe) {
+        const key = iframe.getAttribute('data-video-key');
+        const value = settings[key];
+        if (value && value.trim()) {
+          // Extract YouTube video ID from various URL formats
+          let videoId = value.trim();
+          const patterns = [
+            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+            /^([a-zA-Z0-9_-]{11})$/
+          ];
+          for (const pattern of patterns) {
+            const match = value.match(pattern);
+            if (match) {
+              videoId = match[1];
+              break;
+            }
+          }
+          iframe.src = 'https://www.youtube.com/embed/' + videoId;
+        }
+      });
+
       const whatsappBars = document.querySelectorAll('[data-whatsapp-bar]');
       whatsappBars.forEach(function(bar) {
         const phone = getContactValue(settings, industry, 'whatsapp_link');
