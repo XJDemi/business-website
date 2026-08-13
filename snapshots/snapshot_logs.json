@@ -1,0 +1,170 @@
+[
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1786544400705.json",
+    "snapshot_name": "Snapshot 2026/8/12 22:20:00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1786544400714,
+    "created_at": "2026-08-12T14:20:00.714Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1786193416200.json",
+    "snapshot_name": "Snapshot 2026/8/8 20:50:16",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1786193416205,
+    "created_at": "2026-08-08T12:50:16.205Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785859853224.json",
+    "snapshot_name": "2026.8.5-0010",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785859853226,
+    "created_at": "2026-08-04T16:10:53.226Z"
+  },
+  {
+    "action": "delete",
+    "snapshot_id": "snapshot_1785859660741.json",
+    "user": "admin",
+    "details": "Deleted snapshot",
+    "id": 1785859837527,
+    "created_at": "2026-08-04T16:10:37.527Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785859660741.json",
+    "snapshot_name": "2026.8.5.008",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785859660744,
+    "created_at": "2026-08-04T16:07:40.744Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785859149743.json",
+    "snapshot_name": "2026.8.5.24.00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785859149746,
+    "created_at": "2026-08-04T15:59:09.746Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785855431366.json",
+    "snapshot_name": "2026.8.4-23:00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785855431372,
+    "created_at": "2026-08-04T14:57:11.372Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785821182503.json",
+    "snapshot_name": "2026.8.4-13.26",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785821182508,
+    "created_at": "2026-08-04T05:26:22.508Z"
+  },
+  {
+    "action": "delete",
+    "snapshot_id": "snapshot_1785065188111.json",
+    "user": "admin",
+    "details": "Deleted snapshot",
+    "id": 1785772065668,
+    "created_at": "2026-08-03T15:47:45.668Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785772053572.json",
+    "snapshot_name": "2026.8.3-23:48",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785772053575,
+    "created_at": "2026-08-03T15:47:33.575Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785761951121.json",
+    "snapshot_name": "2026.8.3-21:00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785761951125,
+    "created_at": "2026-08-03T12:59:11.125Z"
+  },
+  {
+    "action": "delete",
+    "snapshot_id": "snapshot_1784990674471.json",
+    "user": "admin",
+    "details": "Deleted snapshot",
+    "id": 1785759641065,
+    "created_at": "2026-08-03T12:20:41.065Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785759608659.json",
+    "snapshot_name": "2026.8.3-20:20",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785759608664,
+    "created_at": "2026-08-03T12:20:08.664Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785246766511.json",
+    "snapshot_name": "2026.7.28.22:00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785246766516,
+    "created_at": "2026-07-28T13:52:46.516Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785132197062.json",
+    "snapshot_name": "2026.7.27.14:00",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785132197065,
+    "created_at": "2026-07-27T06:03:17.065Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785076344023.json",
+    "snapshot_name": "2026.7.26.22.32",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785076344025,
+    "created_at": "2026-07-26T14:32:24.025Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1785065188111.json",
+    "snapshot_name": "2026.7.26.19.30",
+    "user": "system",
+    "details": "Created snapshot with 23 categories",
+    "id": 1785065188114,
+    "created_at": "2026-07-26T11:26:28.114Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1784990674471.json",
+    "snapshot_name": "Test Snapshot",
+    "user": "system",
+    "details": "Created snapshot with 45 categories",
+    "id": 1784990674473,
+    "created_at": "2026-07-25T14:44:34.473Z"
+  },
+  {
+    "action": "create",
+    "snapshot_id": "snapshot_1784990624284.json",
+    "snapshot_name": "Test Snapshot",
+    "user": "system",
+    "details": "Created snapshot with 45 categories",
+    "id": 1784990624288,
+    "created_at": "2026-07-25T14:43:44.288Z"
+  }
+]

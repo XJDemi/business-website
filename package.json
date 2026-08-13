@@ -1,0 +1,35 @@
+{
+  "name": "xuanji-admin",
+  "version": "1.0.0",
+  "description": "XuanJi Technology Admin Panel - Product Management System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo 'Build complete'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.7",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^9.0.3",
+    "pg": "^8.22.0",
+    "serverless-http": "^4.0.0",
+    "sharp": "^0.35.3"
+  },
+  "keywords": [
+    "admin",
+    "product",
+    "management",
+    "xuanji"
+  ],
+  "author": "XuanJi Technology",
+  "license": "MIT",
+  "devDependencies": {
+    "isomorphic-git": "^1.41.3"
+  }
+}

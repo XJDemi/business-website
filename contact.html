@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - XuanJi Technology | Get in Touch</title>
+  <meta name="description" content="Contact XuanJi Technology's professional team for your sourcing needs. We're ready to assist you with any inquiries.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary-bg: #0A1628;
+      --primary-color: #0066CC;
+      --accent-color: #FF6B35;
+      --text-light: #FFFFFF;
+      --text-gray: #8892A6;
+      --card-bg: #112240;
+      --border-color: #1E3A5F;
+      --header-bg: rgba(10, 22, 40, 0.95);
+      --hero-grad1: #0A1628;
+      --hero-grad2: #112240;
+      --contactbar-bg: rgba(10, 22, 40, 0.95);
+      --contactbar-border: #1E3A5F;
+      --contactbar-text: #8892A6;
+      --success-bg: rgba(0,204,153,0.2);
+      --success-border: #00CC99;
+      --success-color: #00CC99;
+    }
+    [data-theme="light"] {
+      --primary-bg: #F5F7FA;
+      --primary-color: #0066CC;
+      --accent-color: #FF6B35;
+      --text-light: #1A202C;
+      --text-gray: #64748B;
+      --card-bg: #FFFFFF;
+      --border-color: #E2E8F0;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --hero-grad1: #E8EDF5;
+      --hero-grad2: #F0F4FA;
+      --contactbar-bg: rgba(245, 247, 250, 0.98);
+      --contactbar-border: #E2E8F0;
+      --contactbar-text: #64748B;
+      --success-bg: rgba(0,102,204,0.1);
+      --success-border: #0066CC;
+      --success-color: #0066CC;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+    .logo span { color: var(--accent-color); }
+    .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
+    .mobile-menu-btn { display: none; font-size: 1.5rem; cursor: pointer; }
+
+    .lang-selector {
+      position: relative;
+      margin-left: 10px;
+    }
+    .lang-btn {
+      background: rgba(0,102,204,0.2);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+    .lang-btn:hover { background: rgba(0,102,204,0.4); }
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%; right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      min-width: 150px;
+      margin-top: 5px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+    .lang-dropdown.show { display: block; }
+    .lang-dropdown a {
+      display: block;
+      padding: 10px 15px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .lang-dropdown a:hover { background: var(--primary-color); }
+
+    .section { padding: 80px 0; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 2.5rem; margin-bottom: 15px; }
+    .section-title p { color: var(--text-gray); font-size: 1.1rem; }
+
+    .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; padding-top: 120px; }
+    .contact-form { background: var(--card-bg); padding: 40px; border-radius: 20px; border: 1px solid var(--border-color); }
+    .contact-form h3 { font-size: 1.5rem; margin-bottom: 30px; }
+    .form-group { margin-bottom: 25px; }
+    .form-group label { display: block; margin-bottom: 8px; color: var(--text-light); font-weight: 500; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 15px;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      color: var(--text-light);
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    .form-group textarea { height: 150px; resize: vertical; }
+
+    .btn {
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent-color), #FF8C42); color: white; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,107,53,0.4); }
+
+    .contact-info { padding: 40px; }
+    .contact-info h3 { font-size: 1.5rem; margin-bottom: 30px; }
+    .info-item { margin-bottom: 30px; }
+    .info-item .icon { font-size: 2rem; color: var(--accent-color); margin-bottom: 15px; }
+    .info-item h4 { margin-bottom: 10px; }
+    .info-item p { color: var(--text-gray); }
+    .info-item a { color: var(--primary-color); text-decoration: none; }
+    .info-item a:hover { color: var(--accent-color); }
+
+    .success-message {
+      display: none;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 25px;
+      color: var(--success-color);
+      text-align: center;
+    }
+
+    footer {
+      background: var(--card-bg);
+      padding: 60px 0 30px;
+      border-top: 1px solid var(--border-color);
+    }
+    .footer-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-bottom: 40px; }
+    .footer-section h3 { margin-bottom: 20px; color: var(--primary-color); }
+    .footer-section ul { list-style: none; }
+    .footer-section ul li { margin-bottom: 10px; }
+    .footer-section ul li a { color: var(--text-gray); text-decoration: none; transition: color 0.3s; }
+    .footer-section ul li a:hover { color: var(--accent-color); }
+    .footer-section p { color: var(--text-gray); line-height: 1.8; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-gray); }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--primary-bg);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .nav-links.active { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .contact-container { grid-template-columns: 1fr; }
+      .footer-content { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo"><span data-i18n="company.logo">XJ</span> <span data-i18n="company.name">XuanJi</span></a>
+        <ul class="nav-links">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="biotech/index.html" data-i18n="nav.biotech">Biotech</a></li>
+          <li><a href="autoparts/index.html" data-i18n="nav.autoparts">Auto Parts</a></li>
+          <li><a href="instruments/index.html" data-i18n="nav.instruments">Instruments</a></li>
+          <li><a href="about.html" data-i18n="nav.about">About Us</a></li>
+          <li><a href="contact.html" class="active" data-i18n="nav.contact">Contact</a></li>
+          <li>
+            <div class="lang-selector">
+              <button class="lang-btn" onclick="toggleLangDropdown()">
+                <span id="current-lang">EN</span>
+                <span>▼</span>
+              </button>
+              <div class="lang-dropdown" id="lang-dropdown">
+                <a href="#" onclick="changeLang('en'); return false;" data-i18n="lang.en">English</a>
+                <a href="#" onclick="changeLang('zh'); return false;" data-i18n="lang.zh">中文</a>
+                <a href="#" onclick="changeLang('ru'); return false;" data-i18n="lang.ru">Русский</a>
+                <a href="#" onclick="changeLang('es'); return false;" data-i18n="lang.es">Español</a>
+                <a href="#" onclick="changeLang('de'); return false;" data-i18n="lang.de">Deutsch</a>
+                <a href="#" onclick="changeLang('fr'); return false;" data-i18n="lang.fr">Français</a>
+                <a href="#" onclick="changeLang('it'); return false;" data-i18n="lang.it">Italiano</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="mobile-menu-btn" onclick="toggleMenu()">☰</div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="contact.title">Contact Us</h2>
+        <p data-i18n="contact.subtitle">Get in touch with our professional team</p>
+      </div>
+
+    <div style="margin-bottom: 50px; padding: 40px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color);">
+      <h3 data-i18n="contact.industryContacts" style="font-size: 1.5rem; margin-bottom: 30px;">Industry Contacts</h3>
+      <div id="industry-contacts" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+          <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">🧬 <span data-i18n="contact.industry.biotech">Biotech</span></h4>
+          <p style="font-size: 1rem; line-height: 2;">
+            <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="biotech.contact_name">-</span><br>
+            <strong><span data-i18n="contact.info.email">Email</span>:</strong> <span data-industry-contact="biotech.email">-</span><br>
+            <strong><span data-i18n="contact.info.phone">Phone</span>:</strong> <span data-industry-contact="biotech.phone">-</span><br>
+            <strong><span data-i18n="contact.info.whatsapp">WhatsApp</span>:</strong> <span data-industry-contact="biotech.whatsapp">-</span><br>
+            <strong><span data-i18n="contact.info.wechat">WeChat</span>:</strong> <span data-industry-contact="biotech.wechat">-</span>
+          </p>
+        </div>
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+          <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">⚙️ <span data-i18n="contact.industry.autoparts">Auto Parts</span></h4>
+          <p style="font-size: 1rem; line-height: 2;">
+            <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="autoparts.contact_name">-</span><br>
+            <strong><span data-i18n="contact.info.email">Email</span>:</strong> <span data-industry-contact="autoparts.email">-</span><br>
+            <strong><span data-i18n="contact.info.phone">Phone</span>:</strong> <span data-industry-contact="autoparts.phone">-</span><br>
+            <strong><span data-i18n="contact.info.whatsapp">WhatsApp</span>:</strong> <span data-industry-contact="autoparts.whatsapp">-</span><br>
+            <strong><span data-i18n="contact.info.wechat">WeChat</span>:</strong> <span data-industry-contact="autoparts.wechat">-</span>
+          </p>
+        </div>
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+          <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">🔬 <span data-i18n="contact.industry.instruments">Instruments</span></h4>
+          <p style="font-size: 1rem; line-height: 2;">
+            <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="instruments.contact_name">-</span><br>
+            <strong><span data-i18n="contact.info.email">Email</span>:</strong> <span data-industry-contact="instruments.email">-</span><br>
+            <strong><span data-i18n="contact.info.phone">Phone</span>:</strong> <span data-industry-contact="instruments.phone">-</span><br>
+            <strong><span data-i18n="contact.info.whatsapp">WhatsApp</span>:</strong> <span data-industry-contact="instruments.whatsapp">-</span><br>
+            <strong><span data-i18n="contact.info.wechat">WeChat</span>:</strong> <span data-industry-contact="instruments.wechat">-</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+      <div class="contact-container">
+        <div class="contact-form">
+          <h3 data-i18n="contact.title">Send Us a Message</h3>
+          <div class="success-message" id="success-message" data-i18n="contact.success">Thank you for your inquiry! Our professional team will contact you within 24 hours.</div>
+          <form id="contact-form">
+            <input type="hidden" name="source_department" id="contact-source-department" value="">
+            <div class="form-group">
+              <label data-i18n="contact.form.name">Your Name *</label>
+              <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.company">Company Name</label>
+              <input type="text" name="company">
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.email">Email Address *</label>
+              <input type="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.phone">Phone Number</label>
+              <input type="tel" name="phone">
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.interest">Product Interest</label>
+              <select name="interest" id="product-interest">
+                <option value="" data-i18n="contact.form.select">Select...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.quantity">Estimated Quantity</label>
+              <input type="text" name="quantity">
+            </div>
+            <div class="form-group">
+              <label data-i18n="contact.form.message">Message</label>
+              <textarea name="message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" data-i18n="contact.form.submit">Send Message</button>
+          </form>
+        </div>
+        <div class="contact-info">
+          <h3 data-i18n="contact.info.email">Contact Information</h3>
+          <div class="info-item">
+            <div class="icon">👤</div>
+            <h4 data-i18n="contact.info.name">Name</h4>
+            <p><span data-site-key="contact_name">-</span></p>
+          </div>
+          <div class="info-item">
+            <div class="icon">📧</div>
+            <h4 data-i18n="contact.info.email">Email</h4>
+            <p><a href="mailto:hddemiguo@gmail.com" data-site-key="company_email">hddemiguo@gmail.com</a></p>
+          </div>
+          <div class="info-item">
+            <div class="icon">📞</div>
+            <h4 data-i18n="contact.info.phone">Phone</h4>
+            <p><a href="tel:+8615868179726" data-site-key="contact_phone">0086-15868179726</a></p>
+          </div>
+          <div class="info-item">
+            <div class="icon">📍</div>
+            <h4 data-i18n="contact.info.address">Address</h4>
+            <p><span data-site-key="company_address">Room 601, 6th Floor, BeiChengMingYuan, Shangcheng District, Hangzhou City, Zhejiang Province, China</span></p>
+          </div>
+          <div class="info-item">
+            <div class="icon">💬</div>
+            <h4 data-i18n="contact.info.whatsapp">WhatsApp</h4>
+            <p><a href="https://api.whatsapp.com/send?phone=+8615868179726" target="_blank" data-site-key="whatsapp_link">0086-15868179726</a></p>
+          </div>
+          <div class="info-item">
+            <div class="icon">💬</div>
+            <h4 data-i18n="contact.info.wechat">WeChat</h4>
+            <p><span data-site-key="wechat_link">-</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 data-i18n="footer.title">XuanJi Technology</h3>
+          <p data-i18n="footer.desc">Your trusted partner for Chinese export products since 2005. We specialize in biotech equipment, auto parts, and industrial instruments.</p>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.divisions">Our Divisions</h3>
+          <ul>
+            <li><a href="biotech/index.html" data-i18n="nav.biotech">Biotech Equipment</a></li>
+            <li><a href="autoparts/index.html" data-i18n="nav.autoparts">Auto Parts</a></li>
+            <li><a href="instruments/index.html" data-i18n="nav.instruments">Industrial Instruments</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.services">Services</h3>
+          <ul>
+            <li><a href="#" data-i18n="footer.oem">OEM/ODM</a></li>
+            <li><a href="#" data-i18n="footer.qc">Quality Control</a></li>
+            <li><a href="#" data-i18n="footer.scm">Supply Chain Management</a></li>
+            <li><a href="#" data-i18n="footer.payment">Payment Flexibility</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.contact">Contact Us</h3>
+          <p><span data-i18n="contact.info.name">Name</span>: <span data-site-key="contact_name">-</span></p>
+          <p><span data-i18n="contact.info.email">Email</span>: <a href="mailto:hddemiguo@gmail.com" data-site-key="company_email">hddemiguo@gmail.com</a></p>
+          <p><span data-i18n="contact.info.phone">Phone</span>: <span data-site-key="contact_phone">0086-15868179726</span></p>
+          <p><span data-i18n="contact.info.whatsapp">WhatsApp</span>: <a href="https://api.whatsapp.com/send?phone=+8615868179726" data-site-key="whatsapp_link">0086-15868179726</a></p>
+          <p><span data-i18n="contact.info.wechat">WeChat</span>: <span data-site-key="wechat_link">-</span></p>
+          <p><span data-i18n="contact.info.address">Address</span>: <span data-site-key="company_address">Room 601, 6th Floor, BeiChengMingYuan, Shangcheng District, Hangzhou City, Zhejiang Province, China</span></p>
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <a href="#" data-social-icon="youtube" style="font-size: 1.5rem; color: #FF0000;" title="YouTube">📺</a>
+            <a href="#" data-social-icon="instagram" style="font-size: 1.5rem; color: #E4405F;" title="Instagram">📷</a>
+            <a href="#" data-social-icon="facebook" style="font-size: 1.5rem; color: #1877F2;" title="Facebook">📘</a>
+            <a href="#" data-social-icon="linkedin" style="font-size: 1.5rem; color: #0A66C2;" title="LinkedIn">💼</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2024 XuanJi Technology. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/i18n/i18n.js"></script>
+  <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    }
+
+    function toggleLangDropdown() {
+      document.getElementById('lang-dropdown').classList.toggle('show');
+    }
+
+    function changeLang(lang) {
+      GT_I18N.setLang(lang);
+      document.getElementById('current-lang').textContent = lang.toUpperCase();
+      document.getElementById('lang-dropdown').classList.remove('show');
+      document.documentElement.lang = lang;
+    }
+
+    GT_I18N.init(function() {
+      var currentLang = GT_I18N.getLang();
+      document.getElementById('current-lang').textContent = currentLang.toUpperCase();
+      document.documentElement.lang = currentLang;
+    });
+
+    async function loadProductOptions() {
+      try {
+        var response = await fetch('/api/products?lang=' + (GT_I18N.getLang() || 'en') + '&limit=100');
+        var result = await response.json();
+        if (result.success && result.data) {
+          var select = document.getElementById('product-interest');
+          
+          while (select.options.length > 1) {
+            select.remove(1);
+          }
+          
+          var grouped = {};
+          result.data.forEach(function(product) {
+            var industry = product.industry || 'other';
+            if (!grouped[industry]) {
+              grouped[industry] = [];
+            }
+            grouped[industry].push(product);
+          });
+          
+          var industryNames = {
+            'biotech': 'Biomedical Equipment',
+            'autoparts': 'Auto Parts',
+            'instruments': 'Industrial Instruments',
+            'other': 'Other Products'
+          };
+          
+          Object.keys(grouped).forEach(function(industry) {
+            var optgroup = document.createElement('optgroup');
+            optgroup.label = industryNames[industry] || industry;
+            
+            grouped[industry].forEach(function(product) {
+              var option = document.createElement('option');
+              option.value = product.id;
+              option.textContent = product.name;
+              option.setAttribute('data-industry', industry);
+              optgroup.appendChild(option);
+            });
+            
+            select.appendChild(optgroup);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      }
+    }
+    loadProductOptions();
+
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('lang-dropdown');
+      if (dropdown && !dropdown.contains(e.target) && !e.target.classList.contains('lang-btn')) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var formData = new FormData(this);
+      var data = {};
+      formData.forEach(function(value, key) {
+        data[key] = value;
+      });
+      
+      var productSelect = document.getElementById('product-interest');
+      var selectedOption = productSelect.options[productSelect.selectedIndex];
+      if (selectedOption && selectedOption.value) {
+        data.product = selectedOption.text;
+        data.product_id = selectedOption.value;
+        data.industry = selectedOption.getAttribute('data-industry') || '';
+      }
+      delete data.interest;
+      
+      if (window.GT_TRACKING) {
+        data.session_id = GT_TRACKING.getSessionId();
+        data.visitor_id = GT_TRACKING.getVisitorId();
+      } else {
+        var sessionId = localStorage.getItem('gt_session_id');
+        if (!sessionId) {
+          sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('gt_session_id', sessionId);
+        }
+        data.session_id = sessionId;
+        data.visitor_id = localStorage.getItem('gt_visitor_id') || sessionId;
+      }
+      
+      data.source_page = window.location.pathname;
+      
+      try {
+        var response = await fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          document.getElementById('success-message').style.display = 'block';
+          this.reset();
+          loadProductOptions();
+        } else {
+          alert('Failed to submit. Please try again.');
+        }
+      } catch (error) {
+        alert('Network error. Please try again.');
+      }
+    });
+  </script>
+  <script src="/tracking.js"></script>
+  <script src="/site-settings.js?v=3"></script>
+
+  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar style="display: flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s;">
+      <span style="font-size: 1.5rem;">💬</span>
+      <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
+    </a>
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar style="display: flex; align-items: center; gap: 10px; background: #0066CC; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4); transition: all 0.3s;">
+      <span style="font-size: 1.5rem;">📧</span>
+      <span data-i18n="contactBar.email">Email Us</span>
+    </a>
+  </div>
+
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
+    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  </div>
+</body>
+</html>

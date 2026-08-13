@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - XuanJi Technology | Trusted Since 2005</title>
+  <meta name="description" content="Learn about XuanJi Technology's 20 years of experience in international trade and our commitment to customer satisfaction.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary-bg: #0A1628;
+      --primary-color: #0066CC;
+      --accent-color: #FF6B35;
+      --text-light: #FFFFFF;
+      --text-gray: #8892A6;
+      --card-bg: #112240;
+      --border-color: #1E3A5F;
+      --header-bg: rgba(10, 22, 40, 0.95);
+      --hero-grad1: #0A1628;
+      --hero-grad2: #112240;
+      --contactbar-bg: rgba(10, 22, 40, 0.95);
+      --contactbar-border: #1E3A5F;
+      --contactbar-text: #8892A6;
+      --email-btn-bg: #0066CC;
+      --email-btn-shadow: rgba(0,102,204,0.4);
+    }
+    [data-theme="light"] {
+      --primary-bg: #F5F7FA;
+      --primary-color: #0066CC;
+      --accent-color: #FF6B35;
+      --text-light: #1A202C;
+      --text-gray: #64748B;
+      --card-bg: #FFFFFF;
+      --border-color: #E2E8F0;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --hero-grad1: #E8EDF5;
+      --hero-grad2: #F0F4FA;
+      --contactbar-bg: rgba(245, 247, 250, 0.98);
+      --contactbar-border: #E2E8F0;
+      --contactbar-text: #64748B;
+      --email-btn-bg: #0066CC;
+      --email-btn-shadow: rgba(0,102,204,0.4);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+    .logo span { color: var(--accent-color); }
+    .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent-color); }
+    .mobile-menu-btn { display: none; font-size: 1.5rem; cursor: pointer; }
+
+    .lang-selector {
+      position: relative;
+      margin-left: 10px;
+    }
+    .lang-btn {
+      background: rgba(0,102,204,0.2);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+    .lang-btn:hover { background: rgba(0,102,204,0.4); }
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%; right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      min-width: 150px;
+      margin-top: 5px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+    .lang-dropdown.show { display: block; }
+    .lang-dropdown a {
+      display: block;
+      padding: 10px 15px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .lang-dropdown a:hover { background: var(--primary-color); }
+
+    .section { padding: 80px 0; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 2.5rem; margin-bottom: 15px; }
+    .section-title p { color: var(--text-gray); font-size: 1.1rem; }
+
+    .about-section { max-width: 900px; margin: 0 auto; text-align: center; padding-top: 120px; }
+    .about-section h2 { font-size: 2.5rem; margin-bottom: 30px; }
+    .about-section p { color: var(--text-gray); font-size: 1.1rem; margin-bottom: 25px; text-align: left; }
+    .about-section .highlight { color: var(--accent-color); font-weight: 600; }
+
+    .service-process { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+    .process-step { text-align: center; background: var(--card-bg); padding: 35px; border-radius: 15px; border: 1px solid var(--border-color); }
+    .process-step .step-number { width: 50px; height: 50px; border-radius: 50%; background: var(--primary-color); color: white; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; margin: 0 auto 20px; }
+    .process-step h3 { margin-bottom: 15px; }
+    .process-step p { color: var(--text-gray); font-size: 0.9rem; }
+
+    .advantages { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+    .advantage-card { text-align: center; padding: 30px; }
+    .advantage-card .icon { font-size: 3rem; margin-bottom: 20px; color: var(--accent-color); }
+    .advantage-card h3 { font-size: 1.3rem; margin-bottom: 15px; }
+    .advantage-card p { color: var(--text-gray); }
+
+    .certifications { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+    .cert-card { background: var(--card-bg); padding: 30px; border-radius: 15px; text-align: center; border: 1px solid var(--border-color); }
+    .cert-card .icon { font-size: 3rem; color: var(--primary-color); margin-bottom: 15px; }
+    .cert-card h4 { color: var(--text-light); }
+
+    .btn {
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent-color), #FF8C42); color: white; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,107,53,0.4); }
+
+    .floating-whatsapp-btn,
+    .floating-email-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .floating-whatsapp-btn {
+      background: #25D366;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+    .floating-email-btn {
+      background: var(--email-btn-bg);
+      box-shadow: 0 4px 15px var(--email-btn-shadow);
+    }
+
+    footer {
+      background: var(--card-bg);
+      padding: 60px 0 30px;
+      border-top: 1px solid var(--border-color);
+    }
+    .footer-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-bottom: 40px; }
+    .footer-section h3 { margin-bottom: 20px; color: var(--primary-color); }
+    .footer-section ul { list-style: none; }
+    .footer-section ul li { margin-bottom: 10px; }
+    .footer-section ul li a { color: var(--text-gray); text-decoration: none; transition: color 0.3s; }
+    .footer-section ul li a:hover { color: var(--accent-color); }
+    .footer-section p { color: var(--text-gray); line-height: 1.8; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-gray); }
+
+    @media (max-width: 992px) {
+      .service-process, .advantages, .certifications, .footer-content { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--primary-bg);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .nav-links.active { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .service-process, .advantages, .certifications, .footer-content { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="index.html" class="logo"><span data-i18n="company.logo">XJ</span> <span data-i18n="company.name">XuanJi</span></a>
+        <ul class="nav-links">
+          <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="biotech/index.html" data-i18n="nav.biotech">Biotech</a></li>
+          <li><a href="autoparts/index.html" data-i18n="nav.autoparts">Auto Parts</a></li>
+          <li><a href="instruments/index.html" data-i18n="nav.instruments">Instruments</a></li>
+          <li><a href="about.html" class="active" data-i18n="nav.about">About Us</a></li>
+          <li><a href="contact.html" data-i18n="nav.contact">Contact</a></li>
+          <li>
+            <div class="lang-selector">
+              <button class="lang-btn" onclick="toggleLangDropdown()">
+                <span id="current-lang">EN</span>
+                <span>▼</span>
+              </button>
+              <div class="lang-dropdown" id="lang-dropdown">
+                <a href="#" onclick="changeLang('en'); return false;" data-i18n="lang.en">English</a>
+                <a href="#" onclick="changeLang('zh'); return false;" data-i18n="lang.zh">中文</a>
+                <a href="#" onclick="changeLang('ru'); return false;" data-i18n="lang.ru">Русский</a>
+                <a href="#" onclick="changeLang('es'); return false;" data-i18n="lang.es">Español</a>
+                <a href="#" onclick="changeLang('de'); return false;" data-i18n="lang.de">Deutsch</a>
+                <a href="#" onclick="changeLang('fr'); return false;" data-i18n="lang.fr">Français</a>
+                <a href="#" onclick="changeLang('it'); return false;" data-i18n="lang.it">Italiano</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="mobile-menu-btn" onclick="toggleMenu()">☰</div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="about-section">
+    <h2 data-i18n="about.title">About XuanJi Technology</h2>
+    <p data-i18n="about.intro"><span class="highlight">Nearly 20 years of professional international trade experience</span>, we understand every aspect of global business. Established in 2005, XuanJi Technology is a professional company specializing in Chinese export trade, dedicated to helping worldwide clients find high-quality Chinese suppliers and build long-term stable partnerships.</p>
+    <p data-i18n="about.coreBusiness">Our core business covers three major areas: <strong>Biomedical Equipment</strong>, <strong>Auto Parts</strong>, and <strong>Industrial Testing Instruments</strong>. These are fields where our team has accumulated rich experience through years of trade practice. We deeply understand the technical details, quality standards, and market requirements of each product.</p>
+    <p data-i18n="about.philosophy"><span class="highlight">Sincerity, Integrity, and Win-Win</span> are the most valuable experiences that have earned us customer trust over the past 20 years, and they are the business philosophy we always uphold. We believe that only by treating every customer sincerely can we build long-term cooperation; only by operating with integrity can we earn market respect; only by achieving win-win results can cooperation sustain and grow.</p>
+    <p data-i18n="about.team">Our professional trade team has extensive international business experience and can provide comprehensive services to clients: from helping select suitable factories, to monitoring production progress, to strict quality control. We are involved throughout the entire process to ensure every step meets our clients' requirements.</p>
+    <p data-i18n="about.conclusion">Whether you are seeking OEM/ODM customization services or need bulk procurement of standard products, we will do our utmost to assist you, making your sourcing journey easy and worry-free.</p>
+  </section>
+
+  <section class="section" style="background: var(--card-bg);">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="services.title">Our Service Process</h2>
+        <p data-i18n="services.subtitle">From inquiry to delivery, we handle every step</p>
+      </div>
+      <div class="service-process">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <h3 data-i18n="services.step1.title">Initial Inquiry</h3>
+          <p data-i18n="services.step1.desc">Receive your requirements and provide professional advice</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <h3 data-i18n="services.step2.title">Factory Selection</h3>
+          <p data-i18n="services.step2.desc">Help you select the best factories based on your needs</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <h3 data-i18n="services.step3.title">Production Monitoring</h3>
+          <p data-i18n="services.step3.desc">Monitor production progress and ensure on-time delivery</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <h3 data-i18n="services.step4.title">Quality Control</h3>
+          <p data-i18n="services.step4.desc">Strict quality inspection before shipment</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">5</div>
+          <h3 data-i18n="services.step5.title">Shipment</h3>
+          <p data-i18n="services.step5.desc">Arrange logistics and provide tracking information</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">6</div>
+          <h3 data-i18n="services.step6.title">After-sales Support</h3>
+          <p data-i18n="services.step6.desc">Provide timely support and resolve any issues</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="advantages.title">Why Choose XuanJi Technology</h2>
+        <p data-i18n="advantages.subtitle">Our advantages that make us stand out</p>
+      </div>
+      <div class="advantages">
+        <div class="advantage-card">
+          <div class="icon">⭐</div>
+          <h3 data-i18n="advantages.adv1.title">20 Years Experience</h3>
+          <p data-i18n="advantages.adv1.desc">Decades of expertise in international trade</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">🤝</div>
+          <h3 data-i18n="advantages.adv2.title">Trustworthy Partnership</h3>
+          <p data-i18n="advantages.adv2.desc">Sincerity and integrity in every business deal</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">🏭</div>
+          <h3 data-i18n="advantages.adv3.title">Factory Network</h3>
+          <p data-i18n="advantages.adv3.desc">Extensive network of reliable manufacturers</p>
+        </div>
+        <div class="advantage-card">
+          <div class="icon">✅</div>
+          <h3 data-i18n="advantages.adv4.title">Quality Assurance</h3>
+          <p data-i18n="advantages.adv4.desc">Strict quality control throughout the process</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: var(--card-bg);">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="certifications.title">Certifications & Qualifications</h2>
+        <p data-i18n="certifications.subtitle">Quality standards we adhere to</p>
+      </div>
+      <div class="certifications">
+        <div class="cert-card">
+          <div class="icon">🏆</div>
+          <h4 data-i18n="certifications.iso9001">ISO 9001</h4>
+        </div>
+        <div class="cert-card">
+          <div class="icon">🏆</div>
+          <h4 data-i18n="certifications.ce">CE Certification</h4>
+        </div>
+        <div class="cert-card">
+          <div class="icon">🏆</div>
+          <h4 data-i18n="certifications.isots16949">ISO/TS 16949</h4>
+        </div>
+        <div class="cert-card">
+          <div class="icon">🏆</div>
+          <h4 data-i18n="certifications.sgs">SGS Certified</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="text-align: center;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 20px;" data-i18n="cta.title">Ready to Start Your Business?</h2>
+      <p style="color: var(--text-gray); font-size: 1.1rem; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;" data-i18n="cta.desc">Contact our professional team today. We are ready to assist you with your sourcing needs and help you succeed in the global market.</p>
+      <a href="contact.html" class="btn btn-primary" data-i18n="cta.btn">Get a Quote Now</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 data-i18n="footer.title">XuanJi Technology</h3>
+          <p data-i18n="footer.desc">Your trusted partner for Chinese export products since 2005. We specialize in biotech equipment, auto parts, and industrial instruments.</p>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.divisions">Our Divisions</h3>
+          <ul>
+            <li><a href="biotech/index.html" data-i18n="nav.biotech">Biotech Equipment</a></li>
+            <li><a href="autoparts/index.html" data-i18n="nav.autoparts">Auto Parts</a></li>
+            <li><a href="instruments/index.html" data-i18n="nav.instruments">Industrial Instruments</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.services">Services</h3>
+          <ul>
+            <li><a href="#" data-i18n="footer.oem">OEM/ODM</a></li>
+            <li><a href="#" data-i18n="footer.qc">Quality Control</a></li>
+            <li><a href="#" data-i18n="footer.scm">Supply Chain Management</a></li>
+            <li><a href="#" data-i18n="footer.payment">Payment Flexibility</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="footer.contact">Contact Us</h3>
+          <p><span data-i18n="contact.info.name">Name</span>: <span data-site-key="contact_name">-</span></p>
+          <p><span data-i18n="contact.info.email">Email</span>: <a href="mailto:hddemiguo@gmail.com" data-site-key="company_email">hddemiguo@gmail.com</a></p>
+          <p><span data-i18n="contact.info.phone">Phone</span>: <span data-site-key="contact_phone">0086-15868179726</span></p>
+          <p><span data-i18n="contact.info.whatsapp">WhatsApp</span>: <a href="https://api.whatsapp.com/send?phone=+8615868179726" data-site-key="whatsapp_link">0086-15868179726</a></p>
+          <p><span data-i18n="contact.info.wechat">WeChat</span>: <span data-site-key="wechat_link">-</span></p>
+          <p><span data-i18n="contact.info.address">Address</span>: <span data-site-key="company_address">Room 601, 6th Floor, BeiChengMingYuan, Shangcheng District, Hangzhou City, Zhejiang Province, China</span></p>
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <a href="#" data-social-icon="youtube" style="font-size: 1.5rem; color: #FF0000;" title="YouTube">📺</a>
+            <a href="#" data-social-icon="instagram" style="font-size: 1.5rem; color: #E4405F;" title="Instagram">📷</a>
+            <a href="#" data-social-icon="facebook" style="font-size: 1.5rem; color: #1877F2;" title="Facebook">📘</a>
+            <a href="#" data-social-icon="linkedin" style="font-size: 1.5rem; color: #0A66C2;" title="LinkedIn">💼</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2024 XuanJi Technology. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/i18n/i18n.js"></script>
+  <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    }
+
+    function toggleLangDropdown() {
+      document.getElementById('lang-dropdown').classList.toggle('show');
+    }
+
+    function changeLang(lang) {
+      GT_I18N.setLang(lang);
+      document.getElementById('current-lang').textContent = lang.toUpperCase();
+      document.getElementById('lang-dropdown').classList.remove('show');
+      document.documentElement.lang = lang;
+    }
+
+    GT_I18N.init(function() {
+      var currentLang = GT_I18N.getLang();
+      document.getElementById('current-lang').textContent = currentLang.toUpperCase();
+      document.documentElement.lang = currentLang;
+    });
+
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('lang-dropdown');
+      if (dropdown && !dropdown.contains(e.target) && !e.target.classList.contains('lang-btn')) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+  </script>
+  <script src="/tracking.js"></script>
+  <script src="/site-settings.js?v=3"></script>
+
+  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar class="floating-whatsapp-btn">
+      <span style="font-size: 1.5rem;">💬</span>
+      <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
+    </a>
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar class="floating-email-btn">
+      <span style="font-size: 1.5rem;">📧</span>
+      <span data-i18n="contactBar.email">Email Us</span>
+    </a>
+  </div>
+
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
+    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  </div>
+</body>
+</html>

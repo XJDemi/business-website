@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auto Parts - XuanJi Technology | Automotive Components & OEM Solutions</title>
+  <meta name="description" content="Professional auto parts supplier. Providing roller chains, brake discs, timing chains, wheel hubs. OE quality replacement solutions, flexible OEM/ODM services, strong bulk supply capabilities.">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary-bg: #1A1A1A;
+      --primary-color: #FF6B35;
+      --accent-color: #CC5522;
+      --text-light: #FFFFFF;
+      --text-gray: #999999;
+      --card-bg: #222222;
+      --border-color: #333333;
+      --header-bg: rgba(26, 26, 26, 0.95);
+      --hero-grad1: #1A1A1A;
+      --hero-grad2: #222222;
+      --contactbar-bg: rgba(26, 26, 26, 0.95);
+      --contactbar-border: #333333;
+      --contactbar-text: #999999;
+      --email-btn-bg: #FF6B35;
+      --email-btn-shadow: rgba(255,107,53,0.4);
+      --tag-bg: rgba(255,107,53,0.15);
+      --tag-bg-hover: rgba(255,107,53,0.3);
+      --product-placeholder: #f8f9fa;
+      --spec-bg: rgba(52,152,219,0.08);
+      --spec-border: rgba(52,152,219,0.2);
+      --shadow-hover: rgba(0,0,0,0.15);
+    }
+    [data-theme="light"] {
+      --primary-bg: #FAF6F3;
+      --primary-color: #E85D2F;
+      --accent-color: #CC5522;
+      --text-light: #2D1F1A;
+      --text-gray: #6B5A50;
+      --card-bg: #FFFFFF;
+      --border-color: #E8DDD5;
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --hero-grad1: #F5EDE8;
+      --hero-grad2: #FAF6F3;
+      --contactbar-bg: rgba(250, 246, 243, 0.98);
+      --contactbar-border: #E8DDD5;
+      --contactbar-text: #6B5A50;
+      --email-btn-bg: #E85D2F;
+      --email-btn-shadow: rgba(232,93,47,0.4);
+      --tag-bg: rgba(232,93,47,0.15);
+      --tag-bg-hover: rgba(232,93,47,0.3);
+      --product-placeholder: #F5EDE8;
+      --spec-bg: rgba(232,93,47,0.08);
+      --spec-border: rgba(232,93,47,0.2);
+      --shadow-hover: rgba(0,0,0,0.08);
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--primary-bg);
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border-color);
+    }
+    nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-color); text-decoration: none; }
+    .logo span { color: var(--accent-color); }
+    .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-color); }
+    .mobile-menu-btn { display: none; font-size: 1.5rem; cursor: pointer; }
+
+    .lang-selector {
+      position: relative;
+      margin-left: 10px;
+    }
+    .lang-btn {
+      background: var(--tag-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s;
+    }
+    .lang-btn:hover { background: var(--tag-bg-hover); }
+    .lang-dropdown {
+      display: none;
+      position: absolute;
+      top: 100%; right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      min-width: 150px;
+      margin-top: 5px;
+      overflow: hidden;
+      z-index: 1001;
+    }
+    .lang-dropdown.show { display: block; }
+    .lang-dropdown a {
+      display: block;
+      padding: 10px 15px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .lang-dropdown a:hover { background: var(--primary-color); }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 80px;
+      background: linear-gradient(135deg, var(--hero-grad1) 0%, var(--hero-grad2) 50%, var(--hero-grad1) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FF6B35' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; animation: fadeInUp 0.8s ease; }
+    .hero h1 span { color: var(--primary-color); }
+    .hero p { font-size: 1.2rem; color: var(--text-gray); max-width: 800px; margin: 0 auto 40px; animation: fadeInUp 0.8s ease 0.2s both; }
+    .hero-buttons { display: flex; gap: 20px; justify-content: center; animation: fadeInUp 0.8s ease 0.4s both; }
+    
+    .btn {
+      padding: 15px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--tag-bg-hover); }
+    .btn-secondary { background: transparent; color: var(--text-light); border: 2px solid var(--primary-color); }
+    .btn-secondary:hover { background: var(--primary-color); transform: translateY(-3px); }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section { padding: 80px 0; }
+    .section-title { text-align: center; margin-bottom: 60px; }
+    .section-title h2 { font-size: 2.5rem; margin-bottom: 15px; }
+    .section-title p { color: var(--text-gray); font-size: 1.1rem; }
+
+    .product-category-tabs {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      padding: 12px 25px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      color: var(--text-light);
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+    .tab-btn:hover { border-color: var(--primary-color); color: var(--primary-color); }
+    .tab-btn.active { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); border-color: transparent; color: white; }
+
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .product-card:hover { transform: translateY(-5px); border-color: var(--primary-color); }
+    .product-category {
+      display: inline-block;
+      background: var(--primary-color);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .product-image-wrapper {
+      width: 100%;
+      height: 280px;
+      overflow: hidden;
+      background: var(--product-placeholder);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .product-image-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    .product-card .product-info { 
+      padding: 25px; 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .product-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    .product-card p { color: var(--text-gray); margin-bottom: 15px; font-size: 0.9rem; flex: 1; }
+    .product-card .price { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; }
+    .product-card .btn { width: 100%; text-align: center; padding: 12px; font-size: 0.9rem; margin-top: auto; }
+
+    .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+    .feature-card { text-align: center; padding: 30px; background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border-color); }
+    .feature-card .icon { font-size: 3rem; margin-bottom: 20px; color: var(--primary-color); }
+    .feature-card h3 { font-size: 1.3rem; margin-bottom: 15px; }
+    .feature-card p { color: var(--text-gray); }
+
+    .testimonials { background: var(--card-bg); }
+    .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+    .testimonial-card { background: var(--primary-bg); border-radius: 15px; padding: 35px; border: 1px solid var(--border-color); }
+    .testimonial-card .quote { font-size: 2rem; color: var(--primary-color); margin-bottom: 20px; }
+    .testimonial-card p { color: var(--text-gray); margin-bottom: 25px; font-style: italic; }
+    .testimonial-card .author { display: flex; align-items: center; gap: 15px; }
+    .testimonial-card .author img { width: 50px; height: 50px; border-radius: 50%; background: var(--primary-color); }
+    .testimonial-card .author-info h4 { color: var(--text-light); }
+    .testimonial-card .author-info span { color: var(--text-gray); font-size: 0.9rem; }
+
+    footer {
+      background: var(--card-bg);
+      padding: 60px 0 30px;
+      border-top: 1px solid var(--border-color);
+    }
+    .footer-content { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-bottom: 40px; }
+    .footer-section h3 { margin-bottom: 20px; color: var(--primary-color); }
+    .footer-section ul { list-style: none; }
+    .footer-section ul li { margin-bottom: 10px; }
+    .footer-section ul li a { color: var(--text-gray); text-decoration: none; transition: color 0.3s; }
+    .footer-section ul li a:hover { color: var(--primary-color); }
+    .footer-section p { color: var(--text-gray); line-height: 1.8; }
+    .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-gray); }
+    .footer-bottom .group-link { color: var(--primary-color); text-decoration: none; }
+
+    .product-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .product-modal-overlay.active { display: flex; }
+    .product-modal {
+      background: var(--card-bg);
+      border-radius: 20px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      position: relative;
+    }
+    .product-modal-close {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: var(--tag-bg);
+      border: none;
+      color: var(--accent-color);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .product-modal-close:hover { background: var(--tag-bg-hover); }
+    .product-modal-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px; }
+    .product-modal-image-wrapper {
+      width: 100%;
+      height: 400px;
+      background: var(--product-placeholder);
+      border-radius: 15px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-in;
+    }
+    .product-modal-image-wrapper img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .product-modal-info h2 { font-size: 1.8rem; margin-bottom: 20px; }
+    .product-modal-info .price { font-size: 1.3rem; color: var(--primary-color); font-weight: 600; margin-bottom: 20px; }
+    .product-modal-info .category { color: var(--text-gray); margin-bottom: 20px; }
+    .product-modal-info .description { color: var(--text-gray); line-height: 1.8; margin-bottom: 25px; }
+    .product-modal-info .specifications { margin-top: 25px; }
+    .product-modal-info .specifications h4 { margin-bottom: 15px; color: var(--primary-color); }
+    .product-modal-info .specifications-content {
+      background: var(--spec-bg);
+      border: 1px solid var(--spec-border);
+      padding: 20px;
+      border-radius: 10px;
+      color: var(--text-light);
+      line-height: 2;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .image-lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 3000;
+      justify-content: center;
+      align-items: center;
+    }
+    .image-lightbox.active { display: flex; }
+    .image-lightbox img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    .image-lightbox-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .product-modal-content { grid-template-columns: 1fr; }
+      .product-modal-image-wrapper { height: 300px; }
+    }
+
+    @media (max-width: 992px) {
+      .product-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+      .features, .footer-content { grid-template-columns: repeat(2, 1fr); }
+      .hero h1 { font-size: 2.5rem; }
+    }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 15px;
+      padding: 25px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .news-card .news-date {
+      font-size: 0.85rem;
+      color: var(--accent-color);
+      margin-bottom: 10px;
+    }
+
+    .news-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--text-primary);
+    }
+
+    .news-card p {
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .news-card .read-more {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .case-studies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+
+    .case-study-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 15px;
+      padding: 30px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .case-study-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px var(--shadow-hover);
+    }
+
+    .case-study-card .client-name {
+      font-size: 0.85rem;
+      color: var(--accent-color);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .case-study-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      color: var(--text-light);
+    }
+
+    .case-study-card p {
+      color: var(--text-gray);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .case-study-card .product-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: var(--tag-bg);
+      color: var(--accent-color);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-gray);
+      font-style: italic;
+    }
+
+    .floating-whatsapp-btn,
+    .floating-email-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .floating-whatsapp-btn {
+      background: #25D366;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+    .floating-email-btn {
+      background: var(--email-btn-bg);
+      box-shadow: 0 4px 15px var(--email-btn-shadow);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%; left: 0; right: 0;
+        background: var(--primary-bg);
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+      .nav-links.active { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .product-grid, .testimonial-grid, .features, .footer-content { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body data-industry="autoparts">
+  <header>
+    <div class="container">
+      <nav>
+        <a href="../index.html" class="logo"><span data-i18n="company.logo">XJ</span> <span data-i18n="company.name">XuanJi</span></a>
+        <ul class="nav-links">
+          <li><a href="../index.html" data-i18n="nav.home">Home</a></li>
+          <li><a href="../biotech/index.html" data-i18n="nav.biotech">BioTech</a></li>
+          <li><a href="index.html" class="active" data-i18n="nav.autoparts">Auto Parts</a></li>
+          <li><a href="../instruments/index.html" data-i18n="nav.instruments">Instruments</a></li>
+          <li><a href="../about.html" data-i18n="nav.about">About Us</a></li>
+          <li><a href="../contact.html" data-i18n="nav.contact">Contact</a></li>
+          <li>
+            <div class="lang-selector">
+              <button class="lang-btn" onclick="toggleLangDropdown()">
+                <span id="current-lang">EN</span>
+                <span>▼</span>
+              </button>
+              <div class="lang-dropdown" id="lang-dropdown">
+                <a href="#" onclick="changeLang('en'); return false;" data-i18n="lang.en">English</a>
+                <a href="#" onclick="changeLang('zh'); return false;" data-i18n="lang.zh">中文</a>
+                <a href="#" onclick="changeLang('ru'); return false;" data-i18n="lang.ru">Русский</a>
+                <a href="#" onclick="changeLang('es'); return false;" data-i18n="lang.es">Español</a>
+                <a href="#" onclick="changeLang('de'); return false;" data-i18n="lang.de">Deutsch</a>
+                <a href="#" onclick="changeLang('fr'); return false;" data-i18n="lang.fr">Français</a>
+                <a href="#" onclick="changeLang('it'); return false;" data-i18n="lang.it">Italiano</a>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="mobile-menu-btn" onclick="toggleMenu()">☰</div>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1 data-i18n="autoparts.hero.title">Automotive <span>Components</span> & Parts</h1>
+        <p data-i18n="autoparts.hero.desc">Professional Auto Parts Supplier · OE Quality Replacement · Flexible OEM/ODM</p>
+        <div class="hero-buttons">
+          <a href="#products" class="btn btn-primary" data-i18n="autoparts.hero.btnProducts">Explore Products</a>
+          <a href="../about.html" class="btn btn-secondary" data-i18n="autoparts.hero.btnLearn">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="autoparts.features.title">Why Choose Our Auto Parts</h2>
+        <p data-i18n="autoparts.features.desc">What makes our automotive components stand out</p>
+      </div>
+      <div class="features">
+        <div class="feature-card">
+          <div class="icon">⚙️</div>
+          <h3 data-i18n="autoparts.features.f1.title">OE Quality</h3>
+          <p data-i18n="autoparts.features.f1.desc">Manufactured to original equipment specifications</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔧</div>
+          <h3 data-i18n="autoparts.features.f2.title">OEM/ODM</h3>
+          <p data-i18n="autoparts.features.f2.desc">Flexible customization for your brand requirements</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📦</div>
+          <h3 data-i18n="autoparts.features.f3.title">Mass Production</h3>
+          <p data-i18n="autoparts.features.f3.desc">Strong manufacturing capacity for bulk orders</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">✅</div>
+          <h3 data-i18n="autoparts.features.f4.title">Quality Control</h3>
+          <p data-i18n="autoparts.features.f4.desc">Strict inspection processes for reliability</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team-advantage">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="autoparts.advantage.title">Our Auto Parts Team's Advantages</h2>
+        <p data-i18n="autoparts.advantage.desc">Why partner with our auto parts division</p>
+      </div>
+      <div id="team-advantage-content" style="max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 15px; border: 1px solid var(--border-color); line-height: 1.8; color: var(--text-light); white-space: pre-wrap; font-size: 1.05rem;"></div>
+    </div>
+  </section>
+
+  <section class="section" id="products">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="autoparts.products.title">Our Products</h2>
+        <p data-i18n="autoparts.products.desc">Comprehensive range of automotive components</p>
+      </div>
+      
+      <div class="product-category-tabs" id="category-tabs">
+        <button class="tab-btn active" onclick="filterProducts('all')" data-i18n="autoparts.products.all">All Products</button>
+      </div>
+
+      <div class="product-grid" id="product-grid">
+        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+          <div style="font-size: 3rem; margin-bottom: 20px;">🔄</div>
+          <p style="color: var(--text-gray);" data-i18n="common.loading">Loading products...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section class="news-section" style="padding: 60px 0;">
+    <div class="container">
+      <h2 class="section-title" data-i18n="news.title">Latest News</h2>
+      <div id="news-list" class="news-grid"></div>
+    </div>
+  </section>
+
+  <!-- Case Studies Section -->
+  <section class="case-studies-section" style="padding: 60px 0; background: var(--card-bg);">
+    <div class="container">
+      <h2 class="section-title" data-i18n="caseStudies.title">Case Studies</h2>
+      <div id="case-studies-list" class="case-studies-grid"></div>
+    </div>
+  </section>
+
+  <section class="section testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2 data-i18n="autoparts.testimonials.title">Auto Parts Distributors Trust Us</h2>
+        <p data-i18n="autoparts.testimonials.desc">Real feedback from our automotive clients</p>
+      </div>
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p data-i18n="autoparts.testimonials.t1.text">We've been sourcing roller chains from XuanJi Technology for 8 years. Their quality is consistent and prices are competitive.</p>
+          <div class="author">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=automotive%20business%20man%20portrait&image_size=square" alt="James Wilson">
+            <div class="author-info">
+              <h4 data-i18n="autoparts.testimonials.t1.author">James Wilson</h4>
+              <span data-i18n="autoparts.testimonials.t1.company">CEO, AutoParts USA</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p data-i18n="autoparts.testimonials.t2.text">Their brake discs meet OE standards at a fraction of the cost. Our customers are very satisfied with the quality.</p>
+          <div class="author">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=auto%20parts%20manager%20woman%20portrait&image_size=square" alt="Maria Gonzalez">
+            <div class="author-info">
+              <h4 data-i18n="autoparts.testimonials.t2.author">Maria Gonzalez</h4>
+              <span data-i18n="autoparts.testimonials.t2.company">Purchasing Director, EuroAuto Parts</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="quote">"</div>
+          <p data-i18n="autoparts.testimonials.t3.text">XuanJi Technology's OEM service helped us launch our own brand of timing chains. Their support throughout the process was excellent.</p>
+          <div class="author">
+            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=automotive%20engineer%20man%20portrait&image_size=square" alt="David Kim">
+            <div class="author-info">
+              <h4 data-i18n="autoparts.testimonials.t3.author">David Kim</h4>
+              <span data-i18n="autoparts.testimonials.t3.company">Operations Manager, Asia Auto</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container" style="text-align: center;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 20px;" data-i18n="cta.title">Ready to Start Your Business?</h2>
+      <p style="color: var(--text-gray); font-size: 1.1rem; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;" data-i18n="cta.desc">Contact our professional team today. We are ready to assist you with your sourcing needs and help you succeed in the global market.</p>
+      <a href="../contact.html" class="btn btn-primary" data-i18n="cta.btn">Get a Quote Now</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3 data-i18n="autoparts.footer.title">XuanJi Auto Parts</h3>
+          <p data-i18n="autoparts.footer.desc">Professional auto parts supplier. We are the automotive components division of XuanJi Technology.</p>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="autoparts.footer.categories">Products</h3>
+          <ul>
+            <li><a href="#" data-i18n="autoparts.footer.cat1">Roller Chains</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.cat2">Brake Discs</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.cat3">Timing Chains</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.cat4">Wheel Hubs</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="autoparts.footer.services">Services</h3>
+          <ul>
+            <li><a href="#" data-i18n="autoparts.footer.oem">OEM/ODM</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.qc">Quality Control</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.bulk">Bulk Order</a></li>
+            <li><a href="#" data-i18n="autoparts.footer.support">Technical Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h3 data-i18n="autoparts.footer.contact">Contact</h3>
+          <p><span data-i18n="contact.info.name">Name</span>: <span data-site-key="contact_name">-</span></p>
+          <p><span data-i18n="contact.info.email">Email</span>: <a href="mailto:hddemiguo@gmail.com" data-site-key="company_email">hddemiguo@gmail.com</a></p>
+          <p><span data-i18n="contact.info.phone">Phone</span>: <span data-site-key="contact_phone">0086-15868179726</span></p>
+          <p><span data-i18n="contact.info.whatsapp">WhatsApp</span>: <a href="https://api.whatsapp.com/send?phone=+8615868179726" data-site-key="whatsapp_link">0086-15868179726</a></p>
+          <p><span data-i18n="contact.info.wechat">WeChat</span>: <span data-site-key="wechat_link">-</span></p>
+          <p><span data-i18n="contact.info.address">Address</span>: <span data-site-key="company_address">Room 601, 6th Floor, BeiChengMingYuan, Shangcheng District, Hangzhou City, Zhejiang Province, China</span></p>
+          <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <a href="#" data-social-icon="youtube" style="font-size: 1.5rem; color: #FF0000;" title="YouTube">📺</a>
+            <a href="#" data-social-icon="instagram" style="font-size: 1.5rem; color: #E4405F;" title="Instagram">📷</a>
+            <a href="#" data-social-icon="facebook" style="font-size: 1.5rem; color: #1877F2;" title="Facebook">📘</a>
+            <a href="#" data-social-icon="linkedin" style="font-size: 1.5rem; color: #0A66C2;" title="LinkedIn">💼</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-i18n="footer.copyright">&copy; 2024 XuanJi Technology. All rights reserved.</p> | <a href="../index.html" class="group-link" data-i18n="autoparts.footer.visitMain">Visit Our Main Site</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/i18n/i18n.js"></script>
+  <script>
+    function toggleMenu() {
+      document.querySelector('.nav-links').classList.toggle('active');
+    }
+
+    function toggleLangDropdown() {
+      document.getElementById('lang-dropdown').classList.toggle('show');
+    }
+
+    function changeLang(lang) {
+      GT_I18N.setLang(lang);
+      document.getElementById('current-lang').textContent = lang.toUpperCase();
+      document.getElementById('lang-dropdown').classList.remove('show');
+      document.documentElement.lang = lang;
+      loadCategories();
+    }
+
+    GT_I18N.init(function() {
+      var currentLang = GT_I18N.getLang();
+      document.getElementById('current-lang').textContent = currentLang.toUpperCase();
+      document.documentElement.lang = currentLang;
+    });
+
+    GT_I18N.addCallback(function() {
+      loadCategories();
+    });
+
+    document.addEventListener('click', function(e) {
+      var dropdown = document.getElementById('lang-dropdown');
+      if (dropdown && !dropdown.contains(e.target) && !e.target.classList.contains('lang-btn')) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    let currentCategory = 'all';
+
+    async function loadCategories() {
+      const currentLang = GT_I18N.getLang();
+      try {
+        const response = await fetch(`/api/categories?industry=autoparts&lang=${currentLang}`);
+        const data = await response.json();
+        if (data.success && data.data) {
+          const tabsContainer = document.getElementById('category-tabs');
+          const allBtn = tabsContainer.querySelector('button');
+          tabsContainer.innerHTML = '';
+          tabsContainer.appendChild(allBtn);
+          
+          data.data.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = 'tab-btn';
+            btn.textContent = cat.name;
+            btn.dataset.category = cat.originalName || cat.name;
+            btn.onclick = () => filterProducts(cat.originalName || cat.name);
+            tabsContainer.appendChild(btn);
+          });
+          
+          if (allBtn) {
+            allBtn.classList.add('active');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load categories:', error);
+      }
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('product-grid');
+      const contactPrice = GT_I18N.t('common.contactPrice', 'Contact for Price');
+      const getQuote = GT_I18N.t('common.getQuote', 'Get Quote');
+      const noProducts = GT_I18N.t('common.noProducts', 'No Products Found');
+      const noProductsDesc = GT_I18N.t('common.noProductsDesc', 'Sorry, there are no products in this category. Please try a different category.');
+      const viewAllProducts = GT_I18N.t('common.viewAllProducts', 'View All Products');
+      const uncategorized = GT_I18N.t('common.uncategorized', 'Uncategorized');
+      const placeholderImg = 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=automotive%20parts%20metal%20industrial%20white%20background&image_size=square';
+
+      grid.innerHTML = '';
+
+      if (!products || products.length === 0) {
+        grid.innerHTML = `
+          <div style="text-align: center; padding: 60px 20px; color: var(--text-gray); grid-column: span 3;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">📭</div>
+            <h3 style="font-size: 1.5rem; margin-bottom: 10px; color: var(--text-light);">${noProducts}</h3>
+            <p style="font-size: 1rem;">${noProductsDesc}</p>
+            <button onclick="filterProducts('all')" class="btn btn-primary" style="margin-top: 20px;">${viewAllProducts}</button>
+          </div>
+        `;
+        return;
+      }
+
+      products.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.style.cursor = 'pointer';
+        card.setAttribute('data-category', product.category || '');
+        card.innerHTML = `
+          <div class="product-image-wrapper">
+            <img src="${product.image_url || placeholderImg}" alt="${product.name}" onerror="this.src='${placeholderImg}'">
+          </div>
+          <div class="product-info">
+            <span class="product-category">${product.category || uncategorized}</span>
+            <h3>${product.name}</h3>
+            <p>${product.description || 'High-quality automotive parts for various applications.'}</p>
+            <div class="price">${product.price_range || contactPrice}</div>
+            <button type="button" class="btn btn-primary">${getQuote}</button>
+          </div>
+        `;
+        card.addEventListener('click', (e) => {
+          openProductModal(product);
+        });
+        grid.appendChild(card);
+      });
+    }
+
+    async function loadProducts(category = 'all') {
+      try {
+        const grid = document.getElementById('product-grid');
+        const loadingText = GT_I18N.t('common.loading', 'Loading products...');
+        grid.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: var(--text-gray); grid-column: span 3;">
+            <div style="font-size: 3rem; margin-bottom: 15px;">🔄</div>
+            <p>${loadingText}</p>
+          </div>
+        `;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const previewId = urlParams.get('preview');
+        
+        if (previewId) {
+          fetch(`/api/products/${previewId}?lang=${GT_I18N.getLang()}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.data) {
+                openProductModal(data.data);
+              }
+            })
+            .catch(err => console.error('Preview load error:', err));
+        }
+
+        let apiUrl = `/api/products?industry=autoparts&lang=${GT_I18N.getLang()}`;
+        if (category !== 'all') {
+          apiUrl += `&category=${encodeURIComponent(category)}`;
+        }
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+          renderProducts(data.data);
+        } else {
+          renderProducts([]);
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        renderProducts([]);
+      }
+    }
+
+    function filterProducts(category) {
+      currentCategory = category;
+      
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      buttons.forEach(btn => {
+        if ((category === 'all' && btn.textContent === 'All Products') || 
+            (category !== 'all' && btn.textContent === category)) {
+          btn.classList.add('active');
+        }
+      });
+
+      loadProducts(category);
+    }
+
+    async function loadIndustryNews() {
+      try {
+        const res = await fetch('/api/news?industry=autoparts&published=true');
+        const data = await res.json();
+        const list = document.getElementById('news-list');
+        if (!list) return;
+        
+        if (!data.data || data.data.length === 0) {
+          list.innerHTML = '<p class="no-data">No news available at this time.</p>';
+          return;
+        }
+        
+        let lang = 'en';
+        try { lang = (window.GT_I18N && window.GT_I18N.getLang) ? GT_I18N.getLang() : 'en'; } catch(e) {}
+        
+        list.innerHTML = data.data.map(news => {
+          const title = (news.title && news.title[lang]) || (news.title && news.title.en) || '';
+          const summary = (news.summary && news.summary[lang]) || (news.summary && news.summary.en) || '';
+          
+          return `
+            <div class="news-card">
+              <div class="news-date">${news.date || ''}</div>
+              <h3>${title}</h3>
+              <p>${summary}</p>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error('Failed to load news:', e);
+        const list = document.getElementById('news-list');
+        if (list) list.innerHTML = '<p class="no-data">Failed to load news.</p>';
+      }
+    }
+
+    async function loadIndustryCaseStudies() {
+      try {
+        const res = await fetch('/api/case-studies?industry=autoparts&published=true');
+        const data = await res.json();
+        const list = document.getElementById('case-studies-list');
+        if (!list) return;
+        
+        if (!data.data || data.data.length === 0) {
+          list.innerHTML = '<p class="no-data">No case studies available at this time.</p>';
+          return;
+        }
+        
+        let lang = 'en';
+        try { lang = (window.GT_I18N && window.GT_I18N.getLang) ? GT_I18N.getLang() : 'en'; } catch(e) {}
+        
+        list.innerHTML = data.data.map(cs => {
+          const title = (cs.title && cs.title[lang]) || (cs.title && cs.title.en) || '';
+          const summary = (cs.summary && cs.summary[lang]) || (cs.summary && cs.summary.en) || '';
+          
+          return `
+            <div class="case-study-card">
+              <div class="client-name">${cs.client || ''}</div>
+              <span class="product-tag">${cs.product || ''}</span>
+              <h3>${title}</h3>
+              <p>${summary}</p>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error('Failed to load case studies:', e);
+        const list = document.getElementById('case-studies-list');
+        if (list) list.innerHTML = '<p class="no-data">Failed to load case studies.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadCategories();
+      loadProducts();
+      loadIndustryNews();
+      loadIndustryCaseStudies();
+    });
+    GT_I18N.addCallback(async function() {
+      loadCategories();
+      loadProducts(currentCategory);
+      if (window.siteSettings && typeof populateTeamAdvantage === 'function') {
+        populateTeamAdvantage(window.siteSettings);
+      }
+      await updateProductModalContent();
+    });
+
+    const productModal = document.createElement('div');
+    productModal.className = 'product-modal-overlay';
+    productModal.id = 'product-modal';
+    productModal.innerHTML = `
+      <div class="product-modal">
+        <button class="product-modal-close" onclick="closeProductModal()">×</button>
+        <div class="product-modal-content">
+          <div class="product-modal-image-wrapper" onclick="openImageLightbox()">
+            <img id="modal-product-image" src="" alt="">
+          </div>
+          <div class="product-modal-info">
+            <h2 id="modal-product-name"></h2>
+            <div class="price" id="modal-product-price"></div>
+            <div class="category" id="modal-product-category"></div>
+            <div class="description" id="modal-product-description"></div>
+            <button type="button" class="btn btn-secondary" style="display: inline-block; margin-bottom: 25px;" id="modal-get-quote-btn" data-i18n="common.getQuote" onclick="document.getElementById('product-inquiry-form').scrollIntoView({behavior:'smooth',block:'center'})">Get Quote</button>
+            <div class="specifications">
+              <h4 id="modal-spec-title" data-i18n="common.specifications">Specifications</h4>
+              <div class="specifications-content" id="modal-product-specifications"></div>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+              <h3 data-i18n="common.requestQuote">Request Quote</h3>
+              <form id="product-inquiry-form" onsubmit="submitProductInquiry(event)">
+                <input type="hidden" id="inquiry-product-id" name="product_id">
+                <input type="hidden" id="inquiry-product-name" name="product_name">
+                <input type="hidden" id="inquiry-source-department" name="source_department" value="autoparts">
+                <div class="form-group">
+                  <label data-i18n="common.selectProduct">Select Product</label>
+                  <select id="inquiry-product-select" name="product_select" onchange="onProductSelectChange(this)">
+                    <option value="" data-i18n="common.loading">Loading...</option>
+                  </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  <div class="form-group">
+                    <label data-i18n="common.yourName">Your Name *</label>
+                    <input type="text" id="inquiry-name" name="name" required>
+                  </div>
+                  <div class="form-group">
+                    <label data-i18n="common.companyName">Company Name</label>
+                    <input type="text" id="inquiry-company" name="company">
+                  </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  <div class="form-group">
+                    <label data-i18n="common.email">Email *</label>
+                    <input type="email" id="inquiry-email" name="email" required>
+                  </div>
+                  <div class="form-group">
+                    <label data-i18n="common.whatsapp">WhatsApp</label>
+                    <input type="text" id="inquiry-whatsapp" name="whatsapp">
+                  </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                  <div class="form-group">
+                    <label data-i18n="common.quantity">Quantity</label>
+                    <input type="number" id="inquiry-quantity" name="quantity" min="1">
+                  </div>
+                  <div class="form-group">
+                    <label data-i18n="common.attachment">Attachment</label>
+                    <input type="file" id="inquiry-attachment" name="attachment" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label data-i18n="common.yourMessage">Your Message</label>
+                  <textarea id="inquiry-message" name="message" rows="3" placeholder="Describe your requirements..."></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;" data-i18n="common.submitQuote">Submit Quote Request</button>
+              </form>
+            </div>
+            
+            <div data-social-share style="margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+              <p data-i18n="common.share">Share:</p>
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <a href="#" data-share-platform="facebook" onclick="shareProduct('facebook')" style="font-size: 1.8rem; color: #1877F2; cursor: pointer;">📘</a>
+                <a href="#" data-share-platform="linkedin" onclick="shareProduct('linkedin')" style="font-size: 1.8rem; color: #0A66C2; cursor: pointer;">💼</a>
+                <a href="#" data-share-platform="instagram" onclick="shareProduct('instagram')" style="font-size: 1.8rem; color: #E4405F; cursor: pointer;">📷</a>
+                <a href="#" data-share-platform="youtube" onclick="shareProduct('youtube')" style="font-size: 1.8rem; color: #FF0000; cursor: pointer;">📺</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(productModal);
+
+    const imageLightbox = document.createElement('div');
+    imageLightbox.className = 'image-lightbox';
+    imageLightbox.id = 'image-lightbox';
+    imageLightbox.innerHTML = `
+      <button class="image-lightbox-close" onclick="closeImageLightbox()">×</button>
+      <img id="lightbox-image" src="" alt="">
+    `;
+    document.body.appendChild(imageLightbox);
+
+    var currentProduct = null;
+
+    function openProductModal(product) {
+      currentProduct = product;
+      updateProductModalContent();
+      loadModalProductOptions();
+      document.getElementById('product-modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      if (typeof updateWhatsAppFloatMessage === 'function') {
+        updateWhatsAppFloatMessage(product.name);
+      }
+    }
+
+    async function updateProductModalContent() {
+      if (!currentProduct) return;
+      
+      const contactPrice = GT_I18N.t('common.contactPrice', 'Contact for Price');
+      const categoryLabel = GT_I18N.t('common.category', 'Category');
+      const noDescription = GT_I18N.t('common.noDescription', 'No description available.');
+      const noSpecifications = GT_I18N.t('common.noSpecifications', '<p>No specifications available.</p>');
+      
+      if (currentProduct.id) {
+        try {
+          const response = await fetch(`/api/products/${currentProduct.id}?lang=${GT_I18N.getLang()}`);
+          const data = await response.json();
+          if (data.success && data.data) {
+            currentProduct = data.data;
+          }
+        } catch (error) {
+          console.error('Failed to fetch translated product:', error);
+        }
+      }
+      
+      document.getElementById('modal-product-image').src = currentProduct.image_url || currentProduct.image || placeholderImg;
+      document.getElementById('modal-product-image').onerror = function() {
+        this.src = placeholderImg;
+        this.onerror = null;
+      };
+      document.getElementById('modal-product-name').textContent = currentProduct.name || '';
+      document.getElementById('modal-product-price').textContent = currentProduct.price_range || contactPrice;
+      document.getElementById('modal-product-category').textContent = currentProduct.category ? `${categoryLabel}: ${currentProduct.category}` : '';
+      document.getElementById('modal-product-description').textContent = currentProduct.description || currentProduct.desc || noDescription;
+      
+      let specsHtml = currentProduct.specifications || noSpecifications;
+      specsHtml = translateSpecContent(specsHtml);
+      document.getElementById('modal-product-specifications').innerHTML = specsHtml;
+      
+      GT_I18N.replaceText();
+    }
+
+    function translateSpecContent(html) {
+      if (!html) return html;
+      
+      const translations = [
+        { en: 'Parameter', key: 'common.param', fallback: 'Parameter' },
+        { en: 'Type', key: 'common.type', fallback: 'Type' },
+        { en: 'Value', key: 'common.value', fallback: 'Value' },
+        { en: 'Model', key: 'common.model', fallback: 'Model' },
+        { en: 'Series', key: 'common.series', fallback: 'Series' },
+        { en: 'Material', key: 'common.material', fallback: 'Material' },
+        { en: 'Dimension', key: 'common.dimension', fallback: 'Dimension' },
+        { en: 'Weight', key: 'common.weight', fallback: 'Weight' },
+        { en: 'Capacity', key: 'common.capacity', fallback: 'Capacity' },
+        { en: 'Power', key: 'common.power', fallback: 'Power' },
+        { en: 'Voltage', key: 'common.voltage', fallback: 'Voltage' },
+        { en: 'Temperature', key: 'common.temperature', fallback: 'Temperature' },
+        { en: 'Size', key: 'common.size', fallback: 'Size' },
+        { en: 'Color', key: 'common.color', fallback: 'Color' },
+        { en: 'Brand', key: 'common.brand', fallback: 'Brand' },
+        { en: 'Origin', key: 'common.origin', fallback: 'Origin' },
+        { en: 'Certification', key: 'common.certification', fallback: 'Certification' },
+        { en: 'Warranty', key: 'common.warranty', fallback: 'Warranty' },
+        { en: 'Packaging', key: 'common.packaging', fallback: 'Packaging' },
+        { en: 'Sample Capacity', key: 'common.sampleCapacity', fallback: 'Sample Capacity' },
+        { en: 'Thawing Time', key: 'common.thawingTime', fallback: 'Thawing Time' },
+        { en: 'Thawing Method', key: 'common.thawingMethod', fallback: 'Thawing Method' },
+        { en: 'Operation Temperature', key: 'common.operationTemperature', fallback: 'Operation Temperature' },
+        { en: 'Temperature of operation', key: 'common.operationTemperature', fallback: 'Operation Temperature' },
+        { en: 'Display Screen', key: 'common.displayScreen', fallback: 'Display Screen' },
+        { en: 'Display screen', key: 'common.displayScreen', fallback: 'Display Screen' },
+        { en: 'Ice Crystal Parameter Setting', key: 'common.iceCrystalSetting', fallback: 'Ice Crystal Parameter Setting' },
+        { en: 'Ice crystal parameter setting', key: 'common.iceCrystalSetting', fallback: 'Ice Crystal Parameter Setting' },
+        { en: 'End of Recovery', key: 'common.recoveryEnd', fallback: 'End of Recovery' },
+        { en: 'End of recovery', key: 'common.recoveryEnd', fallback: 'End of Recovery' },
+        { en: 'Sterilization', key: 'common.sterilization', fallback: 'Sterilization' },
+        { en: 'One-click sterilization', key: 'common.sterilization', fallback: 'One-click sterilization' },
+        { en: 'Temperature Calibration', key: 'common.tempCalibration', fallback: 'Temperature Calibration' },
+        { en: 'Temperature calibration', key: 'common.tempCalibration', fallback: 'Temperature Calibration' },
+        { en: 'Initial Temperature Protection', key: 'common.tempProtection', fallback: 'Initial Temperature Protection' },
+        { en: 'Initial temperature protection', key: 'common.tempProtection', fallback: 'Initial Temperature Protection' },
+        { en: 'Auditing and Tracing', key: 'common.auditingTracing', fallback: 'Auditing and Tracing' },
+        { en: 'Auditing and tracing', key: 'common.auditingTracing', fallback: 'Auditing and Tracing' },
+        { en: 'Data Export', key: 'common.dataExport', fallback: 'Data Export' },
+        { en: 'Data export', key: 'common.dataExport', fallback: 'Data Export' },
+        { en: 'Authority Management', key: 'common.authorityManagement', fallback: 'Authority Management' },
+        { en: 'Authority management', key: 'common.authorityManagement', fallback: 'Authority Management' },
+        { en: 'Rated Power', key: 'common.ratedPower', fallback: 'Rated Power' },
+        { en: 'Rated power', key: 'common.ratedPower', fallback: 'Rated Power' },
+        { en: 'Input Voltage', key: 'common.inputVoltage', fallback: 'Input Voltage' },
+        { en: 'Output Voltage', key: 'common.outputVoltage', fallback: 'Output Voltage' },
+        { en: 'Current Output', key: 'common.currentOutput', fallback: 'Current Output' },
+        { en: 'Power Plug', key: 'common.powerPlug', fallback: 'Power Plug' },
+        { en: 'Notch', key: 'common.notch', fallback: 'Notch' },
+        { en: 'Four slots operate independently', key: 'common.fourSlotsIndependent', fallback: 'Four slots operate independently' },
+        { en: 'Microtubes', key: 'common.microtubes', fallback: 'Microtubes' },
+        { en: 'Dry heat transfer', key: 'common.dryHeatTransfer', fallback: 'Dry heat transfer' },
+        { en: 'Touch screen for real-time observation', key: 'common.touchScreen', fallback: 'Touch screen for real-time observation' },
+        { en: 'Built-in ozone sterilization system', key: 'common.ozoneSterilization', fallback: 'Built-in ozone sterilization system' },
+        { en: 'Level 2; Operator/Administrator', key: 'common.level2Auth', fallback: 'Level 2; Operator/Administrator' },
+        { en: 'With a prompt tone', key: 'common.promptTone', fallback: 'With a prompt tone' },
+        { en: 'Room humidity', key: 'common.roomHumidity', fallback: 'Room humidity' },
+        { en: 'Resuscitation tank dynamics', key: 'common.resuscitationTank', fallback: 'Resuscitation tank dynamics' }
+      ];
+      
+      const translationMap = {};
+      translations.forEach(function(t) {
+        translationMap[t.en.toLowerCase()] = GT_I18N.t(t.key, t.fallback);
+      });
+      
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      
+      function translateNode(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          let text = node.textContent;
+          if (!text || !text.trim()) return;
+          
+          let cleanText = text.replace(/\s+/g, ' ').trim();
+          let lowerText = cleanText.toLowerCase();
+          
+          if (translationMap[lowerText]) {
+            node.textContent = text.replace(cleanText, translationMap[lowerText]);
+            return;
+          }
+          
+          const sortedKeys = Object.keys(translationMap).sort(function(a, b) {
+            return b.length - a.length;
+          });
+          
+          for (var i = 0; i < sortedKeys.length; i++) {
+            var key = sortedKeys[i];
+            if (lowerText.indexOf(key) !== -1) {
+              var regex = new RegExp(key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+              node.textContent = text.replace(regex, translationMap[key]);
+              return;
+            }
+          }
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          for (var i = 0; i < node.childNodes.length; i++) {
+            translateNode(node.childNodes[i]);
+          }
+        }
+      }
+      
+      for (var i = 0; i < tempDiv.childNodes.length; i++) {
+        translateNode(tempDiv.childNodes[i]);
+      }
+      
+      return tempDiv.innerHTML;
+    }
+
+    function closeProductModal() {
+      document.getElementById('product-modal').classList.remove('active');
+      document.body.style.overflow = '';
+      
+      if (typeof updateWhatsAppFloatMessage === 'function') {
+        updateWhatsAppFloatMessage();
+      }
+    }
+
+    async function loadModalProductOptions() {
+      var industry = document.body.getAttribute('data-industry') || '';
+      var select = document.getElementById('inquiry-product-select');
+      if (!select) return;
+      
+      try {
+        var response = await fetch('/api/products?lang=' + (GT_I18N.getLang() || 'en') + '&industry=' + industry + '&limit=100');
+        var result = await response.json();
+        if (result.success && result.data) {
+          select.innerHTML = '<option value="" data-i18n="common.selectProduct">Select Product</option>';
+          result.data.forEach(function(product) {
+            var option = document.createElement('option');
+            option.value = product.id;
+            option.textContent = product.name;
+            select.appendChild(option);
+          });
+          
+          if (currentProduct && currentProduct.id) {
+            select.value = currentProduct.id;
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load products:', error);
+      }
+    }
+
+    function onProductSelectChange(select) {
+      var selectedOption = select.options[select.selectedIndex];
+      if (selectedOption && selectedOption.value) {
+        document.getElementById('inquiry-product-id').value = selectedOption.value;
+        document.getElementById('inquiry-product-name').value = selectedOption.text;
+      }
+    }
+
+    async function submitProductInquiry(event) {
+      event.preventDefault();
+      
+      if (!currentProduct) return;
+      
+      const formData = new FormData();
+      formData.set('name', document.getElementById('inquiry-name').value);
+      formData.set('email', document.getElementById('inquiry-email').value);
+      formData.set('company', document.getElementById('inquiry-company').value);
+      formData.set('whatsapp', document.getElementById('inquiry-whatsapp').value);
+      formData.set('quantity', document.getElementById('inquiry-quantity').value);
+      formData.set('message', document.getElementById('inquiry-message').value);
+      formData.set('product_id', currentProduct.id);
+      formData.set('product_name', currentProduct.name);
+      formData.set('source_department', document.getElementById('inquiry-source-department').value);
+      formData.set('source_page', window.location.href);
+      
+      const fileInput = document.getElementById('inquiry-attachment');
+      if (fileInput.files && fileInput.files[0]) {
+        formData.set('attachment', fileInput.files[0]);
+      }
+      
+      try {
+        const response = await fetch('/api/inquiries', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert(GT_I18N.t('common.quoteSubmitted', 'Quote request submitted successfully! We will contact you shortly.'));
+          event.target.reset();
+        } else {
+          alert(GT_I18N.t('common.submitFailed', 'Failed to submit. Please try again.'));
+        }
+      } catch (error) {
+        console.error('Failed to submit inquiry:', error);
+        alert(GT_I18N.t('common.submitFailed', 'Failed to submit. Please try again.'));
+      }
+    }
+
+    function shareProduct(platform) {
+      if (!currentProduct) return;
+      
+      const title = currentProduct.name || 'Product';
+      const url = window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'product=' + currentProduct.id;
+      
+      let shareUrl = '';
+      const encodedTitle = encodeURIComponent(title);
+      const encodedUrl = encodeURIComponent(url);
+      
+      switch(platform) {
+        case 'facebook':
+          shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedTitle}`;
+          break;
+        case 'linkedin':
+          shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`;
+          break;
+        case 'instagram':
+          shareUrl = `https://www.instagram.com/?url=${encodedUrl}`;
+          break;
+        case 'youtube':
+          navigator.clipboard.writeText(url).then(function() {
+            alert(GT_I18N.t('common.linkCopied', 'Link copied to clipboard!'));
+          });
+          return;
+        default:
+          return;
+      }
+      
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+
+    function openImageLightbox() {
+      const imgSrc = document.getElementById('modal-product-image').src;
+      document.getElementById('lightbox-image').src = imgSrc;
+      document.getElementById('image-lightbox').classList.add('active');
+    }
+
+    function closeImageLightbox() {
+      document.getElementById('image-lightbox').classList.remove('active');
+    }
+
+    document.getElementById('product-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeProductModal();
+    });
+
+    document.getElementById('image-lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeImageLightbox();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        if (document.getElementById('image-lightbox').classList.contains('active')) {
+          closeImageLightbox();
+        } else if (document.getElementById('product-modal').classList.contains('active')) {
+          closeProductModal();
+        }
+      }
+    });
+  </script>
+  <script src="/tracking.js"></script>
+  <script src="/site-settings.js?v=3"></script>
+
+  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20auto%20parts" target="_blank" data-whatsapp-bar class="floating-whatsapp-btn">
+      <span style="font-size: 1.5rem;">💬</span>
+      <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
+    </a>
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar class="floating-email-btn">
+      <span style="font-size: 1.5rem;">📧</span>
+      <span data-i18n="contactBar.email">Email Us</span>
+    </a>
+  </div>
+
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
+    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  </div>
+</body>
+</html>
