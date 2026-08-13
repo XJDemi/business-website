@@ -4,3 +4,4 @@ database.json
 package-lock.json
 .env
 *.log
+*.zip
