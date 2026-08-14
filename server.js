@@ -7,8 +7,20 @@ const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const nodemailer = require('nodemailer');
-const { Client } = require('pg');
-const sharp = require('sharp');
+
+// Lazy-load sharp (native module with platform-specific binaries)
+// Avoids require-time crash on Vercel cold start if binary is unavailable
+let _sharp = null;
+function getSharp() {
+  if (_sharp) return _sharp;
+  try {
+    _sharp = require('sharp');
+  } catch (e) {
+    console.warn('[sharp] failed to load sharp, image compression disabled:', e.message);
+    _sharp = null;
+  }
+  return _sharp;
+}
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -1340,10 +1352,24 @@ async function getAllInquiries() {
   return db.inquiries;
 }
 
-const uploadDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV !== undefined;
+
+// On Vercel, project filesystem is READ-ONLY. Only /tmp is writable.
+// Skip directory creation there (we rely on Supabase for uploads/storage).
+// Fallback path for any unexpected local writes: Vercel's /tmp
+function safeMkdirSync(dirPath) {
+  if (isVercel) return;
+  try {
+    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
+  } catch (e) {
+    console.warn(`[fs] skip mkdir ${dirPath}:`, e.message);
+  }
 }
+
+const uploadDir = isVercel
+  ? '/tmp'
+  : path.join(__dirname, 'uploads');
+safeMkdirSync(uploadDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
@@ -1848,42 +1874,45 @@ async function processAndUploadImage(imageData) {
   const maxFileSize = 800 * 1024;
 
   try {
-    const metadata = await sharp(buffer).metadata();
-    let width = metadata.width || 1920;
-    let height = metadata.height || 1920;
+    const sharpLib = getSharp();
+    if (sharpLib) {
+      const metadata = await sharpLib(buffer).metadata();
+      let width = metadata.width || 1920;
+      let height = metadata.height || 1920;
 
-    let resizeWidth = width;
-    let resizeHeight = height;
+      let resizeWidth = width;
+      let resizeHeight = height;
 
-    if (width > maxDimension || height > maxDimension) {
-      if (width > height) {
-        resizeWidth = maxDimension;
-        resizeHeight = Math.round((height * maxDimension) / width);
-      } else {
-        resizeHeight = maxDimension;
-        resizeWidth = Math.round((width * maxDimension) / height);
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          resizeWidth = maxDimension;
+          resizeHeight = Math.round((height * maxDimension) / width);
+        } else {
+          resizeHeight = maxDimension;
+          resizeWidth = Math.round((width * maxDimension) / height);
+        }
       }
-    }
 
-    buffer = await sharp(buffer)
-      .resize(resizeWidth, resizeHeight, {
-        fit: sharp.fit.contain,
-        background: { r: 248, g: 249, b: 250, alpha: 1 }
-      })
-      .webp({ quality: 85 })
-      .toBuffer();
+      buffer = await sharpLib(buffer)
+        .resize(resizeWidth, resizeHeight, {
+          fit: sharpLib.fit.contain,
+          background: { r: 248, g: 249, b: 250, alpha: 1 }
+        })
+        .webp({ quality: 85 })
+        .toBuffer();
 
-    if (buffer.length > maxFileSize) {
-      let quality = 80;
-      while (buffer.length > maxFileSize && quality > 20) {
-        quality -= 5;
-        buffer = await sharp(buffer)
-          .webp({ quality: quality })
-          .toBuffer();
+      if (buffer.length > maxFileSize) {
+        let quality = 80;
+        while (buffer.length > maxFileSize && quality > 20) {
+          quality -= 5;
+          buffer = await sharpLib(buffer)
+            .webp({ quality: quality })
+            .toBuffer();
+        }
       }
-    }
 
-    console.log('Image processed successfully, size:', buffer.length, 'bytes');
+      console.log('Image processed successfully, size:', buffer.length, 'bytes');
+    }
   } catch (err) {
     console.error('Image processing failed, using original:', err);
   }
@@ -1982,38 +2011,41 @@ app.post('/api/products', authenticateToken, upload.single('image'), async (req,
 
     let buffer = fileContent;
     try {
-      const metadata = await sharp(buffer).metadata();
-      let width = metadata.width || 1920;
-      let height = metadata.height || 1920;
-      const maxDimension = 1920;
-      const maxFileSize = 800 * 1024;
+      const sharpLib = getSharp();
+      if (sharpLib) {
+        const metadata = await sharpLib(buffer).metadata();
+        let width = metadata.width || 1920;
+        let height = metadata.height || 1920;
+        const maxDimension = 1920;
+        const maxFileSize = 800 * 1024;
 
-      let resizeWidth = width;
-      let resizeHeight = height;
+        let resizeWidth = width;
+        let resizeHeight = height;
 
-      if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-          resizeWidth = maxDimension;
-          resizeHeight = Math.round((height * maxDimension) / width);
-        } else {
-          resizeHeight = maxDimension;
-          resizeWidth = Math.round((width * maxDimension) / height);
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            resizeWidth = maxDimension;
+            resizeHeight = Math.round((height * maxDimension) / width);
+          } else {
+            resizeHeight = maxDimension;
+            resizeWidth = Math.round((width * maxDimension) / height);
+          }
         }
-      }
 
-      buffer = await sharp(buffer)
-        .resize(resizeWidth, resizeHeight, {
-          fit: sharp.fit.contain,
-          background: { r: 248, g: 249, b: 250, alpha: 1 }
-        })
-        .webp({ quality: 85 })
-        .toBuffer();
+        buffer = await sharpLib(buffer)
+          .resize(resizeWidth, resizeHeight, {
+            fit: sharpLib.fit.contain,
+            background: { r: 248, g: 249, b: 250, alpha: 1 }
+          })
+          .webp({ quality: 85 })
+          .toBuffer();
 
-      if (buffer.length > maxFileSize) {
-        let quality = 80;
-        while (buffer.length > maxFileSize && quality > 20) {
-          quality -= 5;
-          buffer = await sharp(buffer).webp({ quality: quality }).toBuffer();
+        if (buffer.length > maxFileSize) {
+          let quality = 80;
+          while (buffer.length > maxFileSize && quality > 20) {
+            quality -= 5;
+            buffer = await sharpLib(buffer).webp({ quality: quality }).toBuffer();
+          }
         }
       }
     } catch (err) {
@@ -2100,38 +2132,41 @@ app.put('/api/products/:id', authenticateToken, upload.single('image'), async (r
 
     let buffer = fileContent;
     try {
-      const metadata = await sharp(buffer).metadata();
-      let width = metadata.width || 1920;
-      let height = metadata.height || 1920;
-      const maxDimension = 1920;
-      const maxFileSize = 800 * 1024;
+      const sharpLib = getSharp();
+      if (sharpLib) {
+        const metadata = await sharpLib(buffer).metadata();
+        let width = metadata.width || 1920;
+        let height = metadata.height || 1920;
+        const maxDimension = 1920;
+        const maxFileSize = 800 * 1024;
 
-      let resizeWidth = width;
-      let resizeHeight = height;
+        let resizeWidth = width;
+        let resizeHeight = height;
 
-      if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-          resizeWidth = maxDimension;
-          resizeHeight = Math.round((height * maxDimension) / width);
-        } else {
-          resizeHeight = maxDimension;
-          resizeWidth = Math.round((width * maxDimension) / height);
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            resizeWidth = maxDimension;
+            resizeHeight = Math.round((height * maxDimension) / width);
+          } else {
+            resizeHeight = maxDimension;
+            resizeWidth = Math.round((width * maxDimension) / height);
+          }
         }
-      }
 
-      buffer = await sharp(buffer)
-        .resize(resizeWidth, resizeHeight, {
-          fit: sharp.fit.contain,
-          background: { r: 248, g: 249, b: 250, alpha: 1 }
-        })
-        .webp({ quality: 85 })
-        .toBuffer();
+        buffer = await sharpLib(buffer)
+          .resize(resizeWidth, resizeHeight, {
+            fit: sharpLib.fit.contain,
+            background: { r: 248, g: 249, b: 250, alpha: 1 }
+          })
+          .webp({ quality: 85 })
+          .toBuffer();
 
-      if (buffer.length > maxFileSize) {
-        let quality = 80;
-        while (buffer.length > maxFileSize && quality > 20) {
-          quality -= 5;
-          buffer = await sharp(buffer).webp({ quality: quality }).toBuffer();
+        if (buffer.length > maxFileSize) {
+          let quality = 80;
+          while (buffer.length > maxFileSize && quality > 20) {
+            quality -= 5;
+            buffer = await sharpLib(buffer).webp({ quality: quality }).toBuffer();
+          }
         }
       }
     } catch (err) {
@@ -2687,17 +2722,13 @@ app.get('/api/analytics', authenticateToken, async (req, res) => {
   });
 });
 
-const SNAPSHOT_DIR = path.join(__dirname, 'snapshots');
+const SNAPSHOT_DIR = isVercel ? '/tmp/snapshots' : path.join(__dirname, 'snapshots');
 const SNAPSHOT_LOG_FILE = path.join(SNAPSHOT_DIR, 'snapshot_logs.json');
 const SNAPSHOT_CONFIG_FILE = path.join(SNAPSHOT_DIR, 'snapshot_config.json');
 const SETTINGS_BACKUP_DIR = path.join(SNAPSHOT_DIR, 'settings_backups');
 
-if (!fs.existsSync(SNAPSHOT_DIR)) {
-  fs.mkdirSync(SNAPSHOT_DIR, { recursive: true });
-}
-if (!fs.existsSync(SETTINGS_BACKUP_DIR)) {
-  fs.mkdirSync(SETTINGS_BACKUP_DIR, { recursive: true });
-}
+safeMkdirSync(SNAPSHOT_DIR);
+safeMkdirSync(SETTINGS_BACKUP_DIR);
 
 // Backup site_settings before each update to prevent data loss
 function backupSiteSettings(reason) {
@@ -3418,11 +3449,11 @@ Sitemap: ${baseUrl}/sitemap.xml
   }
 });
 
-// Detect Vercel Serverless environment
-const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV !== undefined;
-
-// Initialize Supabase connection
-const supabaseReady = connectSupabase();
+// Initialize Supabase connection (suppress unhandled rejections; JSON fallback exists)
+const supabaseReady = Promise.resolve().then(() => connectSupabase());
+supabaseReady.catch(err => {
+  console.error('[supabaseReady] unhandled error (continuing with JSON fallback):', err && err.message ? err.message : err);
+});
 
 if (!isVercel) {
   // Local development: start HTTP server

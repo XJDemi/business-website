@@ -1,0 +1,14 @@
+{
+  "builds": [
+    { "src": "api/index.js", "use": "@vercel/node" },
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "." } }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/index.js" },
+    { "src": "/admin(.*)", "dest": "/admin/index.html" },
+    { "src": "/biotech(.*)", "dest": "/biotech/index.html" },
+    { "src": "/autoparts(.*)", "dest": "/autoparts/index.html" },
+    { "src": "/instruments(.*)", "dest": "/instruments/index.html" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
+}

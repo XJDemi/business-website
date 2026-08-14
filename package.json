@@ -13,11 +13,9 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^9.0.3",
-    "pg": "^8.22.0",
-    "serverless-http": "^4.0.0",
+    "serverless-http": "^3.2.0",
     "sharp": "^0.35.3"
   },
   "keywords": [
