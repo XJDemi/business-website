@@ -4,6 +4,3 @@ database.json
 package-lock.json
 .env
 *.log
-*.zip
-*.csv
-snapshots/settings_backups/

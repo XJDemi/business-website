@@ -1,0 +1,20 @@
+id,name,industry,sort_order,created_at
+1,Cryo-Tube Thawing Device,biotech,0,2026-07-21 13:08:37.07644
+2,Cryo-Bag Thawing Device,biotech,1,2026-07-21 13:08:37.07644
+4,Portable Thawing Device,biotech,2,2026-07-21 13:08:37.07644
+5,Cell Freezing Containers,biotech,3,2026-07-21 13:08:37.07644
+7,Cell Cryobags,biotech,4,2026-07-21 13:08:37.07644
+10,Liquid Nitrogen Tank,biotech,5,2026-07-21 13:08:37.07644
+11,Ice-Free Cooling Workstations,biotech,6,2026-07-21 13:08:37.07644
+13,Tube Blocks,biotech,7,2026-07-21 13:08:37.07644
+14,Dry Ice Transport Box,biotech,8,2026-07-21 13:08:37.07644
+16,Roller Chains,autoparts,9,2026-07-21 13:08:37.07644
+18,Timing Chains,autoparts,10,2026-07-21 13:08:37.07644
+19,Silent Chains,autoparts,11,2026-07-21 13:08:37.07644
+20,Sleeve Chains,autoparts,12,2026-07-21 13:08:37.07644
+21,Leaf Chains,autoparts,13,2026-07-21 13:08:37.07644
+22,Coating Thickness Gauge,instruments,14,2026-07-21 13:08:37.07644
+23,Ultrasonic Thickness Gauge,instruments,15,2026-07-21 13:08:37.07644
+24,Eddy Conductivity Meter,instruments,16,2026-07-21 13:08:37.07644
+25,Hardness Tester,instruments,17,2026-07-21 13:08:37.07644
+27,Gloss Meter,instruments,18,2026-07-21 13:08:37.07644

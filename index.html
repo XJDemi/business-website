@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XuanJi Technology - Your Trusted Chinese Export Partner Since 2005</title>
   <meta name="description" content="Nearly 20 years of professional trade experience, specializing in three core industries: Biomedical Equipment, Auto Parts, Industrial Testing Instruments. Sincerity, integrity, win-win partnership with professional team support.">
@@ -16,31 +15,6 @@
       --text-gray: #8892A6;
       --card-bg: #112240;
       --border-color: #1E3A5F;
-      --header-bg: rgba(10, 22, 40, 0.95);
-      --hero-grad1: #0A1628;
-      --hero-grad2: #112240;
-      --contactbar-bg: rgba(10, 22, 40, 0.95);
-      --contactbar-border: #1E3A5F;
-      --contactbar-text: #8892A6;
-      --email-btn-bg: #0066CC;
-      --email-btn-shadow: rgba(0,102,204,0.4);
-    }
-    [data-theme="light"] {
-      --primary-bg: #F5F7FA;
-      --primary-color: #0066CC;
-      --accent-color: #FF6B35;
-      --text-light: #1A202C;
-      --text-gray: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --header-bg: rgba(255, 255, 255, 0.95);
-      --hero-grad1: #E8EDF5;
-      --hero-grad2: #F0F4FA;
-      --contactbar-bg: rgba(245, 247, 250, 0.98);
-      --contactbar-border: #E2E8F0;
-      --contactbar-text: #64748B;
-      --email-btn-bg: #0066CC;
-      --email-btn-shadow: rgba(0,102,204,0.4);
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -51,7 +25,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background: var(--header-bg);
+      background: rgba(10, 22, 40, 0.95);
       backdrop-filter: blur(10px);
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -162,7 +136,7 @@
     .testimonials { background: var(--card-bg); }
     .testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
     .testimonial-card {
-      background: var(--card-bg);
+      background: rgba(10,22,40,0.5);
       padding: 30px;
       border-radius: 15px;
       border: 1px solid var(--border-color);
@@ -171,27 +145,6 @@
     .testimonial-card p { color: var(--text-gray); margin-bottom: 20px; font-style: italic; }
     .testimonial-card .author { font-weight: 600; }
     .testimonial-card .company { color: var(--text-gray); font-size: 0.9rem; }
-
-    .floating-whatsapp-btn,
-    .floating-email-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    .floating-whatsapp-btn {
-      background: #25D366;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    }
-    .floating-email-btn {
-      background: var(--email-btn-bg);
-      box-shadow: 0 4px 15px var(--email-btn-shadow);
-    }
 
     footer {
       background: var(--card-bg);
@@ -287,7 +240,7 @@
       </div>
       <div style="max-width: 800px; margin: 0 auto;">
         <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 15px; border: 1px solid var(--border-color);">
-          <iframe data-video-key="youtube_link" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
         </div>
       </div>
     </div>
@@ -432,6 +385,7 @@
   </footer>
 
   <script src="/i18n/i18n.js"></script>
+  <script src="/public/supabase-client.js"></script>
   <script>
     function toggleMenu() {
       document.querySelector('.nav-links').classList.toggle('active');
@@ -467,15 +421,20 @@
 
     function loadProductCounts() {
       try {
-        fetch(`/api/products?lang=${GT_I18N.getLang()}`)
-          .then(response => response.json())
-          .then(data => {
-            const biotechCount = data.data.filter(p => p.industry === 'biotech').length;
-            const autopartsCount = data.data.filter(p => p.industry === 'autoparts').length;
-            const instrumentsCount = data.data.filter(p => p.industry === 'instruments').length;
-            
+        window.SupaQuery
+          .from('products')
+          .select('industry')
+          .then(({ data, error }) => {
+            if (error || !data) {
+              console.log('Failed to load product counts from Supabase');
+              return;
+            }
+            const biotechCount = data.filter(p => p.industry === 'biotech').length;
+            const autopartsCount = data.filter(p => p.industry === 'autoparts').length;
+            const instrumentsCount = data.filter(p => p.industry === 'instruments').length;
+
             const productsLabel = GT_I18N.t('home.products', 'Products');
-            
+
             document.getElementById('biotech-count').innerHTML = `${biotechCount} ${productsLabel}`;
             document.getElementById('autoparts-count').innerHTML = `${autopartsCount} ${productsLabel}`;
             document.getElementById('instruments-count').innerHTML = `${instrumentsCount} ${productsLabel}`;
@@ -495,21 +454,21 @@
   <script src="/site-settings.js?v=3"></script>
 
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
-    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar class="floating-whatsapp-btn">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar style="display: flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">💬</span>
       <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
     </a>
-    <a href="mailto:hddemiguo@gmail.com" data-email-bar class="floating-email-btn">
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar style="display: flex; align-items: center; gap: 10px; background: #0066CC; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">📧</span>
       <span data-i18n="contactBar.email">Email Us</span>
     </a>
   </div>
 
-  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
-    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
-    <a href="tel:+8615868179726" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
-    <a href="mailto:hddemiguo@gmail.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
-    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 22, 40, 0.95); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid #1E3A5F; z-index: 999;">
+    <span style="color: #8892A6;" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: #FF6B35; text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: #00CC99; text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: #8892A6; font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
   </div>
 </body>
 </html>

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (result.success && result.data) {
       const settings = result.data;
       window.siteSettings = settings;
-      applyTheme(settings);
       
       const industry = detectIndustry();
       window.currentIndustry = industry;
@@ -56,29 +55,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
       });
       
-      // Update video embed iframes from settings
-      const videoIframes = document.querySelectorAll('[data-video-key]');
-      videoIframes.forEach(function(iframe) {
-        const key = iframe.getAttribute('data-video-key');
-        const value = settings[key];
-        if (value && value.trim()) {
-          // Extract YouTube video ID from various URL formats
-          let videoId = value.trim();
-          const patterns = [
-            /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
-            /^([a-zA-Z0-9_-]{11})$/
-          ];
-          for (const pattern of patterns) {
-            const match = value.match(pattern);
-            if (match) {
-              videoId = match[1];
-              break;
-            }
-          }
-          iframe.src = 'https://www.youtube.com/embed/' + videoId;
-        }
-      });
-
       const whatsappBars = document.querySelectorAll('[data-whatsapp-bar]');
       whatsappBars.forEach(function(bar) {
         const phone = getContactValue(settings, industry, 'whatsapp_link');
@@ -110,8 +86,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       updateSocialShareButtons(settings);
       createWhatsAppFloatButton(settings);
       populateIndustryContacts(settings);
-      populateTeamAdvantage(settings);
-      createThemeToggle(settings);
     }
   } catch (error) {
     console.log('Failed to load site settings:', error);
@@ -121,56 +95,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 function detectIndustry() {
   const bodyIndustry = document.body ? document.body.getAttribute('data-industry') : null;
   if (bodyIndustry) return bodyIndustry;
-
+  
   const path = window.location.pathname;
   if (path.includes('/biotech')) return 'biotech';
   if (path.includes('/autoparts')) return 'autoparts';
   if (path.includes('/instruments')) return 'instruments';
-
+  
   return null;
-}
-
-function applyTheme(settings) {
-  var saved = null;
-  try { saved = localStorage.getItem('gt_theme'); } catch(e) {}
-  var theme = saved || settings.site_theme || 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-  if (!saved) {
-    try { localStorage.setItem('gt_theme_default', theme); } catch(e) {}
-  }
-}
-
-function createThemeToggle(settings) {
-  if (settings.theme_toggle_enabled === false) return;
-  if (document.getElementById('gt-theme-toggle')) return;
-
-  var btn = document.createElement('button');
-  btn.id = 'gt-theme-toggle';
-  btn.setAttribute('aria-label', 'Toggle theme');
-  btn.style.cssText = 'position:fixed;bottom:90px;left:30px;z-index:1000;width:44px;height:44px;border-radius:50%;border:1px solid var(--border-color);background:var(--card-bg);color:var(--text-light);cursor:pointer;font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,0.2);transition:all 0.3s;';
-
-  function updateIcon() {
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    btn.textContent = current === 'light' ? '\u2600\ufe0f' : '\u{1F319}';
-  }
-  updateIcon();
-
-  btn.addEventListener('click', function() {
-    var current = document.documentElement.getAttribute('data-theme') || 'dark';
-    var next = current === 'light' ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', next);
-    try { localStorage.setItem('gt_theme', next); } catch(e) {}
-    updateIcon();
-  });
-
-  btn.addEventListener('mouseenter', function() {
-    btn.style.transform = 'scale(1.1)';
-  });
-  btn.addEventListener('mouseleave', function() {
-    btn.style.transform = 'scale(1)';
-  });
-
-  document.body.appendChild(btn);
 }
 
 function getContactValue(settings, industry, key) {
@@ -394,28 +325,6 @@ function populateIndustryContacts(settings) {
       });
     });
   });
-}
-
-function populateTeamAdvantage(settings) {
-  var section = document.getElementById('team-advantage');
-  if (!section) return;
-
-  var industry = window.currentIndustry || detectIndustry();
-  if (!industry) return;
-
-  var lang = 'en';
-  try {
-    lang = (window.GT_I18N && window.GT_I18N.getLang) ? GT_I18N.getLang() : 'en';
-  } catch(e) {}
-
-  var advantageData = settings[industry + '_team_advantage'] || {};
-  var content = advantageData[lang] || advantageData.en || '';
-
-  var contentEl = document.getElementById('team-advantage-content');
-  if (contentEl) {
-    contentEl.textContent = content.trim() ? content : '';
-  }
-  section.style.display = '';
 }
 
 function updateWhatsAppFloatMessage(productName) {

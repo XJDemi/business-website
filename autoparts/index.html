@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Auto Parts - XuanJi Technology | Automotive Components & OEM Solutions</title>
   <meta name="description" content="Professional auto parts supplier. Providing roller chains, brake discs, timing chains, wheel hubs. OE quality replacement solutions, flexible OEM/ODM services, strong bulk supply capabilities.">
@@ -16,43 +15,6 @@
       --text-gray: #999999;
       --card-bg: #222222;
       --border-color: #333333;
-      --header-bg: rgba(26, 26, 26, 0.95);
-      --hero-grad1: #1A1A1A;
-      --hero-grad2: #222222;
-      --contactbar-bg: rgba(26, 26, 26, 0.95);
-      --contactbar-border: #333333;
-      --contactbar-text: #999999;
-      --email-btn-bg: #FF6B35;
-      --email-btn-shadow: rgba(255,107,53,0.4);
-      --tag-bg: rgba(255,107,53,0.15);
-      --tag-bg-hover: rgba(255,107,53,0.3);
-      --product-placeholder: #f8f9fa;
-      --spec-bg: rgba(52,152,219,0.08);
-      --spec-border: rgba(52,152,219,0.2);
-      --shadow-hover: rgba(0,0,0,0.15);
-    }
-    [data-theme="light"] {
-      --primary-bg: #FAF6F3;
-      --primary-color: #E85D2F;
-      --accent-color: #CC5522;
-      --text-light: #2D1F1A;
-      --text-gray: #6B5A50;
-      --card-bg: #FFFFFF;
-      --border-color: #E8DDD5;
-      --header-bg: rgba(255, 255, 255, 0.95);
-      --hero-grad1: #F5EDE8;
-      --hero-grad2: #FAF6F3;
-      --contactbar-bg: rgba(250, 246, 243, 0.98);
-      --contactbar-border: #E8DDD5;
-      --contactbar-text: #6B5A50;
-      --email-btn-bg: #E85D2F;
-      --email-btn-shadow: rgba(232,93,47,0.4);
-      --tag-bg: rgba(232,93,47,0.15);
-      --tag-bg-hover: rgba(232,93,47,0.3);
-      --product-placeholder: #F5EDE8;
-      --spec-bg: rgba(232,93,47,0.08);
-      --spec-border: rgba(232,93,47,0.2);
-      --shadow-hover: rgba(0,0,0,0.08);
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -63,7 +25,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background: var(--header-bg);
+      background: rgba(26, 26, 26, 0.95);
       backdrop-filter: blur(10px);
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -83,7 +45,7 @@
       margin-left: 10px;
     }
     .lang-btn {
-      background: var(--tag-bg);
+      background: rgba(255,107,53,0.2);
       border: 1px solid var(--border-color);
       color: var(--text-light);
       padding: 8px 15px;
@@ -95,7 +57,7 @@
       gap: 5px;
       transition: all 0.3s;
     }
-    .lang-btn:hover { background: var(--tag-bg-hover); }
+    .lang-btn:hover { background: rgba(255,107,53,0.4); }
     .lang-dropdown {
       display: none;
       position: absolute;
@@ -125,7 +87,7 @@
       justify-content: center;
       text-align: center;
       padding-top: 80px;
-      background: linear-gradient(135deg, var(--hero-grad1) 0%, var(--hero-grad2) 50%, var(--hero-grad1) 100%);
+      background: linear-gradient(135deg, #1A1A1A 0%, #222222 50%, #1A1A1A 100%);
       position: relative;
       overflow: hidden;
     }
@@ -150,7 +112,7 @@
       display: inline-block;
     }
     .btn-primary { background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px var(--tag-bg-hover); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,107,53,0.4); }
     .btn-secondary { background: transparent; color: var(--text-light); border: 2px solid var(--primary-color); }
     .btn-secondary:hover { background: var(--primary-color); transform: translateY(-3px); }
 
@@ -210,9 +172,9 @@
     }
     .product-image-wrapper {
       width: 100%;
-      height: 280px;
+      height: 200px;
       overflow: hidden;
-      background: var(--product-placeholder);
+      background: #f8f9fa;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -288,7 +250,7 @@
     .product-modal-close {
       position: absolute;
       top: 15px; right: 15px;
-      background: var(--tag-bg);
+      background: rgba(255, 107, 53, 0.2);
       border: none;
       color: var(--accent-color);
       width: 40px;
@@ -298,12 +260,12 @@
       cursor: pointer;
       z-index: 10;
     }
-    .product-modal-close:hover { background: var(--tag-bg-hover); }
+    .product-modal-close:hover { background: rgba(255, 107, 53, 0.4); }
     .product-modal-content { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 30px; }
     .product-modal-image-wrapper {
       width: 100%;
       height: 400px;
-      background: var(--product-placeholder);
+      background: #f8f9fa;
       border-radius: 15px;
       overflow: hidden;
       display: flex;
@@ -319,11 +281,11 @@
     .product-modal-info .specifications { margin-top: 25px; }
     .product-modal-info .specifications h4 { margin-bottom: 15px; color: var(--primary-color); }
     .product-modal-info .specifications-content {
-      background: var(--spec-bg);
-      border: 1px solid var(--spec-border);
+      background: rgba(52, 152, 219, 0.08);
+      border: 1px solid rgba(52, 152, 219, 0.2);
       padding: 20px;
       border-radius: 10px;
-      color: var(--text-light);
+      color: #ffffff;
       line-height: 2;
       max-height: 300px;
       overflow-y: auto;
@@ -415,7 +377,7 @@
     }
 
     .case-study-card {
-      background: var(--card-bg);
+      background: rgba(10,22,40,0.5);
       border: 1px solid var(--border-color);
       border-radius: 15px;
       padding: 30px;
@@ -424,7 +386,7 @@
 
     .case-study-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 30px var(--shadow-hover);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     .case-study-card .client-name {
@@ -437,7 +399,7 @@
     .case-study-card h3 {
       font-size: 1.15rem;
       margin-bottom: 10px;
-      color: var(--text-light);
+      color: var(--text-primary);
     }
 
     .case-study-card p {
@@ -449,7 +411,7 @@
     .case-study-card .product-tag {
       display: inline-block;
       padding: 4px 12px;
-      background: var(--tag-bg);
+      background: rgba(0,204,153,0.15);
       color: var(--accent-color);
       border-radius: 20px;
       font-size: 0.8rem;
@@ -461,27 +423,6 @@
       padding: 40px;
       color: var(--text-gray);
       font-style: italic;
-    }
-
-    .floating-whatsapp-btn,
-    .floating-email-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    .floating-whatsapp-btn {
-      background: #25D366;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    }
-    .floating-email-btn {
-      background: var(--email-btn-bg);
-      box-shadow: 0 4px 15px var(--email-btn-shadow);
     }
 
     @media (max-width: 768px) {
@@ -578,16 +519,6 @@
           <p data-i18n="autoparts.features.f4.desc">Strict inspection processes for reliability</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section" id="team-advantage">
-    <div class="container">
-      <div class="section-title">
-        <h2 data-i18n="autoparts.advantage.title">Our Auto Parts Team's Advantages</h2>
-        <p data-i18n="autoparts.advantage.desc">Why partner with our auto parts division</p>
-      </div>
-      <div id="team-advantage-content" style="max-width: 900px; margin: 0 auto; background: var(--card-bg); padding: 40px; border-radius: 15px; border: 1px solid var(--border-color); line-height: 1.8; color: var(--text-light); white-space: pre-wrap; font-size: 1.05rem;"></div>
     </div>
   </section>
 
@@ -727,6 +658,7 @@
   </footer>
 
   <script src="/i18n/i18n.js"></script>
+  <script src="/public/supabase-client.js"></script>
   <script>
     function toggleMenu() {
       document.querySelector('.nav-links').classList.toggle('active');
@@ -766,26 +698,38 @@
     async function loadCategories() {
       const currentLang = GT_I18N.getLang();
       try {
-        const response = await fetch(`/api/categories?industry=autoparts&lang=${currentLang}`);
-        const data = await response.json();
-        if (data.success && data.data) {
-          const tabsContainer = document.getElementById('category-tabs');
-          const allBtn = tabsContainer.querySelector('button');
-          tabsContainer.innerHTML = '';
-          tabsContainer.appendChild(allBtn);
-          
-          data.data.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'tab-btn';
-            btn.textContent = cat.name;
-            btn.dataset.category = cat.originalName || cat.name;
-            btn.onclick = () => filterProducts(cat.originalName || cat.name);
-            tabsContainer.appendChild(btn);
-          });
-          
-          if (allBtn) {
-            allBtn.classList.add('active');
+        const { data, error } = await window.SupaQuery
+          .from('categories')
+          .select('*')
+          .eq('industry', 'autoparts')
+          .order('sort_order');
+
+        if (error || !data) {
+          console.error('Failed to load categories from Supabase:', error);
+          return;
+        }
+
+        const tabsContainer = document.getElementById('category-tabs');
+        const allBtn = tabsContainer.querySelector('button');
+        tabsContainer.innerHTML = '';
+        tabsContainer.appendChild(allBtn);
+
+        for (const cat of data) {
+          const originalName = cat.name;
+          let displayName = cat.name;
+          if (currentLang && currentLang !== 'en' && cat.translations && cat.translations[currentLang]) {
+            displayName = cat.translations[currentLang] || cat.name;
           }
+          const btn = document.createElement('button');
+          btn.className = 'tab-btn';
+          btn.textContent = displayName;
+          btn.dataset.category = originalName;
+          btn.onclick = () => filterProducts(originalName);
+          tabsContainer.appendChild(btn);
+        }
+
+        if (allBtn) {
+          allBtn.classList.add('active');
         }
       } catch (error) {
         console.error('Failed to load categories:', error);
@@ -840,7 +784,22 @@
       });
     }
 
+    function applyProductTranslations(product, lang) {
+      if (!lang || lang === 'en' || !product.translations) return { ...product };
+      const t = product.translations[lang];
+      if (!t) return { ...product };
+      return {
+        ...product,
+        name: t.name || product.name,
+        description: t.description || product.description,
+        specifications: t.specifications || product.specifications,
+        price_range: t.price_range || product.price_range,
+        category: t.category || product.category
+      };
+    }
+
     async function loadProducts(category = 'all') {
+      const currentLang = GT_I18N.getLang();
       try {
         const grid = document.getElementById('product-grid');
         const loadingText = GT_I18N.t('common.loading', 'Loading products...');
@@ -853,31 +812,37 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const previewId = urlParams.get('preview');
-        
+
         if (previewId) {
-          fetch(`/api/products/${previewId}?lang=${GT_I18N.getLang()}`)
-            .then(response => response.json())
-            .then(data => {
-              if (data.success && data.data) {
-                openProductModal(data.data);
-              }
-            })
-            .catch(err => console.error('Preview load error:', err));
+          try {
+            const { data: pd } = await window.SupaQuery
+              .from('products')
+              .select('*')
+              .eq('id', parseInt(previewId))
+              .limit(1);
+            if (pd && pd[0]) {
+              openProductModal(applyProductTranslations(pd[0], currentLang));
+            }
+          } catch (e) {
+            console.error('Preview load error:', e);
+          }
         }
 
-        let apiUrl = `/api/products?industry=autoparts&lang=${GT_I18N.getLang()}`;
+        let q = window.SupaQuery.from('products').select('*').eq('industry', 'autoparts');
         if (category !== 'all') {
-          apiUrl += `&category=${encodeURIComponent(category)}`;
+          q = q.eq('category', category);
         }
+        q = q.order('sort_order');
 
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        if (data.success && data.data) {
-          renderProducts(data.data);
-        } else {
+        const { data, error } = await q;
+        if (error) {
+          console.error('Supabase products error:', error);
           renderProducts([]);
+          return;
         }
+
+        const translated = (data || []).map(p => applyProductTranslations(p, currentLang));
+        renderProducts(translated);
       } catch (error) {
         console.error('Failed to load products:', error);
         renderProducts([]);
@@ -902,23 +867,28 @@
 
     async function loadIndustryNews() {
       try {
-        const res = await fetch('/api/news?industry=autoparts&published=true');
-        const data = await res.json();
+        const { data, error } = await window.SupaQuery
+          .from('news')
+          .select('*')
+          .eq('industry', 'autoparts')
+          .eq('published', true)
+          .order('sort_order');
+
         const list = document.getElementById('news-list');
         if (!list) return;
-        
-        if (!data.data || data.data.length === 0) {
+
+        if (error || !data || data.length === 0) {
           list.innerHTML = '<p class="no-data">No news available at this time.</p>';
           return;
         }
-        
+
         let lang = 'en';
         try { lang = (window.GT_I18N && window.GT_I18N.getLang) ? GT_I18N.getLang() : 'en'; } catch(e) {}
-        
-        list.innerHTML = data.data.map(news => {
+
+        list.innerHTML = data.map(news => {
           const title = (news.title && news.title[lang]) || (news.title && news.title.en) || '';
           const summary = (news.summary && news.summary[lang]) || (news.summary && news.summary.en) || '';
-          
+
           return `
             <div class="news-card">
               <div class="news-date">${news.date || ''}</div>
@@ -936,23 +906,28 @@
 
     async function loadIndustryCaseStudies() {
       try {
-        const res = await fetch('/api/case-studies?industry=autoparts&published=true');
-        const data = await res.json();
+        const { data, error } = await window.SupaQuery
+          .from('case_studies')
+          .select('*')
+          .eq('industry', 'autoparts')
+          .eq('published', true)
+          .order('sort_order');
+
         const list = document.getElementById('case-studies-list');
         if (!list) return;
-        
-        if (!data.data || data.data.length === 0) {
+
+        if (error || !data || data.length === 0) {
           list.innerHTML = '<p class="no-data">No case studies available at this time.</p>';
           return;
         }
-        
+
         let lang = 'en';
         try { lang = (window.GT_I18N && window.GT_I18N.getLang) ? GT_I18N.getLang() : 'en'; } catch(e) {}
-        
-        list.innerHTML = data.data.map(cs => {
+
+        list.innerHTML = data.map(cs => {
           const title = (cs.title && cs.title[lang]) || (cs.title && cs.title.en) || '';
           const summary = (cs.summary && cs.summary[lang]) || (cs.summary && cs.summary.en) || '';
-          
+
           return `
             <div class="case-study-card">
               <div class="client-name">${cs.client || ''}</div>
@@ -978,9 +953,6 @@
     GT_I18N.addCallback(async function() {
       loadCategories();
       loadProducts(currentCategory);
-      if (window.siteSettings && typeof populateTeamAdvantage === 'function') {
-        populateTeamAdvantage(window.siteSettings);
-      }
       await updateProductModalContent();
     });
 
@@ -1259,19 +1231,27 @@
       var industry = document.body.getAttribute('data-industry') || '';
       var select = document.getElementById('inquiry-product-select');
       if (!select) return;
-      
+
       try {
-        var response = await fetch('/api/products?lang=' + (GT_I18N.getLang() || 'en') + '&industry=' + industry + '&limit=100');
-        var result = await response.json();
-        if (result.success && result.data) {
+        const { data, error } = await window.SupaQuery
+          .from('products')
+          .select('*')
+          .eq('industry', industry || 'autoparts')
+          .order('sort_order')
+          .limit(100);
+
+        const currentLang = (GT_I18N && GT_I18N.getLang) ? GT_I18N.getLang() : 'en';
+
+        if (!error && data) {
           select.innerHTML = '<option value="" data-i18n="common.selectProduct">Select Product</option>';
-          result.data.forEach(function(product) {
+          data.forEach(function(product) {
+            const translated = applyProductTranslations(product, currentLang);
             var option = document.createElement('option');
             option.value = product.id;
-            option.textContent = product.name;
+            option.textContent = translated.name;
             select.appendChild(option);
           });
-          
+
           if (currentProduct && currentProduct.id) {
             select.value = currentProduct.id;
           }
@@ -1395,21 +1375,21 @@
   <script src="/site-settings.js?v=3"></script>
 
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
-    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20auto%20parts" target="_blank" data-whatsapp-bar class="floating-whatsapp-btn">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20auto%20parts" target="_blank" data-whatsapp-bar style="display: flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">💬</span>
       <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
     </a>
-    <a href="mailto:hddemiguo@gmail.com" data-email-bar class="floating-email-btn">
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar style="display: flex; align-items: center; gap: 10px; background: #00CC99; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 204, 153, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">📧</span>
       <span data-i18n="contactBar.email">Email Us</span>
     </a>
   </div>
 
-  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
-    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
-    <a href="tel:+8615868179726" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
-    <a href="mailto:hddemiguo@gmail.com" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
-    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 26, 26, 0.95); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid #1E4433; z-index: 999;">
+    <span style="color: #889988;" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: #00CC99; text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: #00FFAA; text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: #889988; font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
   </div>
 </body>
 </html>

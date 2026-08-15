@@ -228,8 +228,6 @@ var GT_I18N = (function() {
         altEl.alt = altValue;
       }
     }
-
-    document.documentElement.classList.remove('i18n-pending');
   }
 
   function init(callback) {

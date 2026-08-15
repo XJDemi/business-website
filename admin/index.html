@@ -17,40 +17,6 @@
       --border-color: #1E3A5F;
       --green: #00CC66;
       --blue: #0099FF;
-      --danger: #CC3333;
-      --danger-hover: #AA2222;
-      --modal-overlay: rgba(0,0,0,0.7);
-      --table-hover: rgba(255,255,255,0.03);
-      --input-border: #ddd;
-      --tab-bg: rgba(255,255,255,0.05);
-      --tab-border: #333;
-      --item-border: #2a2a2a;
-      --item-text: var(--text-gray);
-      --item-small: var(--text-gray);
-      --color-scheme: dark;
-    }
-    [data-theme="light"] {
-      --primary-bg: #F5F7FA;
-      --sidebar-bg: #FFFFFF;
-      --primary-color: #0066CC;
-      --accent-color: #FF6B35;
-      --text-light: #1A202C;
-      --text-gray: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --green: #00A854;
-      --blue: #0080FF;
-      --danger: #DC3545;
-      --danger-hover: #C82333;
-      --modal-overlay: rgba(0,0,0,0.4);
-      --table-hover: rgba(0,0,0,0.03);
-      --input-border: #E2E8F0;
-      --tab-bg: #F0F4FA;
-      --tab-border: #E2E8F0;
-      --item-border: #E2E8F0;
-      --item-text: #64748B;
-      --item-small: #94A3B8;
-      --color-scheme: light;
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -121,8 +87,8 @@
     .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,107,53,0.4); }
     .btn-secondary { background: transparent; color: var(--text-light); border: 1px solid var(--border-color); }
     .btn-secondary:hover { background: var(--card-bg); }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-danger:hover { background: var(--danger-hover); }
+    .btn-danger { background: #CC3333; color: white; }
+    .btn-danger:hover { background: #AA2222; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
     .stat-card {
@@ -156,7 +122,7 @@
       color: var(--text-light);
       font-size: 1rem;
       caret-color: var(--accent-color);
-      color-scheme: var(--color-scheme);
+      color-scheme: dark;
     }
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       outline: none;
@@ -185,7 +151,7 @@
     }
     #form-specifications-editor table td, #form-specifications-editor table th,
     #edit-specifications-editor table td, #edit-specifications-editor table th {
-      border: 1px solid var(--input-border);
+      border: 1px solid #ddd;
       padding: 6px 12px;
       min-width: 80px;
       vertical-align: top;
@@ -204,7 +170,7 @@
       border-bottom: 1px solid var(--border-color);
     }
     .table th { color: var(--text-gray); font-weight: 600; }
-    .table tr:hover { background: var(--table-hover); }
+    .table tr:hover { background: rgba(255,255,255,0.03); }
     .table .img-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; }
     .table .action-btns { display: flex; gap: 10px; }
 
@@ -212,7 +178,7 @@
       display: none;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: var(--modal-overlay);
+      background: rgba(0,0,0,0.7);
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -304,17 +270,17 @@
       .table th, .table td { padding: 10px; }
     }
     .lang-tabs { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-    .lang-tab { padding: 8px 16px; border: 1px solid var(--tab-border); background: var(--tab-bg); border-radius: 5px; cursor: pointer; font-size: 14px; color: var(--text-light); }
+    .lang-tab { padding: 8px 16px; border: 1px solid #ddd; background: #f5f5f5; border-radius: 5px; cursor: pointer; font-size: 14px; }
     .lang-tab.active { background: var(--primary-color); color: white; border-color: var(--primary-color); }
     .lang-fields { margin-bottom: 15px; }
-    .item-card { display: flex; justify-content: space-between; align-items: flex-start; padding: 15px; border: 1px solid var(--item-border); border-radius: 8px; margin-bottom: 10px; }
+    .item-card { display: flex; justify-content: space-between; align-items: flex-start; padding: 15px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 10px; }
     .item-info { flex: 1; }
     .item-info h3 { margin: 0 0 5px 0; font-size: 16px; }
-    .item-info p { margin: 0 0 5px 0; color: var(--item-text); font-size: 14px; }
-    .item-info small { color: var(--item-small); }
+    .item-info p { margin: 0 0 5px 0; color: #666; font-size: 14px; }
+    .item-info small { color: #999; }
     .item-actions { display: flex; gap: 10px; }
     .item-actions button { padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; }
-    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger { background: #dc3545; color: white; }
   </style>
 </head>
 <body>
@@ -365,7 +331,6 @@
         <div class="header">
           <h1 id="page-title" data-i18n="admin.dashboard.title">Dashboard</h1>
           <div class="user-info">
-            <button class="btn btn-secondary" onclick="toggleAdminTheme()" id="admin-theme-toggle" title="Toggle theme" style="font-size: 1.2rem; padding: 8px 12px;">🌙</button>
             <span id="current-user" data-i18n="admin.user">Admin</span>
             <button class="btn btn-secondary" onclick="logout()" data-i18n="admin.logout">Logout</button>
           </div>
@@ -1208,130 +1173,7 @@
                   </div>
                 </div>
               </div>
-
-              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-                <h3>Industry Team Advantages</h3>
-                <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 15px;">Describe each industry team's unique advantages. Supports multiple languages. This content will be displayed on the respective industry pages.</p>
-
-                <div style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color);">
-                  <button type="button" class="advantage-tab active" data-industry="biotech" onclick="switchAdvantageTab('biotech')" id="adv-tab-biotech" style="padding: 10px 20px; background: none; border: none; border-bottom: 2px solid var(--primary-color); color: var(--primary-color); cursor: pointer; font-weight: 600; margin-bottom: -2px;">🧬 Biotech</button>
-                  <button type="button" class="advantage-tab" data-industry="autoparts" onclick="switchAdvantageTab('autoparts')" id="adv-tab-autoparts" style="padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-gray); cursor: pointer; font-weight: 600; margin-bottom: -2px;">⚙️ Auto Parts</button>
-                  <button type="button" class="advantage-tab" data-industry="instruments" onclick="switchAdvantageTab('instruments')" id="adv-tab-instruments" style="padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--text-gray); cursor: pointer; font-weight: 600; margin-bottom: -2px;">🔬 Instruments</button>
-                </div>
-
-                <div id="advantage-biotech" class="advantage-panel" style="display: block;">
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>English</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-en" placeholder="Describe the Biotech team's advantages in English..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>中文</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-zh" placeholder="用中文描述生物科技团队的优势..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Русский</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-ru" placeholder="Опишите преимущества команды биотехнологий на русском..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px;">
-                    <h4>Español</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-es" placeholder="Describe las ventajas del equipo de biotecnología en español..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Deutsch</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-de" placeholder="Beschreiben Sie die Vorteile des Biotech-Teams auf Deutsch..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Français</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-fr" placeholder="Décrivez les avantages de l'équipe biotech en français..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Italiano</h4>
-                    <div class="form-group"><textarea id="advantage-biotech-it" placeholder="Descrivi i vantaggi del team biotech in italiano..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                </div>
-
-                <div id="advantage-autoparts" class="advantage-panel" style="display: none;">
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>English</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-en" placeholder="Describe the Auto Parts team's advantages in English..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>中文</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-zh" placeholder="用中文描述汽配团队的优势..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Русский</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-ru" placeholder="Опишите преимущества команды автозапчастей на русском..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px;">
-                    <h4>Español</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-es" placeholder="Describe las ventajas del equipo de autopartes en español..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Deutsch</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-de" placeholder="Beschreiben Sie die Vorteile des Auto-Teams auf Deutsch..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Français</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-fr" placeholder="Décrivez les avantages de l'équipe auto en français..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Italiano</h4>
-                    <div class="form-group"><textarea id="advantage-autoparts-it" placeholder="Descrivi i vantaggi del team auto in italiano..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                </div>
-
-                <div id="advantage-instruments" class="advantage-panel" style="display: none;">
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>English</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-en" placeholder="Describe the Instruments team's advantages in English..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>中文</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-zh" placeholder="用中文描述仪器团队的优势..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Русский</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-ru" placeholder="Опишите преимущества команды приборов на русском..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px;">
-                    <h4>Español</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-es" placeholder="Describe las ventajas del equipo de instrumentos en español..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Deutsch</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-de" placeholder="Beschreiben Sie die Vorteile des Instrumente-Teams auf Deutsch..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Français</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-fr" placeholder="Décrivez les avantages de l'équipe instruments en français..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                  <div style="background: var(--card-bg); padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                    <h4>Italiano</h4>
-                    <div class="form-group"><textarea id="advantage-instruments-it" placeholder="Descrivi i vantaggi del team strumenti in italiano..." rows="5" style="width: 100%;"></textarea></div>
-                  </div>
-                </div>
-              </div>
-
-              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-                <h3>Theme Settings</h3>
-                <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 15px;">Choose a color theme for the website. Dark is the default, Light is a brighter business style.</p>
-                <div class="form-group">
-                  <label>Site Theme</label>
-                  <select id="settings-site-theme" style="width: 100%; max-width: 300px; padding: 10px; background: var(--card-bg); color: var(--text-light); border: 1px solid var(--border-color); border-radius: 5px;">
-                    <option value="dark">Dark Theme (Default)</option>
-                    <option value="light">Light Theme (Bright Business)</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Show Theme Toggle Button on Frontend</label>
-                  <select id="settings-theme-toggle" style="width: 100%; max-width: 300px; padding: 10px; background: var(--card-bg); color: var(--text-light); border: 1px solid var(--border-color); border-radius: 5px;">
-                    <option value="true">Yes (Allow visitors to switch)</option>
-                    <option value="false">No (Admin control only)</option>
-                  </select>
-                </div>
-              </div>
-
+              
               <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
                 <h3 data-i18n="admin.settings.seoTitle">Homepage SEO Settings</h3>
                 <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 15px;" data-i18n="admin.settings.seoNote">Fill in SEO information for each language. Empty fields will use default values.</p>
@@ -1471,15 +1313,8 @@
               <div style="display: flex; gap: 15px; margin-top: 30px;">
                 <button type="submit" class="btn btn-primary" data-i18n="admin.settings.save">Save Settings</button>
                 <button type="button" class="btn btn-secondary" onclick="loadSiteSettings()" data-i18n="admin.settings.refresh">Refresh</button>
-                <button type="button" class="btn btn-secondary" onclick="showSettingsBackups()" style="margin-left: auto;">📋 Settings Backups</button>
               </div>
             </form>
-
-            <div id="settings-backups-section" style="display: none; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
-              <h3>Settings Backup History</h3>
-              <p style="color: var(--text-gray); font-size: 0.8rem; margin-bottom: 15px;">Automatic backups are created before each settings update. Use this to recover lost contact information.</p>
-              <div id="settings-backups-list"></div>
-            </div>
           </div>
         </div>
 
@@ -1877,10 +1712,10 @@
     <div id="rollback-confirm-modal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeModal('rollback-confirm-modal')">&times;</span>
-        <h3 style="color: var(--danger);" data-i18n="admin.snapshots.confirmTitle">Confirm Rollback</h3>
+        <h3 style="color: #CC3333;" data-i18n="admin.snapshots.confirmTitle">Confirm Rollback</h3>
         <div style="margin-top: 20px;">
           <p data-i18n="admin.snapshots.confirmDesc">Are you sure you want to rollback to this snapshot?</p>
-          <div style="margin-top: 15px; padding: 15px; background: rgba(204,51,51,0.1); border-radius: 8px; border: 1px solid var(--danger);">
+          <div style="margin-top: 15px; padding: 15px; background: rgba(204,51,51,0.1); border-radius: 8px; border: 1px solid #CC3333;">
             <strong data-i18n="admin.snapshots.warning">WARNING:</strong>
             <ul style="margin-top: 10px; padding-left: 20px; color: var(--text-gray);">
               <li data-i18n="admin.snapshots.restore">This will restore navigation configuration, public terms, and page settings</li>
@@ -1898,10 +1733,10 @@
     <div id="rollback-final-modal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeModal('rollback-final-modal')">&times;</span>
-        <h3 style="color: var(--danger);" data-i18n="admin.snapshots.finalConfirm">FINAL Confirmation</h3>
+        <h3 style="color: #CC3333;" data-i18n="admin.snapshots.finalConfirm">FINAL Confirmation</h3>
         <div style="margin-top: 20px;">
           <p data-i18n="admin.snapshots.finalDesc">This is your last chance to cancel.</p>
-          <p style="color: var(--accent-color); font-weight: bold; margin-top: 10px;" data-i18n="admin.snapshots.finalWarning">Rollback cannot be undone!</p>
+          <p style="color: #FF6B35; font-weight: bold; margin-top: 10px;" data-i18n="admin.snapshots.finalWarning">Rollback cannot be undone!</p>
           <div style="margin-top: 15px; padding: 15px; background: rgba(0,102,204,0.1); border-radius: 8px;">
             <p data-i18n="admin.snapshots.snapshotName">Snapshot to restore:</p>
             <p id="final-snapshot-name" style="font-weight: bold; margin-top: 5px;"></p>
@@ -1917,7 +1752,7 @@
     <div id="rollback-success-modal" class="modal">
       <div class="modal-content">
         <span class="close-btn" onclick="closeModal('rollback-success-modal')">&times;</span>
-        <h3 style="color: var(--green);" data-i18n="admin.snapshots.success">Rollback Successful!</h3>
+        <h3 style="color: #00CC66;" data-i18n="admin.snapshots.success">Rollback Successful!</h3>
         <div style="margin-top: 20px;">
           <div id="rollback-result-details"></div>
         </div>
@@ -1929,32 +1764,6 @@
   </div>
 
   <script>
-    // Admin theme management
-    function initAdminTheme() {
-      var saved = null;
-      try { saved = localStorage.getItem('admin_theme'); } catch(e) {}
-      var theme = saved || 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      updateThemeIcon(theme);
-    }
-
-    function toggleAdminTheme() {
-      var current = document.documentElement.getAttribute('data-theme') || 'dark';
-      var next = current === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
-      try { localStorage.setItem('admin_theme', next); } catch(e) {}
-      updateThemeIcon(next);
-    }
-
-    function updateThemeIcon(theme) {
-      var btn = document.getElementById('admin-theme-toggle');
-      if (btn) {
-        btn.textContent = theme === 'light' ? '☀️' : '🌙';
-      }
-    }
-
-    initAdminTheme();
-
     let token = localStorage.getItem('token');
     let categories = {};
     let currentPage = 1;
@@ -1988,8 +1797,8 @@
         html += '<tr>';
         for (let c = 0; c < parseInt(cols); c++) {
           html += r === 0 
-            ? `<th style="border: 1px solid var(--input-border); padding: 8px 12px; min-width: 80px; vertical-align: top; background: rgba(0,102,204,0.2);">Header ${c+1}</th>`
-            : `<td style="border: 1px solid var(--input-border); padding: 8px 12px; min-width: 80px; vertical-align: top;">Cell ${r+1}-${c+1}</td>`;
+            ? `<th style="border: 1px solid #ddd; padding: 8px 12px; min-width: 80px; vertical-align: top; background: rgba(0,102,204,0.2);">Header ${c+1}</th>`
+            : `<td style="border: 1px solid #ddd; padding: 8px 12px; min-width: 80px; vertical-align: top;">Cell ${r+1}-${c+1}</td>`;
         }
         html += '</tr>';
       }
@@ -2233,7 +2042,7 @@
                   table.style.marginBottom = '10px';
                   const cells = table.querySelectorAll('td, th');
                   cells.forEach(cell => {
-                    cell.style.border = '1px solid var(--input-border)';
+                    cell.style.border = '1px solid #ddd';
                     cell.style.padding = '6px 12px';
                     cell.style.minWidth = '80px';
                     cell.style.verticalAlign = 'top';
@@ -3133,7 +2942,7 @@
           const details = document.getElementById('rollback-result-details');
           details.innerHTML = `
             <p>${GT_I18N.t('admin.snapshots.restored', 'Restored')}: ${result.restored.categories} ${GT_I18N.t('admin.snapshots.categories', 'categories')}, ${result.restored.translations} ${GT_I18N.t('admin.snapshots.languages', 'languages')}</p>
-            <p style="color: var(--green); margin-top: 10px;">${GT_I18N.t('admin.snapshots.protectedProducts', 'Protected')}: ${result.protected.products} ${GT_I18N.t('admin.products.title', 'products')}</p>
+            <p style="color: #00CC66; margin-top: 10px;">${GT_I18N.t('admin.snapshots.protectedProducts', 'Protected')}: ${result.protected.products} ${GT_I18N.t('admin.products.title', 'products')}</p>
           `;
           document.getElementById('rollback-success-modal').classList.add('active');
         } else {
@@ -3194,7 +3003,7 @@
           logsList.innerHTML = result.data.map(log => `
             <div style="padding: 15px; border-bottom: 1px solid var(--border-color);">
               <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                <span style="font-weight: bold; color: ${log.action === 'rollback' ? 'var(--danger)' : log.action === 'create' ? 'var(--green)' : 'var(--blue)'}">${log.action.toUpperCase()}</span>
+                <span style="font-weight: bold; color: ${log.action === 'rollback' ? '#CC3333' : log.action === 'create' ? '#00CC66' : '#0099FF'}">${log.action.toUpperCase()}</span>
                 <span style="font-size: 0.8rem; color: var(--text-gray)">${new Date(log.created_at).toLocaleString()}</span>
               </div>
               <div style="font-size: 0.9rem;">${log.details}</div>
@@ -3671,8 +3480,6 @@
           document.getElementById('settings-facebook').value = settings.facebook_link || '';
           document.getElementById('settings-linkedin').value = settings.linkedin_link || '';
           document.getElementById('settings-google-verification').value = settings.google_verification_code || '';
-          document.getElementById('settings-site-theme').value = settings.site_theme || 'dark';
-          document.getElementById('settings-theme-toggle').value = settings.theme_toggle_enabled !== false ? 'true' : 'false';
           document.getElementById('settings-social-share').value = settings.social_share_enabled !== false ? 'true' : 'false';
           document.getElementById('settings-whatsapp-float').value = settings.whatsapp_float_enabled !== false ? 'true' : 'false';
 
@@ -3684,16 +3491,7 @@
               if (el) el.value = settings[ind + '_' + f] || '';
             });
           });
-
-          var advantageLangs = ['en', 'zh', 'ru', 'de', 'fr', 'es', 'it'];
-          industries.forEach(function(ind) {
-            var advData = settings[ind + '_team_advantage'] || {};
-            advantageLangs.forEach(function(lang) {
-              var el = document.getElementById('advantage-' + ind + '-' + lang);
-              if (el) el.value = advData[lang] || '';
-            });
-          });
-
+          
           const seoTitle = settings.homepage_seo_title || {};
           const seoDescription = settings.homepage_seo_description || {};
           const seoKeywords = settings.homepage_seo_keywords || {};
@@ -3735,108 +3533,7 @@
     }
     window.switchIndustryTab = switchIndustryTab;
 
-    function switchAdvantageTab(industry) {
-      document.querySelectorAll('.advantage-tab').forEach(function(tab) {
-        var isActive = tab.getAttribute('data-industry') === industry;
-        tab.style.borderBottomColor = isActive ? 'var(--primary-color)' : 'transparent';
-        tab.style.color = isActive ? 'var(--primary-color)' : 'var(--text-gray)';
-        tab.style.fontWeight = isActive ? '600' : '400';
-      });
-      document.querySelectorAll('.advantage-panel').forEach(function(panel) {
-        panel.style.display = panel.id === 'advantage-' + industry ? 'block' : 'none';
-      });
-    }
-    window.switchAdvantageTab = switchAdvantageTab;
-
     window.loadSiteSettings = loadSiteSettings;
-
-    // Settings backup management
-    async function showSettingsBackups() {
-      const section = document.getElementById('settings-backups-section');
-      const listEl = document.getElementById('settings-backups-list');
-      if (section.style.display === 'none') {
-        section.style.display = 'block';
-        listEl.innerHTML = '<p style="color: var(--text-gray);">Loading backups...</p>';
-        try {
-          const response = await fetch('/api/settings-backups', {
-            headers: { 'Authorization': `Bearer ${token}` }
-          });
-          const result = await response.json();
-          if (result.success && result.data.length > 0) {
-            listEl.innerHTML = result.data.map(b => {
-              const date = new Date(b.backed_up_at).toLocaleString();
-              const contactBadge = b.has_contact ? '<span style="color: var(--green); font-size: 0.75rem;">✓ Contact</span>' : '';
-              const industryBadge = b.has_industry_contact ? '<span style="color: var(--blue); font-size: 0.75rem;">✓ Industry</span>' : '';
-              return `<div class="item-card" style="margin-bottom: 8px;">
-                <div class="item-info">
-                  <h3>${date}</h3>
-                  <p>Reason: ${b.reason} ${contactBadge} ${industryBadge}</p>
-                </div>
-                <div class="item-actions">
-                  <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="viewSettingsBackup('${b.id}')">View</button>
-                  <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="restoreSettingsBackup('${b.id}')">Restore</button>
-                </div>
-              </div>`;
-            }).join('');
-          } else {
-            listEl.innerHTML = '<p style="color: var(--text-gray);">No backups found. Backups are created automatically when you save settings.</p>';
-          }
-        } catch (error) {
-          listEl.innerHTML = '<p style="color: var(--danger);">Failed to load backups: ' + error.message + '</p>';
-        }
-      } else {
-        section.style.display = 'none';
-      }
-    }
-    window.showSettingsBackups = showSettingsBackups;
-
-    async function viewSettingsBackup(backupId) {
-      try {
-        const response = await fetch(`/api/settings-backups/${backupId}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const result = await response.json();
-        if (result.success) {
-          const d = result.data.data;
-          const info = [
-            'Email: ' + (d.company_email || '(empty)'),
-            'Phone: ' + (d.contact_phone || '(empty)'),
-            'WhatsApp: ' + (d.whatsapp_link || '(empty)'),
-            'Contact Name: ' + (d.contact_name || '(empty)'),
-            'Address: ' + (d.company_address || '(empty)'),
-            '--- Industry Contacts ---',
-            'Biotech Email: ' + (d.biotech_email || '(empty)'),
-            'Autoparts Email: ' + (d.autoparts_email || '(empty)'),
-            'Instruments Email: ' + (d.instruments_email || '(empty)')
-          ].join('\n');
-          alert('Backup from: ' + new Date(result.data.backed_up_at).toLocaleString() + '\n\n' + info);
-        }
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-    }
-    window.viewSettingsBackup = viewSettingsBackup;
-
-    async function restoreSettingsBackup(backupId) {
-      if (!confirm('This will replace ALL current site settings with the backup. Continue?')) return;
-      if (!confirm('FINAL CONFIRMATION: This cannot be undone. Are you sure?')) return;
-      try {
-        const response = await fetch(`/api/settings-backups/${backupId}/restore`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const result = await response.json();
-        if (result.success) {
-          alert('Settings restored successfully!');
-          loadSiteSettings();
-        } else {
-          alert('Error: ' + (result.error || 'Failed to restore'));
-        }
-      } catch (error) {
-        alert('Error: ' + error.message);
-      }
-    }
-    window.restoreSettingsBackup = restoreSettingsBackup;
 
     document.getElementById('site-settings-form').addEventListener('submit', async function(e) {
       e.preventDefault();
@@ -3853,8 +3550,6 @@
           facebook_link: document.getElementById('settings-facebook').value,
           linkedin_link: document.getElementById('settings-linkedin').value,
           google_verification_code: document.getElementById('settings-google-verification').value,
-          site_theme: document.getElementById('settings-site-theme').value,
-          theme_toggle_enabled: document.getElementById('settings-theme-toggle').value === 'true',
           social_share_enabled: document.getElementById('settings-social-share').value === 'true',
           whatsapp_float_enabled: document.getElementById('settings-whatsapp-float').value === 'true',
           biotech_contact_name: document.getElementById('settings-biotech-contact-name')?.value || '',
@@ -3872,33 +3567,6 @@
           instruments_wechat: document.getElementById('settings-instruments-wechat')?.value || '',
           instruments_email: document.getElementById('settings-instruments-email')?.value || '',
           instruments_phone: document.getElementById('settings-instruments-phone')?.value || '',
-          biotech_team_advantage: {
-            en: document.getElementById('advantage-biotech-en')?.value || '',
-            zh: document.getElementById('advantage-biotech-zh')?.value || '',
-            ru: document.getElementById('advantage-biotech-ru')?.value || '',
-            de: document.getElementById('advantage-biotech-de')?.value || '',
-            fr: document.getElementById('advantage-biotech-fr')?.value || '',
-            es: document.getElementById('advantage-biotech-es')?.value || '',
-            it: document.getElementById('advantage-biotech-it')?.value || ''
-          },
-          autoparts_team_advantage: {
-            en: document.getElementById('advantage-autoparts-en')?.value || '',
-            zh: document.getElementById('advantage-autoparts-zh')?.value || '',
-            ru: document.getElementById('advantage-autoparts-ru')?.value || '',
-            de: document.getElementById('advantage-autoparts-de')?.value || '',
-            fr: document.getElementById('advantage-autoparts-fr')?.value || '',
-            es: document.getElementById('advantage-autoparts-es')?.value || '',
-            it: document.getElementById('advantage-autoparts-it')?.value || ''
-          },
-          instruments_team_advantage: {
-            en: document.getElementById('advantage-instruments-en')?.value || '',
-            zh: document.getElementById('advantage-instruments-zh')?.value || '',
-            ru: document.getElementById('advantage-instruments-ru')?.value || '',
-            de: document.getElementById('advantage-instruments-de')?.value || '',
-            fr: document.getElementById('advantage-instruments-fr')?.value || '',
-            es: document.getElementById('advantage-instruments-es')?.value || '',
-            it: document.getElementById('advantage-instruments-it')?.value || ''
-          },
           homepage_seo_title: {
             en: document.getElementById('settings-seo-title-en').value,
             zh: document.getElementById('settings-seo-title-zh').value,
@@ -4217,7 +3885,7 @@
         const data = await res.json();
         const list = document.getElementById('news-list');
         if (data.data.length === 0) {
-          list.innerHTML = '<p style="text-align:center; color:var(--text-gray);">No news found.</p>';
+          list.innerHTML = '<p style="text-align:center; color:#999;">No news found.</p>';
           return;
         }
         list.innerHTML = data.data.map(n => `
@@ -4385,7 +4053,7 @@
         const data = await res.json();
         const list = document.getElementById('case-study-list');
         if (data.data.length === 0) {
-          list.innerHTML = '<p style="text-align:center; color:var(--text-gray);">No case studies found.</p>';
+          list.innerHTML = '<p style="text-align:center; color:#999;">No case studies found.</p>';
           return;
         }
         list.innerHTML = data.data.map(cs => `

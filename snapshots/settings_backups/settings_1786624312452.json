@@ -1,0 +1,88 @@
+{
+  "backed_up_at": "2026-08-13T12:31:52.452Z",
+  "reason": "pre-update",
+  "data": {
+    "site_theme": "light",
+    "updated_at": "2026-08-13T12:19:31.550Z",
+    "company_email": "hddemiguo@gmail.com",
+    "linkedin_link": "",
+    "contact_phone": "0086-15868179726",
+    "wechat_link": "0086-15868179726",
+    "contact_name": "Demi Guo",
+    "facebook_link": "",
+    "instagram_link": "",
+    "company_address": "Room 601, 6th Floor, BeiChengMingYuan, Shangcheng District, Hangzhou City, Zhejiang Province, China",
+    "whatsapp_float_enabled": true,
+    "social_share_enabled": true,
+    "theme_toggle_enabled": true,
+    "google_verification_code": "google-site-verification=",
+    "youtube_link": "",
+    "whatsapp_link": "0086-15868179726",
+    "biotech_contact_name": "Demi guo",
+    "biotech_whatsapp": "0086-15868179726",
+    "biotech_wechat": "",
+    "biotech_email": "hddemiguo@gmail.com",
+    "biotech_phone": "+8615868179726",
+    "autoparts_contact_name": "Helen Guo",
+    "autoparts_whatsapp": "0086-19285811077",
+    "autoparts_wechat": "0086-19285811077",
+    "autoparts_email": "helen0144103@hotmail.com",
+    "autoparts_phone": "0086-19285811077",
+    "instruments_contact_name": "Emma Wang",
+    "instruments_whatsapp": "0086-19219016433",
+    "instruments_wechat": "008619219016433",
+    "instruments_email": "476111402@qq.com",
+    "instruments_phone": "0086-19219016433",
+    "biotech_team_advantage": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "de": "",
+      "fr": "",
+      "es": "",
+      "it": ""
+    },
+    "autoparts_team_advantage": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "de": "",
+      "fr": "",
+      "es": "",
+      "it": ""
+    },
+    "instruments_team_advantage": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "de": "",
+      "fr": "",
+      "es": "",
+      "it": ""
+    },
+    "homepage_seo_title": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "es": "",
+      "de": "",
+      "fr": ""
+    },
+    "homepage_seo_description": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "es": "",
+      "de": "",
+      "fr": ""
+    },
+    "homepage_seo_keywords": {
+      "en": "",
+      "zh": "",
+      "ru": "",
+      "es": "",
+      "de": "",
+      "fr": ""
+    }
+  }
+}

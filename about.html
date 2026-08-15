@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Us - XuanJi Technology | Trusted Since 2005</title>
   <meta name="description" content="Learn about XuanJi Technology's 20 years of experience in international trade and our commitment to customer satisfaction.">
@@ -16,31 +15,6 @@
       --text-gray: #8892A6;
       --card-bg: #112240;
       --border-color: #1E3A5F;
-      --header-bg: rgba(10, 22, 40, 0.95);
-      --hero-grad1: #0A1628;
-      --hero-grad2: #112240;
-      --contactbar-bg: rgba(10, 22, 40, 0.95);
-      --contactbar-border: #1E3A5F;
-      --contactbar-text: #8892A6;
-      --email-btn-bg: #0066CC;
-      --email-btn-shadow: rgba(0,102,204,0.4);
-    }
-    [data-theme="light"] {
-      --primary-bg: #F5F7FA;
-      --primary-color: #0066CC;
-      --accent-color: #FF6B35;
-      --text-light: #1A202C;
-      --text-gray: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --header-bg: rgba(255, 255, 255, 0.95);
-      --hero-grad1: #E8EDF5;
-      --hero-grad2: #F0F4FA;
-      --contactbar-bg: rgba(245, 247, 250, 0.98);
-      --contactbar-border: #E2E8F0;
-      --contactbar-text: #64748B;
-      --email-btn-bg: #0066CC;
-      --email-btn-shadow: rgba(0,102,204,0.4);
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -51,7 +25,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background: var(--header-bg);
+      background: rgba(10, 22, 40, 0.95);
       backdrop-filter: blur(10px);
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -143,27 +117,6 @@
     }
     .btn-primary { background: linear-gradient(135deg, var(--accent-color), #FF8C42); color: white; }
     .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(255,107,53,0.4); }
-
-    .floating-whatsapp-btn,
-    .floating-email-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s;
-    }
-    .floating-whatsapp-btn {
-      background: #25D366;
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    }
-    .floating-email-btn {
-      background: var(--email-btn-bg);
-      box-shadow: 0 4px 15px var(--email-btn-shadow);
-    }
 
     footer {
       background: var(--card-bg);
@@ -430,21 +383,21 @@
   <script src="/site-settings.js?v=3"></script>
 
   <div style="position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px;">
-    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar class="floating-whatsapp-btn">
+    <a href="https://api.whatsapp.com/send?phone=+8615868179726&text=Hello%2C%20I%20am%20interested%20in%20your%20products" target="_blank" data-whatsapp-bar style="display: flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">💬</span>
       <span data-i18n="contactBar.whatsapp">Chat on WhatsApp</span>
     </a>
-    <a href="mailto:hddemiguo@gmail.com" data-email-bar class="floating-email-btn">
+    <a href="mailto:hddemiguo@gmail.com" data-email-bar style="display: flex; align-items: center; gap: 10px; background: #0066CC; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4); transition: all 0.3s;">
       <span style="font-size: 1.5rem;">📧</span>
       <span data-i18n="contactBar.email">Email Us</span>
     </a>
   </div>
 
-  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
-    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
-    <a href="tel:+8615868179726" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
-    <a href="mailto:hddemiguo@gmail.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
-    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 22, 40, 0.95); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid #1E3A5F; z-index: 999;">
+    <span style="color: #8892A6;" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: #FF6B35; text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: #00CC99; text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: #8892A6; font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
   </div>
 </body>
 </html>

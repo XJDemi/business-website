@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Products - XuanJi Technology</title>
   <meta name="description" content="Explore our comprehensive product range including cell culture equipment, auto parts, and industrial instruments.">
@@ -110,6 +109,7 @@
 
   <script src="script.js"></script>
   <script src="/i18n/i18n.js"></script>
+  <script src="/public/supabase-client.js"></script>
   <script src="/site-settings.js?v=3"></script>
   <script>
     let products = [];
@@ -149,14 +149,31 @@
       return null;
     }
 
+    function applyProductTranslations(product, lang) {
+      if (!lang || lang === 'en' || !product.translations) return { ...product };
+      const t = product.translations[lang];
+      if (!t) return { ...product };
+      return {
+        ...product,
+        name: t.name || product.name,
+        description: t.description || product.description,
+        specifications: t.specifications || product.specifications,
+        price_range: t.price_range || product.price_range,
+        category: t.category || product.category
+      };
+    }
+
     async function loadProducts() {
       try {
-        const currentLang = GT_I18N.getLang();
-        const response = await fetch(`/api/products?lang=${currentLang}`);
-        const data = await response.json();
+        const { data, error } = await window.SupaQuery
+          .from('products')
+          .select('*')
+          .order('sort_order');
 
-        if (data.success && data.data.length > 0) {
-          products = data.data;
+        const currentLang = GT_I18N.getLang();
+
+        if (!error && data && data.length > 0) {
+          products = data.map(p => applyProductTranslations(p, currentLang));
           renderProducts('all');
         } else {
           renderDefaultProducts();

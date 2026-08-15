@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
@@ -7,23 +9,11 @@ const fs = require('fs');
 const path = require('path');
 const { createClient } = require('@supabase/supabase-js');
 const nodemailer = require('nodemailer');
-
-// Lazy-load sharp (native module with platform-specific binaries)
-// Avoids require-time crash on Vercel cold start if binary is unavailable
-let _sharp = null;
-function getSharp() {
-  if (_sharp) return _sharp;
-  try {
-    _sharp = require('sharp');
-  } catch (e) {
-    console.warn('[sharp] failed to load sharp, image compression disabled:', e.message);
-    _sharp = null;
-  }
-  return _sharp;
-}
+const { Client } = require('pg');
+const sharp = require('sharp');
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 const JWT_SECRET = process.env.JWT_SECRET || 'xuanji-secret-key-2024';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -1141,8 +1131,6 @@ async function getSiteSettings() {
 
 async function updateSiteSettings(settings) {
   const now = new Date().toISOString();
-  // Backup current settings before overwriting to prevent data loss
-  backupSiteSettings('pre-update');
   settings.updated_at = now;
   
   if (usingSupabase && supabase) {
@@ -1173,9 +1161,9 @@ async function updateSiteSettings(settings) {
     }
   }
   
-  db.site_settings = { ...db.site_settings, ...settings };
+  db.site_settings = settings;
   await saveDB();
-  return db.site_settings;
+  return settings;
 }
 
 async function getCategories(query = {}) {
@@ -1352,24 +1340,10 @@ async function getAllInquiries() {
   return db.inquiries;
 }
 
-const isVercel = process.env.VERCEL === '1' || process.env.VERCEL_ENV !== undefined;
-
-// On Vercel, project filesystem is READ-ONLY. Only /tmp is writable.
-// Skip directory creation there (we rely on Supabase for uploads/storage).
-// Fallback path for any unexpected local writes: Vercel's /tmp
-function safeMkdirSync(dirPath) {
-  if (isVercel) return;
-  try {
-    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
-  } catch (e) {
-    console.warn(`[fs] skip mkdir ${dirPath}:`, e.message);
-  }
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
 }
-
-const uploadDir = isVercel
-  ? '/tmp'
-  : path.join(__dirname, 'uploads');
-safeMkdirSync(uploadDir);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
@@ -1393,7 +1367,7 @@ const upload = multer({
 });
 
 app.use(cors({
-  origin: ['http://localhost:8000', 'http://127.0.0.1:8000'],
+  origin: ['http://localhost:8080', 'http://127.0.0.1:8080', 'http://localhost:8000', 'http://127.0.0.1:8000'],
   credentials: true
 }));
 app.use(express.json());
@@ -1874,45 +1848,42 @@ async function processAndUploadImage(imageData) {
   const maxFileSize = 800 * 1024;
 
   try {
-    const sharpLib = getSharp();
-    if (sharpLib) {
-      const metadata = await sharpLib(buffer).metadata();
-      let width = metadata.width || 1920;
-      let height = metadata.height || 1920;
+    const metadata = await sharp(buffer).metadata();
+    let width = metadata.width || 1920;
+    let height = metadata.height || 1920;
 
-      let resizeWidth = width;
-      let resizeHeight = height;
+    let resizeWidth = width;
+    let resizeHeight = height;
 
-      if (width > maxDimension || height > maxDimension) {
-        if (width > height) {
-          resizeWidth = maxDimension;
-          resizeHeight = Math.round((height * maxDimension) / width);
-        } else {
-          resizeHeight = maxDimension;
-          resizeWidth = Math.round((width * maxDimension) / height);
-        }
+    if (width > maxDimension || height > maxDimension) {
+      if (width > height) {
+        resizeWidth = maxDimension;
+        resizeHeight = Math.round((height * maxDimension) / width);
+      } else {
+        resizeHeight = maxDimension;
+        resizeWidth = Math.round((width * maxDimension) / height);
       }
-
-      buffer = await sharpLib(buffer)
-        .resize(resizeWidth, resizeHeight, {
-          fit: sharpLib.fit.contain,
-          background: { r: 248, g: 249, b: 250, alpha: 1 }
-        })
-        .webp({ quality: 85 })
-        .toBuffer();
-
-      if (buffer.length > maxFileSize) {
-        let quality = 80;
-        while (buffer.length > maxFileSize && quality > 20) {
-          quality -= 5;
-          buffer = await sharpLib(buffer)
-            .webp({ quality: quality })
-            .toBuffer();
-        }
-      }
-
-      console.log('Image processed successfully, size:', buffer.length, 'bytes');
     }
+
+    buffer = await sharp(buffer)
+      .resize(resizeWidth, resizeHeight, {
+        fit: sharp.fit.contain,
+        background: { r: 248, g: 249, b: 250, alpha: 1 }
+      })
+      .webp({ quality: 85 })
+      .toBuffer();
+
+    if (buffer.length > maxFileSize) {
+      let quality = 80;
+      while (buffer.length > maxFileSize && quality > 20) {
+        quality -= 5;
+        buffer = await sharp(buffer)
+          .webp({ quality: quality })
+          .toBuffer();
+      }
+    }
+
+    console.log('Image processed successfully, size:', buffer.length, 'bytes');
   } catch (err) {
     console.error('Image processing failed, using original:', err);
   }
@@ -2011,41 +1982,38 @@ app.post('/api/products', authenticateToken, upload.single('image'), async (req,
 
     let buffer = fileContent;
     try {
-      const sharpLib = getSharp();
-      if (sharpLib) {
-        const metadata = await sharpLib(buffer).metadata();
-        let width = metadata.width || 1920;
-        let height = metadata.height || 1920;
-        const maxDimension = 1920;
-        const maxFileSize = 800 * 1024;
+      const metadata = await sharp(buffer).metadata();
+      let width = metadata.width || 1920;
+      let height = metadata.height || 1920;
+      const maxDimension = 1920;
+      const maxFileSize = 800 * 1024;
 
-        let resizeWidth = width;
-        let resizeHeight = height;
+      let resizeWidth = width;
+      let resizeHeight = height;
 
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            resizeWidth = maxDimension;
-            resizeHeight = Math.round((height * maxDimension) / width);
-          } else {
-            resizeHeight = maxDimension;
-            resizeWidth = Math.round((width * maxDimension) / height);
-          }
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          resizeWidth = maxDimension;
+          resizeHeight = Math.round((height * maxDimension) / width);
+        } else {
+          resizeHeight = maxDimension;
+          resizeWidth = Math.round((width * maxDimension) / height);
         }
+      }
 
-        buffer = await sharpLib(buffer)
-          .resize(resizeWidth, resizeHeight, {
-            fit: sharpLib.fit.contain,
-            background: { r: 248, g: 249, b: 250, alpha: 1 }
-          })
-          .webp({ quality: 85 })
-          .toBuffer();
+      buffer = await sharp(buffer)
+        .resize(resizeWidth, resizeHeight, {
+          fit: sharp.fit.contain,
+          background: { r: 248, g: 249, b: 250, alpha: 1 }
+        })
+        .webp({ quality: 85 })
+        .toBuffer();
 
-        if (buffer.length > maxFileSize) {
-          let quality = 80;
-          while (buffer.length > maxFileSize && quality > 20) {
-            quality -= 5;
-            buffer = await sharpLib(buffer).webp({ quality: quality }).toBuffer();
-          }
+      if (buffer.length > maxFileSize) {
+        let quality = 80;
+        while (buffer.length > maxFileSize && quality > 20) {
+          quality -= 5;
+          buffer = await sharp(buffer).webp({ quality: quality }).toBuffer();
         }
       }
     } catch (err) {
@@ -2132,41 +2100,38 @@ app.put('/api/products/:id', authenticateToken, upload.single('image'), async (r
 
     let buffer = fileContent;
     try {
-      const sharpLib = getSharp();
-      if (sharpLib) {
-        const metadata = await sharpLib(buffer).metadata();
-        let width = metadata.width || 1920;
-        let height = metadata.height || 1920;
-        const maxDimension = 1920;
-        const maxFileSize = 800 * 1024;
+      const metadata = await sharp(buffer).metadata();
+      let width = metadata.width || 1920;
+      let height = metadata.height || 1920;
+      const maxDimension = 1920;
+      const maxFileSize = 800 * 1024;
 
-        let resizeWidth = width;
-        let resizeHeight = height;
+      let resizeWidth = width;
+      let resizeHeight = height;
 
-        if (width > maxDimension || height > maxDimension) {
-          if (width > height) {
-            resizeWidth = maxDimension;
-            resizeHeight = Math.round((height * maxDimension) / width);
-          } else {
-            resizeHeight = maxDimension;
-            resizeWidth = Math.round((width * maxDimension) / height);
-          }
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          resizeWidth = maxDimension;
+          resizeHeight = Math.round((height * maxDimension) / width);
+        } else {
+          resizeHeight = maxDimension;
+          resizeWidth = Math.round((width * maxDimension) / height);
         }
+      }
 
-        buffer = await sharpLib(buffer)
-          .resize(resizeWidth, resizeHeight, {
-            fit: sharpLib.fit.contain,
-            background: { r: 248, g: 249, b: 250, alpha: 1 }
-          })
-          .webp({ quality: 85 })
-          .toBuffer();
+      buffer = await sharp(buffer)
+        .resize(resizeWidth, resizeHeight, {
+          fit: sharp.fit.contain,
+          background: { r: 248, g: 249, b: 250, alpha: 1 }
+        })
+        .webp({ quality: 85 })
+        .toBuffer();
 
-        if (buffer.length > maxFileSize) {
-          let quality = 80;
-          while (buffer.length > maxFileSize && quality > 20) {
-            quality -= 5;
-            buffer = await sharpLib(buffer).webp({ quality: quality }).toBuffer();
-          }
+      if (buffer.length > maxFileSize) {
+        let quality = 80;
+        while (buffer.length > maxFileSize && quality > 20) {
+          quality -= 5;
+          buffer = await sharp(buffer).webp({ quality: quality }).toBuffer();
         }
       }
     } catch (err) {
@@ -2722,60 +2687,12 @@ app.get('/api/analytics', authenticateToken, async (req, res) => {
   });
 });
 
-const SNAPSHOT_DIR = isVercel ? '/tmp/snapshots' : path.join(__dirname, 'snapshots');
+const SNAPSHOT_DIR = path.join(__dirname, 'snapshots');
 const SNAPSHOT_LOG_FILE = path.join(SNAPSHOT_DIR, 'snapshot_logs.json');
 const SNAPSHOT_CONFIG_FILE = path.join(SNAPSHOT_DIR, 'snapshot_config.json');
-const SETTINGS_BACKUP_DIR = path.join(SNAPSHOT_DIR, 'settings_backups');
 
-safeMkdirSync(SNAPSHOT_DIR);
-safeMkdirSync(SETTINGS_BACKUP_DIR);
-
-// Backup site_settings before each update to prevent data loss
-function backupSiteSettings(reason) {
-  try {
-    if (!db.site_settings || Object.keys(db.site_settings).length === 0) return;
-    const backup = {
-      backed_up_at: new Date().toISOString(),
-      reason: reason || 'pre-update',
-      data: JSON.parse(JSON.stringify(db.site_settings))
-    };
-    const backupId = `settings_${Date.now()}.json`;
-    const backupPath = path.join(SETTINGS_BACKUP_DIR, backupId);
-    fs.writeFileSync(backupPath, JSON.stringify(backup, null, 2));
-
-    // Keep only the latest 20 settings backups
-    const backups = fs.readdirSync(SETTINGS_BACKUP_DIR)
-      .filter(f => f.startsWith('settings_') && f.endsWith('.json'))
-      .sort();
-    while (backups.length > 20) {
-      const oldPath = path.join(SETTINGS_BACKUP_DIR, backups.shift());
-      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
-    }
-  } catch (e) {
-    console.error('Failed to backup site_settings:', e);
-  }
-}
-
-// Get list of site_settings backups
-function getSettingsBackups() {
-  try {
-    const files = fs.readdirSync(SETTINGS_BACKUP_DIR)
-      .filter(f => f.startsWith('settings_') && f.endsWith('.json'));
-    return files.map(f => {
-      const filePath = path.join(SETTINGS_BACKUP_DIR, f);
-      const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-      return {
-        id: f,
-        backed_up_at: data.backed_up_at,
-        reason: data.reason,
-        has_contact: !!(data.data && (data.data.company_email || data.data.contact_phone || data.data.whatsapp_link)),
-        has_industry_contact: !!(data.data && (data.data.biotech_email || data.data.autoparts_email || data.data.instruments_email))
-      };
-    }).sort((a, b) => new Date(b.backed_up_at) - new Date(a.backed_up_at));
-  } catch (e) {
-    console.error('Failed to list settings backups:', e);
-    return [];
-  }
+if (!fs.existsSync(SNAPSHOT_DIR)) {
+  fs.mkdirSync(SNAPSHOT_DIR, { recursive: true });
 }
 
 function loadSnapshotConfig() {
@@ -2842,15 +2759,14 @@ async function createSnapshot(name = '') {
   }
 
   const snapshotData = {
-    version: '1.1',
+    version: '1.0',
     name: name || `Snapshot ${new Date().toLocaleString()}`,
     created_at: new Date().toISOString(),
     data: {
       categories: JSON.parse(JSON.stringify(db.categories)),
       translations: JSON.parse(JSON.stringify(translations)),
       users: JSON.parse(JSON.stringify(db.users)),
-      nextCategoryId: db.nextCategoryId,
-      site_settings: JSON.parse(JSON.stringify(db.site_settings || {}))
+      nextCategoryId: db.nextCategoryId
     },
     excluded: {
       products: db.products.length,
@@ -2902,8 +2818,7 @@ function getSnapshotList() {
         name: data.name,
         created_at: data.created_at,
         category_count: data.data.categories.length,
-        excluded_products: data.excluded.products,
-        has_site_settings: !!(data.data && data.data.site_settings)
+        excluded_products: data.excluded.products
       };
     }).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   } catch (e) {
@@ -2926,20 +2841,12 @@ async function rollbackToSnapshot(snapshotId, userId) {
   try {
     const snapshotData = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'));
 
-    // Backup current state before rollback
-    backupSiteSettings('pre-rollback');
-
     const translationsPath = path.join(__dirname, 'i18n', 'translations.json');
     fs.writeFileSync(translationsPath, JSON.stringify(snapshotData.data.translations, null, 2));
 
     db.categories = snapshotData.data.categories;
     db.nextCategoryId = snapshotData.data.nextCategoryId;
     db.users = snapshotData.data.users;
-
-    // Restore site_settings if the snapshot includes it (v1.1+)
-    if (snapshotData.data.site_settings) {
-      db.site_settings = snapshotData.data.site_settings;
-    }
 
     await saveDB();
 
@@ -2948,7 +2855,7 @@ async function rollbackToSnapshot(snapshotId, userId) {
       snapshot_id: snapshotId,
       snapshot_name: snapshotData.name,
       user: userId || 'admin',
-      details: `Rolled back to snapshot. Restored ${snapshotData.data.categories.length} categories${snapshotData.data.site_settings ? ', site settings' : ''}. Products (${db.products.length}) protected.`
+      details: `Rolled back to snapshot. Restored ${snapshotData.data.categories.length} categories. Products (${db.products.length}) protected.`
     });
 
     return { 
@@ -3277,54 +3184,6 @@ app.put('/api/site-settings', authenticateToken, async (req, res) => {
   }
 });
 
-// Settings backup endpoints - allows recovery of lost contact info
-app.get('/api/settings-backups', authenticateToken, (req, res) => {
-  try {
-    const backups = getSettingsBackups();
-    res.json({ success: true, data: backups });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-app.get('/api/settings-backups/:id', authenticateToken, (req, res) => {
-  try {
-    const backupPath = path.join(SETTINGS_BACKUP_DIR, req.params.id);
-    if (!fs.existsSync(backupPath)) {
-      return res.status(404).json({ error: 'Backup not found' });
-    }
-    const backup = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
-    res.json({ success: true, data: backup });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-app.post('/api/settings-backups/:id/restore', authenticateToken, async (req, res) => {
-  try {
-    const backupPath = path.join(SETTINGS_BACKUP_DIR, req.params.id);
-    if (!fs.existsSync(backupPath)) {
-      return res.status(404).json({ error: 'Backup not found' });
-    }
-    const backup = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
-    // Backup current settings before restoring
-    backupSiteSettings('pre-restore');
-    // Restore the backed-up settings
-    db.site_settings = { ...backup.data, updated_at: new Date().toISOString() };
-    await saveDB();
-    saveSnapshotLog({
-      action: 'restore',
-      snapshot_id: req.params.id,
-      snapshot_name: 'Settings backup restore',
-      user: req.user.userId || 'admin',
-      details: 'Restored site settings from backup'
-    });
-    res.json({ success: true, data: db.site_settings });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin', 'index.html'));
@@ -3449,31 +3308,14 @@ Sitemap: ${baseUrl}/sitemap.xml
   }
 });
 
-// Initialize Supabase connection (suppress unhandled rejections; JSON fallback exists)
-const supabaseReady = Promise.resolve().then(() => connectSupabase());
-supabaseReady.catch(err => {
-  console.error('[supabaseReady] unhandled error (continuing with JSON fallback):', err && err.message ? err.message : err);
-});
-
-if (!isVercel) {
-  // Local development: start HTTP server
-  supabaseReady.then(() => {
-    app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-      console.log(`Server running on http://0.0.0.0:${PORT}`);
-      console.log(`Admin panel: http://localhost:${PORT}/admin`);
-      console.log(`Default login: admin / admin123`);
-      console.log(`Using Supabase: ${usingSupabase}`);
-    });
-  });
-} else {
-  // Vercel Serverless: log initialization status
-  supabaseReady.then(() => {
-    console.log('Vercel Serverless: Supabase connected');
+connectSupabase().then(() => {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Admin panel: http://localhost:${PORT}/admin`);
+    console.log(`Default login: admin / admin123`);
     console.log(`Using Supabase: ${usingSupabase}`);
   });
-}
+});
 
-// Export for Vercel Serverless Functions
 module.exports = app;
-module.exports.supabaseReady = supabaseReady;

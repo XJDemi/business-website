@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>try{var t=localStorage.getItem('gt_theme')||localStorage.getItem('gt_theme_default');if(t)document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('gt_lang');if(l&&l!=='en'){document.documentElement.setAttribute('lang',l);document.documentElement.classList.add('i18n-pending');var s=document.createElement('style');s.textContent='.i18n-pending [data-i18n]{visibility:hidden}';document.head.appendChild(s);setTimeout(function(){document.documentElement.classList.remove('i18n-pending');},2000);}}catch(e){}</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact Us - XuanJi Technology | Get in Touch</title>
   <meta name="description" content="Contact XuanJi Technology's professional team for your sourcing needs. We're ready to assist you with any inquiries.">
@@ -16,33 +15,6 @@
       --text-gray: #8892A6;
       --card-bg: #112240;
       --border-color: #1E3A5F;
-      --header-bg: rgba(10, 22, 40, 0.95);
-      --hero-grad1: #0A1628;
-      --hero-grad2: #112240;
-      --contactbar-bg: rgba(10, 22, 40, 0.95);
-      --contactbar-border: #1E3A5F;
-      --contactbar-text: #8892A6;
-      --success-bg: rgba(0,204,153,0.2);
-      --success-border: #00CC99;
-      --success-color: #00CC99;
-    }
-    [data-theme="light"] {
-      --primary-bg: #F5F7FA;
-      --primary-color: #0066CC;
-      --accent-color: #FF6B35;
-      --text-light: #1A202C;
-      --text-gray: #64748B;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
-      --header-bg: rgba(255, 255, 255, 0.95);
-      --hero-grad1: #E8EDF5;
-      --hero-grad2: #F0F4FA;
-      --contactbar-bg: rgba(245, 247, 250, 0.98);
-      --contactbar-border: #E2E8F0;
-      --contactbar-text: #64748B;
-      --success-bg: rgba(0,102,204,0.1);
-      --success-border: #0066CC;
-      --success-color: #0066CC;
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -53,7 +25,7 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
     header {
-      background: var(--header-bg);
+      background: rgba(10, 22, 40, 0.95);
       backdrop-filter: blur(10px);
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -121,7 +93,7 @@
     .form-group input, .form-group textarea, .form-group select {
       width: 100%;
       padding: 15px;
-      background: var(--card-bg);
+      background: rgba(10,22,40,0.5);
       border: 1px solid var(--border-color);
       border-radius: 10px;
       color: var(--text-light);
@@ -158,12 +130,12 @@
 
     .success-message {
       display: none;
-      background: var(--success-bg);
-      border: 1px solid var(--success-border);
+      background: rgba(0,204,153,0.2);
+      border: 1px solid #00CC99;
       border-radius: 10px;
       padding: 20px;
       margin-bottom: 25px;
-      color: var(--success-color);
+      color: #00CC99;
       text-align: center;
     }
 
@@ -243,7 +215,7 @@
     <div style="margin-bottom: 50px; padding: 40px; background: var(--card-bg); border-radius: 20px; border: 1px solid var(--border-color);">
       <h3 data-i18n="contact.industryContacts" style="font-size: 1.5rem; margin-bottom: 30px;">Industry Contacts</h3>
       <div id="industry-contacts" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px;">
-        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: rgba(10,22,40,0.3);">
           <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">🧬 <span data-i18n="contact.industry.biotech">Biotech</span></h4>
           <p style="font-size: 1rem; line-height: 2;">
             <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="biotech.contact_name">-</span><br>
@@ -253,7 +225,7 @@
             <strong><span data-i18n="contact.info.wechat">WeChat</span>:</strong> <span data-industry-contact="biotech.wechat">-</span>
           </p>
         </div>
-        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: rgba(10,22,40,0.3);">
           <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">⚙️ <span data-i18n="contact.industry.autoparts">Auto Parts</span></h4>
           <p style="font-size: 1rem; line-height: 2;">
             <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="autoparts.contact_name">-</span><br>
@@ -263,7 +235,7 @@
             <strong><span data-i18n="contact.info.wechat">WeChat</span>:</strong> <span data-industry-contact="autoparts.wechat">-</span>
           </p>
         </div>
-        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: var(--card-bg);">
+        <div style="padding: 30px; border: 1px solid var(--border-color); border-radius: 15px; background: rgba(10,22,40,0.3);">
           <h4 style="color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem;">🔬 <span data-i18n="contact.industry.instruments">Instruments</span></h4>
           <p style="font-size: 1rem; line-height: 2;">
             <strong><span data-i18n="contact.info.name">Name</span>:</strong> <span data-industry-contact="instruments.contact_name">-</span><br>
@@ -400,6 +372,7 @@
   </footer>
 
   <script src="/i18n/i18n.js"></script>
+  <script src="/public/supabase-client.js"></script>
   <script>
     function toggleMenu() {
       document.querySelector('.nav-links').classList.toggle('active');
@@ -422,37 +395,55 @@
       document.documentElement.lang = currentLang;
     });
 
+    function applyProductTranslations(product, lang) {
+      if (!lang || lang === 'en' || !product.translations) return { ...product };
+      const t = product.translations[lang];
+      if (!t) return { ...product };
+      return {
+        ...product,
+        name: t.name || product.name,
+        description: t.description || product.description
+      };
+    }
+
     async function loadProductOptions() {
       try {
-        var response = await fetch('/api/products?lang=' + (GT_I18N.getLang() || 'en') + '&limit=100');
-        var result = await response.json();
-        if (result.success && result.data) {
+        const { data, error } = await window.SupaQuery
+          .from('products')
+          .select('*')
+          .order('sort_order')
+          .limit(100);
+
+        const currentLang = (GT_I18N && GT_I18N.getLang) ? GT_I18N.getLang() : 'en';
+
+        if (!error && data) {
           var select = document.getElementById('product-interest');
-          
+
           while (select.options.length > 1) {
             select.remove(1);
           }
-          
+
           var grouped = {};
-          result.data.forEach(function(product) {
+          data.forEach(function(product) {
             var industry = product.industry || 'other';
             if (!grouped[industry]) {
               grouped[industry] = [];
             }
-            grouped[industry].push(product);
+            const translated = applyProductTranslations(product, currentLang);
+            grouped[industry].push({ ...product, name: translated.name });
           });
-          
+
           var industryNames = {
             'biotech': 'Biomedical Equipment',
             'autoparts': 'Auto Parts',
             'instruments': 'Industrial Instruments',
             'other': 'Other Products'
           };
-          
+
           Object.keys(grouped).forEach(function(industry) {
             var optgroup = document.createElement('optgroup');
             optgroup.label = industryNames[industry] || industry;
-            
+
             grouped[industry].forEach(function(product) {
               var option = document.createElement('option');
               option.value = product.id;
@@ -460,7 +451,7 @@
               option.setAttribute('data-industry', industry);
               optgroup.appendChild(option);
             });
-            
+
             select.appendChild(optgroup);
           });
         }
@@ -542,11 +533,11 @@
     </a>
   </div>
 
-  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: var(--contactbar-bg); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid var(--contactbar-border); z-index: 999;">
-    <span style="color: var(--contactbar-text);" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
-    <a href="tel:+8615868179726" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
-    <a href="mailto:hddemiguo@gmail.com" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
-    <span style="color: var(--contactbar-text); font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
+  <div style="position: fixed; bottom: 0; left: 0; right: 0; background: rgba(10, 22, 40, 0.95); padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 30px; border-top: 1px solid #1E3A5F; z-index: 999;">
+    <span style="color: #8892A6;" data-i18n="contactBar.help">Need help? Contact us anytime:</span>
+    <a href="tel:+8615868179726" style="color: #FF6B35; text-decoration: none; font-weight: 600;">📞 0086-15868179726</a>
+    <a href="mailto:hddemiguo@gmail.com" style="color: #00CC99; text-decoration: none; font-weight: 600;">📧 hddemiguo@gmail.com</a>
+    <span style="color: #8892A6; font-size: 0.9rem;" data-i18n="contactBar.hours">Working Hours: Mon-Fri 9:00-18:00 CST</span>
   </div>
 </body>
 </html>

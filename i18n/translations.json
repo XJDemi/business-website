@@ -337,10 +337,6 @@
           "desc": "Customization options available"
         }
       },
-      "advantage": {
-        "title": "Our Biotech Team's Advantages",
-        "desc": "Why partner with our biotech division"
-      },
       "footer": {
         "title": "Biotech Division",
         "desc": "Professional cell culture and cryogenic equipment supplier. We are the biomedical equipment division of XuanJi Technology.",
@@ -436,10 +432,6 @@
           "desc": "Strict inspection processes"
         }
       },
-      "advantage": {
-        "title": "Our Auto Parts Team's Advantages",
-        "desc": "Why partner with our auto parts division"
-      },
       "footer": {
         "title": "Auto Parts Division",
         "desc": "Professional automotive components supplier. We are the auto parts division of XuanJi Technology.",
@@ -534,10 +526,6 @@
           "title": "OEM/ODM",
           "desc": "Customization available"
         }
-      },
-      "advantage": {
-        "title": "Our Instruments Team's Advantages",
-        "desc": "Why partner with our instruments division"
       },
       "footer": {
         "title": "Industrial Instruments Division",
@@ -1234,10 +1222,6 @@
           "desc": "可定制选项"
         }
       },
-      "advantage": {
-        "title": "我们生物科技团队的优势",
-        "desc": "为什么选择我们的生物科技部门"
-      },
       "footer": {
         "title": "生物医学事业部",
         "desc": "专业细胞培养和低温设备供应商。我们是XuanJi Technology集团的生物医学设备事业部。",
@@ -1333,10 +1317,6 @@
           "desc": "严格的检验流程"
         }
       },
-      "advantage": {
-        "title": "我们汽配团队的优势",
-        "desc": "为什么选择我们的汽配部门"
-      },
       "footer": {
         "title": "汽车零部件事业部",
         "desc": "专业汽车零部件供应商。我们是XuanJi Technology集团的汽车零部件事业部。",
@@ -1431,10 +1411,6 @@
           "title": "OEM/ODM",
           "desc": "可定制"
         }
-      },
-      "advantage": {
-        "title": "我们仪器团队的优势",
-        "desc": "为什么选择我们的仪器部门"
       },
       "footer": {
         "title": "工业仪器事业部",
@@ -1947,10 +1923,6 @@
           "desc": "Доступны варианты кастомизации"
         }
       },
-      "advantage": {
-        "title": "Преимущества нашей команды биотехнологий",
-        "desc": "Почему стоит выбрать наше биотехнологическое подразделение"
-      },
       "footer": {
         "title": "Биомедицинский Отдел",
         "desc": "Профессиональный поставщик оборудования для клеточной культуры и криогенных систем. Мы - биомедицинский отдел XuanJi Technology.",
@@ -2046,10 +2018,6 @@
           "desc": "Строгие процессы проверки"
         }
       },
-      "advantage": {
-        "title": "Преимущества нашей команды автозапчастей",
-        "desc": "Почему стоит выбрать наше подразделение автозапчастей"
-      },
       "footer": {
         "title": "Отдел Автозапчастей",
         "desc": "Профессиональный поставщик автозапчастей. Мы - отдел автомобильных компонентов XuanJi Technology.",
@@ -2136,10 +2104,6 @@
           "title": "OEM/ODM",
           "desc": "Доступна кастомизация"
         }
-      },
-      "advantage": {
-        "title": "Преимущества нашей команды приборов",
-        "desc": "Почему стоит выбрать наше подразделение приборов"
       },
       "footer": {
         "title": "Отдел Промышленных Инструментов",
@@ -2673,10 +2637,6 @@
           "desc": "Opciones de personalización disponibles"
         }
       },
-      "advantage": {
-        "title": "Ventajas de nuestro equipo biotecnológico",
-        "desc": "Por qué asociarse con nuestra división biotecnológica"
-      },
       "footer": {
         "title": "División de Biotecnología",
         "desc": "Proveedor profesional de equipos para cultivo celular y criogénicos. Somos la división de equipos biomédicos de XuanJi Technology.",
@@ -2772,10 +2732,6 @@
           "desc": "Procesos de inspección estrictos"
         }
       },
-      "advantage": {
-        "title": "Ventajas de nuestro equipo de autopartes",
-        "desc": "Por qué asociarse con nuestra división de autopartes"
-      },
       "footer": {
         "title": "División de Piezas de Automóvil",
         "desc": "Proveedor profesional de piezas de automóvil. Somos la división de componentes automotrices de XuanJi Technology.",
@@ -2862,10 +2818,6 @@
           "title": "OEM/ODM",
           "desc": "Personalización disponible"
         }
-      },
-      "advantage": {
-        "title": "Ventajas de nuestro equipo de instrumentos",
-        "desc": "Por qué asociarse con nuestra división de instrumentos"
       },
       "footer": {
         "title": "División de Instrumentos Industriales",
@@ -3399,10 +3351,6 @@
           "desc": "Anpassungsmöglichkeiten verfügbar"
         }
       },
-      "advantage": {
-        "title": "Vorteile unseres Biotech-Teams",
-        "desc": "Warum Sie sich für unsere Biotech-Abteilung entscheiden sollten"
-      },
       "footer": {
         "title": "Biotech Abteilung",
         "desc": "Professioneller Lieferant von Geräten für Zellkultur und Kryogenik. Wir sind die Biomedizin-Abteilung der XuanJi Technology.",
@@ -3490,10 +3438,6 @@
           "desc": "Strenge Prüfprozesse"
         }
       },
-      "advantage": {
-        "title": "Vorteile unseres Auto-Teams",
-        "desc": "Warum Sie sich für unsere Auto-Abteilung entscheiden sollten"
-      },
       "footer": {
         "title": "Autoteile Abteilung",
         "desc": "Professioneller Autoteile-Lieferant. Wir sind die Automobilkomponenten-Abteilung der XuanJi Technology.",
@@ -3580,10 +3524,6 @@
           "title": "OEM/ODM",
           "desc": "Anpassung verfügbar"
         }
-      },
-      "advantage": {
-        "title": "Vorteile unseres Instrumente-Teams",
-        "desc": "Warum Sie sich für unsere Instrumente-Abteilung entscheiden sollten"
       },
       "footer": {
         "title": "Industrieinstrumente Abteilung",
@@ -4117,10 +4057,6 @@
           "desc": "Options de personnalisation disponibles"
         }
       },
-      "advantage": {
-        "title": "Avantages de notre équipe biotech",
-        "desc": "Pourquoi vous associer à notre division biotech"
-      },
       "footer": {
         "title": "Division Biotechnologie",
         "desc": "Fournisseur professionnel d'équipements de culture cellulaire et cryogéniques. Nous sommes la division d'équipements biomédicaux de XuanJi Technology.",
@@ -4208,10 +4144,6 @@
           "desc": "Processus d'inspection stricts"
         }
       },
-      "advantage": {
-        "title": "Avantages de notre équipe auto",
-        "desc": "Pourquoi vous associer à notre division auto"
-      },
       "footer": {
         "title": "Division Pièces Automobiles",
         "desc": "Fournisseur professionnel de pièces automobiles. Nous sommes la division de composants automobiles de XuanJi Technology.",
@@ -4298,10 +4230,6 @@
           "title": "OEM/ODM",
           "desc": "Personnalisation disponible"
         }
-      },
-      "advantage": {
-        "title": "Avantages de notre équipe instruments",
-        "desc": "Pourquoi vous associer à notre division instruments"
       },
       "footer": {
         "title": "Division Instruments Industriels",
@@ -4835,10 +4763,6 @@
           "desc": "Opzioni di personalizzazione disponibili"
         }
       },
-      "advantage": {
-        "title": "Vantaggi del nostro team biotech",
-        "desc": "Perché scegliere la nostra divisione biotech"
-      },
       "footer": {
         "title": "Divisione Biotecnologia",
         "desc": "Fornitore professionista di attrezzature per cultura cellulare e criogenica. Siamo la divisione di attrezzature biomediche di XuanJi Technology.",
@@ -4926,10 +4850,6 @@
           "desc": "Processi di ispezione rigorosi"
         }
       },
-      "advantage": {
-        "title": "Vantaggi del nostro team auto",
-        "desc": "Perché scegliere la nostra divisione auto"
-      },
       "footer": {
         "title": "Divisione Parti Auto",
         "desc": "Fornitore professionista di parti auto. Siamo la divisione di componenti automobilistici di XuanJi Technology.",
@@ -5016,10 +4936,6 @@
           "title": "OEM/ODM",
           "desc": "Personalizzazione disponibile"
         }
-      },
-      "advantage": {
-        "title": "Vantaggi del nostro team strumenti",
-        "desc": "Perché scegliere la nostra divisione strumenti"
       },
       "footer": {
         "title": "Divisione Strumenti Industriali",

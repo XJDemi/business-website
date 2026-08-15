@@ -12,29 +12,6 @@
   --text-gray: #8892A6;
   --card-bg: #112240;
   --border-color: #1E3A5F;
-  --header-bg: rgba(10, 22, 40, 0.95);
-  --hero-grad1: #0A1628;
-  --hero-grad2: #112240;
-  --contactbar-bg: rgba(10, 26, 26, 0.95);
-  --contactbar-border: #1E4433;
-  --contactbar-text: #889988;
-}
-
-/* Light Business Theme */
-[data-theme="light"] {
-  --primary-bg: #F5F7FA;
-  --primary-color: #0066CC;
-  --accent-color: #FF6B35;
-  --text-light: #1A202C;
-  --text-gray: #64748B;
-  --card-bg: #FFFFFF;
-  --border-color: #E2E8F0;
-  --header-bg: rgba(255, 255, 255, 0.95);
-  --hero-grad1: #E8EDF5;
-  --hero-grad2: #F0F4FA;
-  --contactbar-bg: rgba(245, 247, 250, 0.98);
-  --contactbar-border: #E2E8F0;
-  --contactbar-text: #64748B;
 }
 
 body {
@@ -52,7 +29,7 @@ body {
 
 /* Header */
 header {
-  background: var(--header-bg);
+  background: rgba(10, 22, 40, 0.95);
   backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
@@ -115,7 +92,7 @@ nav {
   justify-content: center;
   text-align: center;
   padding-top: 80px;
-  background: linear-gradient(135deg, var(--hero-grad1) 0%, var(--hero-grad2) 50%, var(--hero-grad1) 100%);
+  background: linear-gradient(135deg, #0A1628 0%, #112240 50%, #0A1628 100%);
   position: relative;
   overflow: hidden;
 }
