@@ -1,7 +1,7 @@
 // Supabase frontend client for direct DB access from pages (B方案)
 // Anon key is safe in browser - RLS policies enforce read-only for anon role
 (function () {
-  const SUPABASE_URL = 'https://idvlvxevkpfkxffivus.supabase.co';
+  const SUPABASE_URL = 'https://idvlxevufkpfxfiffvus.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlkdmx4ZXZ1ZmtwZnhmaWZmdnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1OTgwNzEsImV4cCI6MjEwMDE3NDA3MX0.NOLE7ocrd1ajfcu4ObHTjYTMwNPWu7F-eD2JtHE1l0g';
   const MAX_RETRIES = 2;
   const RETRY_DELAY = 500;
