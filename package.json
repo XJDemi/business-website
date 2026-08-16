@@ -1,13 +1,4 @@
 {
-  "name": "xuanji-admin",
-  "version": "1.0.0",
-  "description": "XuanJi Technology - Zero dependencies",
-  "scripts": {
-    "start": "node dev-server.js",
-    "dev": "node dev-server.js",
-    "build": "echo 'Build complete'"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+  "name": "xuanji-business-website",
+  "private": true
 }
