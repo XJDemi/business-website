@@ -1,5 +1,5 @@
-// Vercel serverless function - XuanJi Technology
-// Pure Node.js handler, zero dependencies, maximum reliability
+// Vercel catch-all API route - handles all /api/* requests
+// Pure Node.js handler, zero dependencies
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://idvlxevufkpfxfiffvus.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlkdmx4ZXZ1ZmtwZnhmaWZmdnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1OTgwNzEsImV4cCI6MjEwMDE3NDA3MX0.NOLE7ocrd1ajfcu4ObHTjYTMwNPWu7F-eD2JtHE1l0g';
@@ -47,11 +47,9 @@ function sendJson(res, status, obj) {
 }
 
 function matchRoute(method, pathname) {
-  // /api/health
   if (pathname === '/api/health' && method === 'GET')
     return function () { return { status: 200, body: { status: 'ok', time: new Date().toISOString() } }; };
 
-  // Products CRUD
   if (pathname === '/api/products' && method === 'GET')
     return async function (req, res, q) {
       var qs = new URLSearchParams();
@@ -71,7 +69,7 @@ function matchRoute(method, pathname) {
       if (r.error) return { status: 500, body: { success: false, error: r.error } };
       return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
     };
-    if (method === 'PUT') return async function (req, res) {
+    if (method === 'PUT') return async function (req) {
       var body = await parseBody(req);
       var r = await supaQuery('products', 'PATCH', '?id=eq.' + id, body);
       if (r.error) return { status: 500, body: { success: false, error: r.error } };
@@ -91,7 +89,6 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // Categories CRUD
   if (pathname === '/api/categories' && method === 'GET') return async function (req, res, q) {
     var qs = new URLSearchParams();
     if (q.industry) qs.set('industry', 'eq.' + q.industry);
@@ -129,7 +126,6 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // News CRUD
   if (pathname === '/api/news' && method === 'GET') return async function (req, res, q) {
     var qs = new URLSearchParams();
     if (q.industry) qs.set('industry', 'eq.' + q.industry);
@@ -167,7 +163,6 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // Case Studies CRUD
   if (pathname === '/api/case-studies' && method === 'GET') return async function (req, res, q) {
     var qs = new URLSearchParams();
     if (q.industry) qs.set('industry', 'eq.' + q.industry);
@@ -205,7 +200,6 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // Inquiries
   if ((pathname === '/api/inquiry' || pathname === '/api/inquiries') && method === 'POST') return async function (req) {
     var body = await parseBody(req);
     var r = await supaQuery('inquiries', 'POST', '', [Object.assign({}, body, { created_at: new Date().toISOString() })]);
@@ -226,7 +220,6 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // Site Settings
   if (pathname === '/api/site-settings' && method === 'GET') return async function () {
     var r = await supaQuery('site_settings', 'GET', '?select=*&limit=1');
     return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : {} } };
@@ -239,14 +232,12 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  // Tracking
   if ((pathname === '/api/track' || pathname === '/api/track-visit') && method === 'POST') return async function (req) {
     var body = await parseBody(req);
     await supaQuery('visits', 'POST', '', [Object.assign({}, body, { created_at: new Date().toISOString() })]);
     return { status: 200, body: { success: true } };
   };
 
-  // Login
   if (pathname === '/api/login' && method === 'POST') return async function (req) {
     var body = await parseBody(req);
     if (!body.username || !body.password) return { status: 400, body: { success: false, error: 'Username and password required' } };
@@ -255,24 +246,12 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, token: 'dev-token', user: { username: body.username } } };
   };
 
-  // Stats
   if (pathname === '/api/stats' && method === 'GET') return async function () {
     var p1 = await supaQuery('products', 'GET', '?select=id');
     var p2 = await supaQuery('inquiries', 'GET', '?select=id');
-    return {
-      status: 200,
-      body: {
-        success: true,
-        data: {
-          products: Array.isArray(p1.data) ? p1.data.length : 0,
-          inquiries: Array.isArray(p2.data) ? p2.data.length : 0,
-          updatedAt: new Date().toISOString()
-        }
-      }
-    };
+    return { status: 200, body: { success: true, data: { products: Array.isArray(p1.data) ? p1.data.length : 0, inquiries: Array.isArray(p2.data) ? p2.data.length : 0, updatedAt: new Date().toISOString() } } };
   };
 
-  // Snapshots
   if (pathname === '/api/snapshots' && method === 'GET') return async function () {
     var r = await supaQuery('snapshots', 'GET', '?select=*&order=created_at.desc');
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
@@ -302,7 +281,6 @@ function matchRoute(method, pathname) {
   if (pathname === '/api/snapshots/logs' && method === 'GET')
     return function () { return { status: 200, body: { success: true, data: [] } }; };
 
-  // Upload / Delete Image
   if (pathname === '/api/upload-editor-image' && method === 'POST') return async function (req) {
     var body = await parseBody(req);
     return { status: 200, body: { success: true, url: body.url || '' } };
@@ -311,7 +289,6 @@ function matchRoute(method, pathname) {
   if (pathname === '/api/delete-image' && method === 'POST')
     return function () { return { status: 200, body: { success: true } }; };
 
-  // Public Phrases
   if (pathname === '/api/public-phrases' && method === 'GET') return async function () {
     var r = await supaQuery('public_phrases', 'GET', '?select=*&order=id.asc');
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
@@ -334,7 +311,6 @@ function matchRoute(method, pathname) {
 }
 
 module.exports = async function (req, res) {
-  // Handle CORS preflight
   if (req.method === 'OPTIONS') {
     sendJson(res, 200, {});
     return;

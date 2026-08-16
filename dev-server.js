@@ -6,7 +6,7 @@ const path = require('path');
 
 const PORT = process.env.PORT || 8080;
 const ROOT_DIR = __dirname;
-const apiHandler = require('./api/index.js');
+const apiHandler = require('./api/[...path].js');
 
 const MIME = {
   '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
