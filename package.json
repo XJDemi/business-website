@@ -4,7 +4,9 @@
   "description": "XuanJi Technology Admin Panel - Product Management System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node dev-server.js",
+    "dev": "node dev-server.js",
+    "api": "node server.js",
     "build": "echo 'Build complete'"
   },
   "dependencies": {
