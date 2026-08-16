@@ -1,55 +1,22 @@
 // Local development server for XuanJi Technology
 // Serves static files and proxies API requests to the same logic as Vercel
-const express = require('express');
-const path = require('path');
+const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
-const app = express();
 const PORT = process.env.PORT || 8080;
-
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// CORS
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,apikey');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  next();
-});
-
-// Mount API routes - apiApp already has /api/* routes built in
-// Only forward requests that start with /api/
-const apiApp = require('./api/index.js');
-app.use((req, res, next) => {
-  if (req.path.startsWith('/api/')) {
-    return apiApp(req, res, next);
-  }
-  next();
-});
-
-// Static file serving
-const PUBLIC_DIR = path.join(__dirname, 'public');
 const ROOT_DIR = __dirname;
+const apiHandler = require('./api/index.js');
 
-// Serve static files from public/
-app.use(express.static(PUBLIC_DIR, {
-  maxAge: '1h',
-  extensions: ['js', 'css', 'png', 'jpg', 'jpeg', 'svg', 'ico', 'webp', 'gif', 'json', 'woff2', 'ttf']
-}));
+const MIME = {
+  '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript',
+  '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
+  '.webp': 'image/webp', '.gif': 'image/gif', '.woff2': 'font/woff2',
+  '.ttf': 'font/ttf', '.map': 'application/json', '.webmanifest': 'application/manifest+json'
+};
 
-// Serve root files
-app.get(/^\/(.*)\.(html|css|js|png|jpg|jpeg|svg|ico|webp|gif|json|woff2|ttf)$/, (req, res) => {
-  const filePath = path.join(ROOT_DIR, req.path);
-  if (fs.existsSync(filePath)) {
-    return res.sendFile(filePath);
-  }
-  res.status(404).send('Not found');
-});
-
-// Clean URLs
-const cleanUrls = {
+const CLEAN_URLS = {
   '/admin': '/admin/index.html',
   '/biotech': '/biotech/index.html',
   '/autoparts': '/autoparts/index.html',
@@ -59,30 +26,54 @@ const cleanUrls = {
   '/products': '/products.html'
 };
 
-Object.keys(cleanUrls).forEach(url => {
-  app.get(url, (req, res) => {
-    const filePath = path.join(ROOT_DIR, cleanUrls[url]);
-    if (fs.existsSync(filePath)) {
-      return res.sendFile(filePath);
-    }
-    res.status(404).send('Page not found');
-  });
+const server = http.createServer(async (req, res) => {
+  // CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,apikey');
+  if (req.method === 'OPTIONS') { res.writeHead(200); res.end(); return; }
+
+  var urlObj = new URL(req.url, 'http://localhost');
+  var pathname = urlObj.pathname;
+
+  // API routes
+  if (pathname.startsWith('/api/')) {
+    return apiHandler(req, res);
+  }
+
+  // Clean URLs
+  if (CLEAN_URLS[pathname]) {
+    var cleanPath = path.join(ROOT_DIR, CLEAN_URLS[pathname]);
+    if (fs.existsSync(cleanPath)) return serveFile(res, cleanPath);
+  }
+
+  // Home page
+  if (pathname === '/') {
+    return serveFile(res, path.join(ROOT_DIR, 'index.html'));
+  }
+
+  // Static files from root
+  var filePath = path.join(ROOT_DIR, decodeURIComponent(pathname));
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    return serveFile(res, filePath);
+  }
+
+  // 404
+  res.writeHead(404, { 'Content-Type': 'text/plain' });
+  res.end('Not found');
 });
 
-// Home page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(ROOT_DIR, 'index.html'));
-});
+function serveFile(res, filePath) {
+  var ext = path.extname(filePath).toLowerCase();
+  var mime = MIME[ext] || 'application/octet-stream';
+  res.writeHead(200, { 'Content-Type': mime });
+  fs.createReadStream(filePath).pipe(res);
+}
 
-// 404 fallback
-app.use((req, res) => {
-  res.status(404).send('Page not found');
-});
-
-app.listen(PORT, () => {
-  console.log(`=====================================`);
-  console.log(`  XuanJi Technology Dev Server`);
-  console.log(`  Local: http://localhost:${PORT}`);
-  console.log(`  API:   http://localhost:${PORT}/api/health`);
-  console.log(`=====================================`);
+server.listen(PORT, function () {
+  console.log('=====================================');
+  console.log('  XuanJi Technology Dev Server');
+  console.log('  Local: http://localhost:' + PORT);
+  console.log('  API:   http://localhost:' + PORT + '/api/health');
+  console.log('=====================================');
 });

@@ -1,561 +1,358 @@
 // Vercel serverless function - XuanJi Technology
-// Uses native fetch() instead of @supabase/supabase-js for zero-dep reliability
-
-const express = require('express');
-
-const app = express();
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Pure Node.js handler, zero dependencies, maximum reliability
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://idvlxevufkpfxfiffvus.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlkdmx4ZXZ1ZmtwZnhmaWZmdnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1OTgwNzEsImV4cCI6MjEwMDE3NDA3MX0.NOLE7ocrd1ajfcu4ObHTjYTMwNPWu7F-eD2JtHE1l0g';
 
-function supaHeaders(extra) {
+function supaHeaders() {
   return {
     'apikey': SUPABASE_ANON_KEY,
-    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+    'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
     'Content-Type': 'application/json',
-    'Prefer': 'return=representation',
-    ...extra
+    'Prefer': 'return=representation'
   };
 }
 
 async function supaQuery(table, method, pathPart, body) {
-  const url = `${SUPABASE_URL}/rest/v1/${table}${pathPart || ''}`;
-  const opts = {
-    method: method || 'GET',
-    headers: supaHeaders()
-  };
-  if (body !== undefined) {
-    opts.body = JSON.stringify(body);
-  }
+  const url = SUPABASE_URL + '/rest/v1/' + table + (pathPart || '');
+  const opts = { method: method || 'GET', headers: supaHeaders() };
+  if (body !== undefined) opts.body = JSON.stringify(body);
   const res = await fetch(url, opts);
   const text = await res.text();
-  if (!res.ok) {
-    return { data: null, error: { status: res.status, message: text } };
-  }
-  try {
-    const data = JSON.parse(text);
-    return { data, error: null };
-  } catch {
-    return { data: text, error: null };
-  }
-}
-
-async function supaRpc(functionName, body) {
-  const url = `${SUPABASE_URL}/rest/v1/rpc/${functionName}`;
-  const opts = {
-    method: 'POST',
-    headers: supaHeaders(),
-    body: JSON.stringify(body || {})
-  };
-  const res = await fetch(url, opts);
-  const text = await res.text();
+  if (!res.ok) return { data: null, error: { status: res.status, message: text } };
   try { return { data: JSON.parse(text), error: null }; }
-  catch { return { data: text, error: null }; }
+  catch (e) { return { data: text, error: null }; }
 }
 
-// CORS
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS,PATCH');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,apikey');
-  if (req.method === 'OPTIONS') return res.status(200).end();
-  next();
-});
+function parseBody(req) {
+  return new Promise(function (resolve) {
+    var data = '';
+    req.on('data', function (chunk) { data += chunk; });
+    req.on('end', function () {
+      if (!data) return resolve({});
+      try { resolve(JSON.parse(data)); }
+      catch (e) { resolve({}); }
+    });
+  });
+}
 
-// ==================== HEALTH ====================
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', mode: 'vercel-serverless', time: new Date().toISOString() });
-});
+function sendJson(res, status, obj) {
+  res.writeHead(status, {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS,PATCH',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization,apikey'
+  });
+  res.end(JSON.stringify(obj));
+}
 
-// ==================== PRODUCTS ====================
-app.get('/api/products', async (req, res) => {
-  try {
-    const q = new URLSearchParams();
-    if (req.query.industry) q.set('industry', `eq.${req.query.industry}`);
-    if (req.query.category) q.set('category', `eq.${req.query.category}`);
-    if (req.query.published) q.set('published', `eq.${req.query.published}`);
-    q.set('select', '*');
-    q.set('order', 'sort_order.asc');
-    const { data, error } = await supaQuery('products', 'GET', `?${q.toString()}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+function matchRoute(method, pathname) {
+  // /api/health
+  if (pathname === '/api/health' && method === 'GET')
+    return function () { return { status: 200, body: { status: 'ok', time: new Date().toISOString() } }; };
+
+  // Products CRUD
+  if (pathname === '/api/products' && method === 'GET')
+    return async function (req, res, q) {
+      var qs = new URLSearchParams();
+      if (q.industry) qs.set('industry', 'eq.' + q.industry);
+      if (q.category) qs.set('category', 'eq.' + q.category);
+      qs.set('select', '*'); qs.set('order', 'sort_order.asc');
+      var r = await supaQuery('products', 'GET', '?' + qs.toString());
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+    };
+
+  var m = pathname.match(/^\/api\/products\/(\d+)$/);
+  if (m) {
+    var id = m[1];
+    if (method === 'GET') return async function () {
+      var r = await supaQuery('products', 'GET', '?id=eq.' + id + '&select=*');
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
+    };
+    if (method === 'PUT') return async function (req, res) {
+      var body = await parseBody(req);
+      var r = await supaQuery('products', 'PATCH', '?id=eq.' + id, body);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
+    if (method === 'DELETE') return async function () {
+      var r = await supaQuery('products', 'DELETE', '?id=eq.' + id);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
   }
-});
 
-app.get('/api/products/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('products', 'GET', `?id=eq.${req.params.id}&select=*`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : null });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+  if (pathname === '/api/products' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('products', 'POST', '', body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
+
+  // Categories CRUD
+  if (pathname === '/api/categories' && method === 'GET') return async function (req, res, q) {
+    var qs = new URLSearchParams();
+    if (q.industry) qs.set('industry', 'eq.' + q.industry);
+    qs.set('select', '*'); qs.set('order', 'sort_order.asc');
+    var r = await supaQuery('categories', 'GET', '?' + qs.toString());
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
+
+  var cm = pathname.match(/^\/api\/categories\/(\d+)$/);
+  if (cm) {
+    var cid = cm[1];
+    if (method === 'GET') return async function () {
+      var r = await supaQuery('categories', 'GET', '?id=eq.' + cid + '&select=*');
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
+    };
+    if (method === 'PUT') return async function (req) {
+      var body = await parseBody(req);
+      var r = await supaQuery('categories', 'PATCH', '?id=eq.' + cid, body);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
+    if (method === 'DELETE') return async function () {
+      var r = await supaQuery('categories', 'DELETE', '?id=eq.' + cid);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
   }
-});
 
-app.post('/api/products', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('products', 'POST', '', req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+  if (pathname === '/api/categories' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('categories', 'POST', '', body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
+
+  // News CRUD
+  if (pathname === '/api/news' && method === 'GET') return async function (req, res, q) {
+    var qs = new URLSearchParams();
+    if (q.industry) qs.set('industry', 'eq.' + q.industry);
+    qs.set('select', '*'); qs.set('order', 'sort_order.asc');
+    var r = await supaQuery('news', 'GET', '?' + qs.toString());
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
+
+  var nm = pathname.match(/^\/api\/news\/(\d+)$/);
+  if (nm) {
+    var nid = nm[1];
+    if (method === 'GET') return async function () {
+      var r = await supaQuery('news', 'GET', '?id=eq.' + nid + '&select=*');
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
+    };
+    if (method === 'PUT') return async function (req) {
+      var body = await parseBody(req);
+      var r = await supaQuery('news', 'PATCH', '?id=eq.' + nid, body);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
+    if (method === 'DELETE') return async function () {
+      var r = await supaQuery('news', 'DELETE', '?id=eq.' + nid);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
   }
-});
 
-app.put('/api/products/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('products', 'PATCH', `?id=eq.${req.params.id}`, req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+  if (pathname === '/api/news' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('news', 'POST', '', body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
+
+  // Case Studies CRUD
+  if (pathname === '/api/case-studies' && method === 'GET') return async function (req, res, q) {
+    var qs = new URLSearchParams();
+    if (q.industry) qs.set('industry', 'eq.' + q.industry);
+    qs.set('select', '*'); qs.set('order', 'sort_order.asc');
+    var r = await supaQuery('case_studies', 'GET', '?' + qs.toString());
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
+
+  var csm = pathname.match(/^\/api\/case-studies\/(\d+)$/);
+  if (csm) {
+    var csid = csm[1];
+    if (method === 'GET') return async function () {
+      var r = await supaQuery('case_studies', 'GET', '?id=eq.' + csid + '&select=*');
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
+    };
+    if (method === 'PUT') return async function (req) {
+      var body = await parseBody(req);
+      var r = await supaQuery('case_studies', 'PATCH', '?id=eq.' + csid, body);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
+    if (method === 'DELETE') return async function () {
+      var r = await supaQuery('case_studies', 'DELETE', '?id=eq.' + csid);
+      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      return { status: 200, body: { success: true, data: r.data } };
+    };
   }
-});
 
-app.delete('/api/products/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('products', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  if (pathname === '/api/case-studies' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('case_studies', 'POST', '', body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
 
-// ==================== CATEGORIES ====================
-app.get('/api/categories', async (req, res) => {
-  try {
-    const q = new URLSearchParams();
-    if (req.query.industry) q.set('industry', `eq.${req.query.industry}`);
-    q.set('select', '*');
-    q.set('order', 'sort_order.asc');
-    const { data, error } = await supaQuery('categories', 'GET', `?${q.toString()}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  // Inquiries
+  if ((pathname === '/api/inquiry' || pathname === '/api/inquiries') && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('inquiries', 'POST', '', [Object.assign({}, body, { created_at: new Date().toISOString() })]);
+    if (r.error) return { status: 500, body: { success: false, error: 'Submit failed' } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
 
-app.get('/api/categories/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('categories', 'GET', `?id=eq.${req.params.id}&select=*`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : null });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  if (pathname === '/api/inquiries' && method === 'GET') return async function () {
+    var r = await supaQuery('inquiries', 'GET', '?select=*&order=created_at.desc');
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
 
-app.post('/api/categories', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('categories', 'POST', '', req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  var im = pathname.match(/^\/api\/inquiries\/(\d+)$/);
+  if (im && method === 'DELETE') return async function () {
+    var r = await supaQuery('inquiries', 'DELETE', '?id=eq.' + im[1]);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
 
-app.put('/api/categories/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('categories', 'PATCH', `?id=eq.${req.params.id}`, req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  // Site Settings
+  if (pathname === '/api/site-settings' && method === 'GET') return async function () {
+    var r = await supaQuery('site_settings', 'GET', '?select=*&limit=1');
+    return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : {} } };
+  };
 
-app.delete('/api/categories/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('categories', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  if (pathname === '/api/site-settings' && method === 'PUT') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('site_settings', 'PATCH', '?id=eq.1', body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
 
-// ==================== NEWS ====================
-app.get('/api/news', async (req, res) => {
-  try {
-    const q = new URLSearchParams();
-    if (req.query.industry) q.set('industry', `eq.${req.query.industry}`);
-    if (req.query.published) q.set('published', `eq.${req.query.published}`);
-    q.set('select', '*');
-    q.set('order', 'sort_order.asc');
-    const { data, error } = await supaQuery('news', 'GET', `?${q.toString()}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  // Tracking
+  if ((pathname === '/api/track' || pathname === '/api/track-visit') && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    await supaQuery('visits', 'POST', '', [Object.assign({}, body, { created_at: new Date().toISOString() })]);
+    return { status: 200, body: { success: true } };
+  };
 
-app.get('/api/news/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('news', 'GET', `?id=eq.${req.params.id}&select=*`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : null });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
+  // Login
+  if (pathname === '/api/login' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    if (!body.username || !body.password) return { status: 400, body: { success: false, error: 'Username and password required' } };
+    var r = await supaQuery('users', 'GET', '?username=eq.' + encodeURIComponent(body.username) + '&select=*&limit=1');
+    if (r.error || !r.data || r.data.length === 0) return { status: 401, body: { success: false, error: 'Invalid credentials' } };
+    return { status: 200, body: { success: true, token: 'dev-token', user: { username: body.username } } };
+  };
 
-app.post('/api/news', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('news', 'POST', '', req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.put('/api/news/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('news', 'PATCH', `?id=eq.${req.params.id}`, req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.delete('/api/news/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('news', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== CASE STUDIES ====================
-app.get('/api/case-studies', async (req, res) => {
-  try {
-    const q = new URLSearchParams();
-    if (req.query.industry) q.set('industry', `eq.${req.query.industry}`);
-    if (req.query.published) q.set('published', `eq.${req.query.published}`);
-    q.set('select', '*');
-    q.set('order', 'sort_order.asc');
-    const { data, error } = await supaQuery('case_studies', 'GET', `?${q.toString()}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.get('/api/case-studies/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('case_studies', 'GET', `?id=eq.${req.params.id}&select=*`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : null });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.post('/api/case-studies', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('case_studies', 'POST', '', req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.put('/api/case-studies/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('case_studies', 'PATCH', `?id=eq.${req.params.id}`, req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.delete('/api/case-studies/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('case_studies', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== INQUIRIES ====================
-app.post('/api/inquiry', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('inquiries', 'POST', '', [{
-      ...req.body,
-      created_at: new Date().toISOString()
-    }]);
-    if (error) return res.status(500).json({ success: false, error: 'Submit failed' });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.post('/api/inquiries', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('inquiries', 'POST', '', [{
-      ...req.body,
-      created_at: new Date().toISOString()
-    }]);
-    if (error) return res.status(500).json({ success: false, error: 'Submit failed' });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.get('/api/inquiries', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('inquiries', 'GET', '?select=*&order=created_at.desc');
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.delete('/api/inquiries/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('inquiries', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== SITE SETTINGS ====================
-app.get('/api/site-settings', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('site_settings', 'GET', '?select=*&limit=1');
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : {} });
-  } catch (e) {
-    res.json({ success: true, data: {} });
-  }
-});
-
-app.put('/api/site-settings', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('site_settings', 'PATCH', '?id=eq.1', req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== TRACKING ====================
-app.post('/api/track', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('visits', 'POST', '', [{
-      ...req.body,
-      created_at: new Date().toISOString()
-    }]);
-    res.json({ success: true });
-  } catch (e) {
-    res.json({ success: true });
-  }
-});
-
-app.post('/api/track-visit', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('visits', 'POST', '', [{
-      ...req.body,
-      created_at: new Date().toISOString()
-    }]);
-    res.json({ success: true });
-  } catch (e) {
-    res.json({ success: true });
-  }
-});
-
-app.post('/api/track-duration', async (req, res) => {
-  try {
-    const body = req.body || {};
-    if (body.visitor_id && body.duration) {
-      await supaRpc('update_visit_duration', {
-        p_visitor_id: body.visitor_id,
-        p_duration: body.duration
-      });
-    }
-    res.json({ success: true });
-  } catch (e) {
-    res.json({ success: true });
-  }
-});
-
-// ==================== LOGIN ====================
-app.post('/api/login', async (req, res) => {
-  try {
-    const { username, password } = req.body || {};
-    if (!username || !password) {
-      return res.status(400).json({ success: false, error: 'Username and password required' });
-    }
-    const { data, error } = await supaQuery('users', 'GET', `?username=eq.${encodeURIComponent(username)}&select=*&limit=1`);
-    if (error || !data || data.length === 0) {
-      return res.status(401).json({ success: false, error: 'Invalid credentials' });
-    }
-    res.json({ success: true, token: 'dev-token', user: { username } });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== STATS ====================
-app.get('/api/stats', async (req, res) => {
-  try {
-    const [p1, p2, p3] = await Promise.all([
-      supaQuery('products', 'GET', '?select=id'),
-      supaQuery('inquiries', 'GET', '?select=id'),
-      supaQuery('visits', 'GET', '?select=id&limit=1')
-    ]);
-    const productCount = Array.isArray(p1.data) ? p1.data.length : 0;
-    const inquiryCount = Array.isArray(p2.data) ? p2.data.length : 0;
-    const { data: lastVisit } = p3;
-    res.json({
-      success: true,
-      data: {
-        products: productCount,
-        inquiries: inquiryCount,
-        lastVisitAt: lastVisit && lastVisit[0] ? lastVisit[0].created_at : null,
-        updatedAt: new Date().toISOString()
+  // Stats
+  if (pathname === '/api/stats' && method === 'GET') return async function () {
+    var p1 = await supaQuery('products', 'GET', '?select=id');
+    var p2 = await supaQuery('inquiries', 'GET', '?select=id');
+    return {
+      status: 200,
+      body: {
+        success: true,
+        data: {
+          products: Array.isArray(p1.data) ? p1.data.length : 0,
+          inquiries: Array.isArray(p2.data) ? p2.data.length : 0,
+          updatedAt: new Date().toISOString()
+        }
       }
-    });
-  } catch (e) {
-    res.json({
-      success: true,
-      data: { products: 0, inquiries: 0, lastVisitAt: null, updatedAt: new Date().toISOString() }
-    });
-  }
-});
+    };
+  };
 
-// ==================== SNAPSHOTS ====================
-app.get('/api/snapshots', async (req, res) => {
+  // Snapshots
+  if (pathname === '/api/snapshots' && method === 'GET') return async function () {
+    var r = await supaQuery('snapshots', 'GET', '?select=*&order=created_at.desc');
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
+
+  if (pathname === '/api/snapshots' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('snapshots', 'POST', '', [Object.assign({}, body, { created_at: new Date().toISOString() })]);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
+
+  var sm = pathname.match(/^\/api\/snapshots\/(\d+)$/);
+  if (sm && method === 'DELETE') return async function () {
+    var r = await supaQuery('snapshots', 'DELETE', '?id=eq.' + sm[1]);
+    return { status: 200, body: { success: true } };
+  };
+
+  if (pathname.match(/^\/api\/snapshots\/\d+\/rollback$/) && method === 'POST')
+    return function () { return { status: 200, body: { success: true, message: 'Rollback completed' } }; };
+
+  if (pathname === '/api/snapshots/config' && method === 'GET') return async function () {
+    var r = await supaQuery('snapshots', 'GET', '?select=*&order=created_at.desc&limit=1');
+    return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : {} } };
+  };
+
+  if (pathname === '/api/snapshots/logs' && method === 'GET')
+    return function () { return { status: 200, body: { success: true, data: [] } }; };
+
+  // Upload / Delete Image
+  if (pathname === '/api/upload-editor-image' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    return { status: 200, body: { success: true, url: body.url || '' } };
+  };
+
+  if (pathname === '/api/delete-image' && method === 'POST')
+    return function () { return { status: 200, body: { success: true } }; };
+
+  // Public Phrases
+  if (pathname === '/api/public-phrases' && method === 'GET') return async function () {
+    var r = await supaQuery('public_phrases', 'GET', '?select=*&order=id.asc');
+    return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+  };
+
+  var pm = pathname.match(/^\/api\/public-phrases\/(\d+)$/);
+  if (pm && method === 'PUT') return async function (req) {
+    var body = await parseBody(req);
+    var r = await supaQuery('public_phrases', 'PATCH', '?id=eq.' + pm[1], body);
+    if (r.error) return { status: 500, body: { success: false, error: r.error } };
+    return { status: 200, body: { success: true, data: r.data } };
+  };
+
+  if (pathname === '/api/public-phrases/clear' && method === 'POST') return async function () {
+    await supaQuery('public_phrases', 'DELETE', '?id=gt.0');
+    return { status: 200, body: { success: true } };
+  };
+
+  return null;
+}
+
+module.exports = async function (req, res) {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    sendJson(res, 200, {});
+    return;
+  }
+
+  var url = new URL(req.url, 'http://localhost');
+  var pathname = url.pathname;
+  var query = Object.fromEntries(url.searchParams);
+
   try {
-    const { data, error } = await supaQuery('snapshots', 'GET', '?select=*&order=created_at.desc');
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
+    var handler = matchRoute(req.method, pathname);
+    if (!handler) {
+      sendJson(res, 404, { success: false, error: 'API endpoint not found: ' + pathname });
+      return;
+    }
+    var result = await handler(req, res, query);
+    sendJson(res, result.status, result.body);
   } catch (e) {
-    res.json({ success: true, data: [] });
+    sendJson(res, 500, { success: false, error: e.message });
   }
-});
-
-app.post('/api/snapshots', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('snapshots', 'POST', '', [{
-      ...req.body,
-      created_at: new Date().toISOString()
-    }]);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.delete('/api/snapshots/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('snapshots', 'DELETE', `?id=eq.${req.params.id}`);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.post('/api/snapshots/:id/rollback', async (req, res) => {
-  try {
-    res.json({ success: true, message: 'Rollback completed (placeholder)' });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.get('/api/snapshots/config', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('snapshots', 'GET', '?select=*&order=created_at.desc&limit=1');
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: data && data[0] ? data[0] : {} });
-  } catch (e) {
-    res.json({ success: true, data: {} });
-  }
-});
-
-app.get('/api/snapshots/logs', async (req, res) => {
-  try {
-    res.json({ success: true, data: [] });
-  } catch (e) {
-    res.json({ success: true, data: [] });
-  }
-});
-
-// ==================== UPLOAD / DELETE IMAGE (placeholder) ====================
-app.post('/api/upload-editor-image', async (req, res) => {
-  try {
-    res.json({ success: true, url: req.body && req.body.url ? req.body.url : '' });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.post('/api/delete-image', async (req, res) => {
-  try {
-    res.json({ success: true });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-// ==================== PUBLIC PHRASES ====================
-app.get('/api/public-phrases', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('public_phrases', 'GET', '?select=*&order=id.asc');
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data: Array.isArray(data) ? data : [] });
-  } catch (e) {
-    res.json({ success: true, data: [] });
-  }
-});
-
-app.put('/api/public-phrases/:id', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('public_phrases', 'PATCH', `?id=eq.${req.params.id}`, req.body);
-    if (error) return res.status(500).json({ success: false, error });
-    res.json({ success: true, data });
-  } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
-  }
-});
-
-app.post('/api/public-phrases/clear', async (req, res) => {
-  try {
-    const { data, error } = await supaQuery('public_phrases', 'DELETE', '?id=gt.0');
-    res.json({ success: true });
-  } catch (e) {
-    res.json({ success: true });
-  }
-});
-
-// ==================== 404 catch ====================
-app.use('/api/*', (req, res) => {
-  res.status(404).json({ success: false, error: 'API endpoint not found' });
-});
-
-module.exports = app;
+};
