@@ -658,7 +658,7 @@
   </footer>
 
   <script src="/i18n/i18n.js"></script>
-  <script src="/public/supabase-client.js"></script>
+  <script src="/supabase-client.js"></script>
   <script>
     function toggleMenu() {
       document.querySelector('.nav-links').classList.toggle('active');
@@ -1078,15 +1078,19 @@
       const noDescription = GT_I18N.t('common.noDescription', 'No description available.');
       const noSpecifications = GT_I18N.t('common.noSpecifications', '<p>No specifications available.</p>');
       
-      if (currentProduct.id) {
+      if (currentProduct.id && !currentProduct._fullyLoaded) {
         try {
-          const response = await fetch(`/api/products/${currentProduct.id}?lang=${GT_I18N.getLang()}`);
-          const data = await response.json();
-          if (data.success && data.data) {
-            currentProduct = data.data;
+          const { data: pd } = await window.SupaQuery
+            .from('products')
+            .select('*')
+            .eq('id', currentProduct.id)
+            .limit(1);
+          if (pd && pd[0]) {
+            currentProduct = applyProductTranslations(pd[0], GT_I18N.getLang());
+            currentProduct._fullyLoaded = true;
           }
         } catch (error) {
-          console.error('Failed to fetch translated product:', error);
+          console.error('Failed to fetch product details:', error);
         }
       }
       

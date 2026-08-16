@@ -18,8 +18,8 @@
       "destination": "/instruments/index.html"
     },
     {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
+      "source": "/(about|contact|products).html",
+      "destination": "/$1.html"
     },
     {
       "source": "/(.*)",
