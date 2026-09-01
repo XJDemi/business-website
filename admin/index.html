@@ -301,9 +301,6 @@
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="admin.login.btn">Login</button>
         </form>
-        <p style="text-align: center; margin-top: 20px; color: var(--text-gray); font-size: 0.8rem;" data-i18n="admin.login.default">
-          Default: admin / admin123
-        </p>
       </div>
     </div>
 
@@ -323,6 +320,7 @@
             <li><a href="#" onclick="showPage('news')" data-i18n="admin.nav.news">News</a></li>
             <li><a href="#" onclick="showPage('case-studies')" data-i18n="admin.nav.caseStudies">Case Studies</a></li>
             <li><a href="#" onclick="showPage('settings')" data-i18n="admin.nav.settings">Site Settings</a></li>
+            <li><a href="#" onclick="showPage('change-password')" data-i18n="admin.nav.changePassword">Change Password</a></li>
           </ul>
         </nav>
       </div>
@@ -1314,6 +1312,29 @@
                 <button type="submit" class="btn btn-primary" data-i18n="admin.settings.save">Save Settings</button>
                 <button type="button" class="btn btn-secondary" onclick="loadSiteSettings()" data-i18n="admin.settings.refresh">Refresh</button>
               </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="change-password-content" style="display: none;">
+          <div class="card">
+            <h2 data-i18n="admin.changePassword.title">Change Password</h2>
+            <p style="color: var(--text-gray); margin-bottom: 20px; font-size: 0.9rem;">Update the admin login password. New password must be at least 6 characters.</p>
+
+            <form id="change-password-form">
+              <div class="form-group">
+                <label data-i18n="admin.changePassword.current">Current Password *</label>
+                <input type="password" id="cp-current" required autocomplete="current-password">
+              </div>
+              <div class="form-group">
+                <label data-i18n="admin.changePassword.new">New Password *</label>
+                <input type="password" id="cp-new" required minlength="6" autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label data-i18n="admin.changePassword.confirm">Confirm New Password *</label>
+                <input type="password" id="cp-confirm" required minlength="6" autocomplete="new-password">
+              </div>
+              <button type="submit" class="btn btn-primary" data-i18n="admin.changePassword.submit">Update Password</button>
             </form>
           </div>
         </div>
@@ -2666,6 +2687,7 @@
       if (data.success) {
         token = data.token;
         localStorage.setItem('token', token);
+        localStorage.setItem('admin_username', data.user.username);
         document.getElementById('current-user').textContent = data.user.username;
         showDashboard();
         await loadCategories();
@@ -2789,6 +2811,7 @@
       document.getElementById('news-content').style.display = 'none';
       document.getElementById('case-studies-content').style.display = 'none';
       document.getElementById('settings-content').style.display = 'none';
+      document.getElementById('change-password-content').style.display = 'none';
 
       if (page === 'dashboard') {
         document.getElementById('page-title').textContent = GT_I18N.t('admin.dashboard.title', 'Dashboard');
@@ -2848,8 +2871,43 @@
         document.getElementById('page-title').textContent = GT_I18N.t('admin.caseStudies.title', 'Case Studies Management');
         document.getElementById('case-studies-content').style.display = 'block';
         loadCaseStudies();
+      } else if (page === 'change-password') {
+        document.getElementById('page-title').textContent = GT_I18N.t('admin.changePassword.title', 'Change Password');
+        document.getElementById('change-password-content').style.display = 'block';
+        document.getElementById('change-password-form').reset();
       }
     }
+
+    // 修改后台登录密码
+    document.getElementById('change-password-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      var currentPassword = document.getElementById('cp-current').value;
+      var newPassword = document.getElementById('cp-new').value;
+      var confirmPassword = document.getElementById('cp-confirm').value;
+
+      if (newPassword !== confirmPassword) {
+        alert(GT_I18N.t('admin.changePassword.mismatch', 'New password and confirmation do not match'));
+        return;
+      }
+
+      var username = localStorage.getItem('admin_username') || 'admin';
+      try {
+        var response = await fetch('/api/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ username: username, current_password: currentPassword, new_password: newPassword })
+        });
+        var result = await response.json();
+        if (result.success) {
+          alert(GT_I18N.t('admin.changePassword.success', 'Password updated successfully! Please use the new password next time you login.'));
+          this.reset();
+        } else {
+          alert(GT_I18N.t('admin.error', 'Error') + ': ' + (result.error || 'Update failed'));
+        }
+      } catch (error) {
+        alert(GT_I18N.t('admin.error', 'Error') + ': ' + error.message);
+      }
+    });
 
     let currentRollbackSnapshot = null;
 

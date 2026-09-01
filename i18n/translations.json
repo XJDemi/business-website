@@ -582,7 +582,18 @@
         "snapshots": "Snapshots",
         "i18n": "Translation",
         "news": "News",
-        "caseStudies": "Case Studies"
+        "caseStudies": "Case Studies",
+        "settings": "Site Settings",
+        "changePassword": "Change Password"
+      },
+      "changePassword": {
+        "title": "Change Password",
+        "current": "Current Password",
+        "new": "New Password",
+        "confirm": "Confirm New Password",
+        "submit": "Update Password",
+        "mismatch": "New password and confirmation do not match",
+        "success": "Password updated successfully! Please use the new password next time you login."
       },
       "user": "Admin",
       "logout": "Logout",
@@ -1465,7 +1476,18 @@
         "categories": "分类管理",
         "inquiries": "询盘管理",
         "news": "新闻",
-        "caseStudies": "案例研究"
+        "caseStudies": "案例研究",
+        "settings": "网站设置",
+        "changePassword": "修改密码"
+      },
+      "changePassword": {
+        "title": "修改密码",
+        "current": "当前密码",
+        "new": "新密码",
+        "confirm": "确认新密码",
+        "submit": "更新密码",
+        "mismatch": "两次输入的新密码不一致",
+        "success": "密码修改成功！下次登录请使用新密码。"
       },
       "user": "管理员",
       "logout": "退出登录",
@@ -2150,7 +2172,18 @@
         "categories": "Категории",
         "inquiries": "Запросы",
         "news": "Новости",
-        "caseStudies": "Кейсы"
+        "caseStudies": "Кейсы",
+        "settings": "Настройки сайта",
+        "changePassword": "Смена пароля"
+      },
+      "changePassword": {
+        "title": "Смена пароля",
+        "current": "Текущий пароль",
+        "new": "Новый пароль",
+        "confirm": "Подтвердите новый пароль",
+        "submit": "Обновить пароль",
+        "mismatch": "Новый пароль и подтверждение не совпадают",
+        "success": "Пароль успешно обновлён! При следующем входе используйте новый пароль."
       },
       "user": "Админ",
       "logout": "Выйти",
@@ -2864,7 +2897,18 @@
         "categories": "Categorías",
         "inquiries": "Consultas",
         "news": "Noticias",
-        "caseStudies": "Estudios de Caso"
+        "caseStudies": "Estudios de Caso",
+        "settings": "Configuración del Sitio",
+        "changePassword": "Cambiar Contraseña"
+      },
+      "changePassword": {
+        "title": "Cambiar Contraseña",
+        "current": "Contraseña Actual",
+        "new": "Nueva Contraseña",
+        "confirm": "Confirmar Nueva Contraseña",
+        "submit": "Actualizar Contraseña",
+        "mismatch": "La nueva contraseña y la confirmación no coinciden",
+        "success": "¡Contraseña actualizada con éxito! Use la nueva contraseña la próxima vez que inicie sesión."
       },
       "user": "Admin",
       "logout": "Cerrar Sesión",
@@ -3570,7 +3614,18 @@
         "categories": "Kategorien",
         "inquiries": "Anfragen",
         "news": "Neuigkeiten",
-        "caseStudies": "Fallstudien"
+        "caseStudies": "Fallstudien",
+        "settings": "Website-Einstellungen",
+        "changePassword": "Passwort ändern"
+      },
+      "changePassword": {
+        "title": "Passwort ändern",
+        "current": "Aktuelles Passwort",
+        "new": "Neues Passwort",
+        "confirm": "Neues Passwort bestätigen",
+        "submit": "Passwort aktualisieren",
+        "mismatch": "Neues Passwort und Bestätigung stimmen nicht überein",
+        "success": "Passwort erfolgreich aktualisiert! Verwenden Sie beim nächsten Login das neue Passwort."
       },
       "user": "Admin",
       "logout": "Logout",
@@ -4276,7 +4331,18 @@
         "categories": "Catégories",
         "inquiries": "Demande",
         "news": "Actualités",
-        "caseStudies": "Études de Caso"
+        "caseStudies": "Études de Caso",
+        "settings": "Paramètres du Site",
+        "changePassword": "Changer le Mot de Passe"
+      },
+      "changePassword": {
+        "title": "Changer le Mot de Passe",
+        "current": "Mot de Passe Actuel",
+        "new": "Nouveau Mot de Passe",
+        "confirm": "Confirmer le Nouveau Mot de Passe",
+        "submit": "Mettre à Jour le Mot de Passe",
+        "mismatch": "Le nouveau mot de passe et la confirmation ne correspondent pas",
+        "success": "Mot de passe mis à jour avec succès ! Veuillez utiliser le nouveau mot de passe lors de votre prochaine connexion."
       },
       "user": "Admin",
       "logout": "Déconnexion",
@@ -4982,7 +5048,18 @@
         "categories": "Categorie",
         "inquiries": "Richieste",
         "news": "Notizie",
-        "caseStudies": "Casi Studio"
+        "caseStudies": "Casi Studio",
+        "settings": "Impostazioni Sito",
+        "changePassword": "Cambia Password"
+      },
+      "changePassword": {
+        "title": "Cambia Password",
+        "current": "Password Attuale",
+        "new": "Nuova Password",
+        "confirm": "Conferma Nuova Password",
+        "submit": "Aggiorna Password",
+        "mismatch": "La nuova password e la conferma non corrispondono",
+        "success": "Password aggiornata con successo! Utilizzare la nuova password al prossimo accesso."
       },
       "user": "Admin",
       "logout": "Esci",

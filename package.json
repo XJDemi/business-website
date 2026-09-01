@@ -1,4 +1,7 @@
 {
   "name": "xuanji-business-website",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^3.0.3"
+  }
 }

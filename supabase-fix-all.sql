@@ -152,6 +152,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.site_settings TO anon, authentica
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.snapshots TO anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.public_phrases TO anon, authenticated;
 GRANT SELECT, INSERT ON public.users TO anon, authenticated;
+-- 允许通过 API 修改后台密码（列级权限：anon 只能更新 password 列）
+GRANT UPDATE (password) ON public.users TO anon, authenticated;
 
 -- 序列权限（插入数据必需）
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated;
@@ -195,9 +197,11 @@ CREATE POLICY snapshots_all ON snapshots FOR ALL TO anon, authenticated USING (t
 -- public_phrases
 DROP POLICY IF EXISTS public_phrases_all ON public_phrases;
 CREATE POLICY public_phrases_all ON public_phrases FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
--- users（登录验证用，允许读取）
+-- users（登录验证用，允许读取；UPDATE 仅限 password 列，用于修改后台密码）
 DROP POLICY IF EXISTS users_read ON users;
 CREATE POLICY users_read ON users FOR SELECT TO anon, authenticated USING (true);
+DROP POLICY IF EXISTS users_update ON users;
+CREATE POLICY users_update ON users FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
 
 -- ===== 5. 刷新 PostgREST schema 缓存（必须，否则新列不生效） =====
 NOTIFY pgrst, 'reload schema';

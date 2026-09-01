@@ -1,5 +1,6 @@
 // Vercel catch-all API route - handles all /api/* requests
-// Pure Node.js handler, zero dependencies
+
+const bcrypt = require('bcryptjs');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://idvlxevufkpfxfiffvus.supabase.co';
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlkdmx4ZXZ1ZmtwZnhmaWZmdnVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ1OTgwNzEsImV4cCI6MjEwMDE3NDA3MX0.NOLE7ocrd1ajfcu4ObHTjYTMwNPWu7F-eD2JtHE1l0g';
@@ -269,7 +270,38 @@ function matchRoute(method, pathname) {
     if (!body.username || !body.password) return { status: 400, body: { success: false, error: 'Username and password required' } };
     var r = await supaQuery('users', 'GET', '?username=eq.' + encodeURIComponent(body.username) + '&select=*&limit=1');
     if (r.error || !r.data || r.data.length === 0) return { status: 401, body: { success: false, error: 'Invalid credentials' } };
+    var stored = r.data[0].password || '';
+    var ok = false;
+    try {
+      ok = await bcrypt.compare(String(body.password), stored);
+    } catch (e) {
+      // stored value is not a valid bcrypt hash -> plain text fallback
+      ok = stored === String(body.password);
+    }
+    if (!ok) return { status: 401, body: { success: false, error: 'Invalid credentials' } };
     return { status: 200, body: { success: true, token: 'dev-token', user: { username: body.username } } };
+  };
+
+  // Change admin password: verifies current password, stores bcrypt hash of new one
+  if (pathname === '/api/change-password' && method === 'POST') return async function (req) {
+    var body = await parseBody(req);
+    var username = body.username, currentPassword = body.current_password, newPassword = body.new_password;
+    if (!username || !currentPassword || !newPassword) return { status: 400, body: { success: false, error: 'Username, current password and new password are required' } };
+    if (String(newPassword).length < 6) return { status: 400, body: { success: false, error: 'New password must be at least 6 characters' } };
+    var r = await supaQuery('users', 'GET', '?username=eq.' + encodeURIComponent(username) + '&select=*&limit=1');
+    if (r.error || !r.data || r.data.length === 0) return { status: 401, body: { success: false, error: 'Invalid credentials' } };
+    var stored = r.data[0].password || '';
+    var ok = false;
+    try {
+      ok = await bcrypt.compare(String(currentPassword), stored);
+    } catch (e) {
+      ok = stored === String(currentPassword);
+    }
+    if (!ok) return { status: 401, body: { success: false, error: 'Current password is incorrect' } };
+    var hash = await bcrypt.hash(String(newPassword), 10);
+    var u = await supaQuery('users', 'PATCH', '?id=eq.' + r.data[0].id, { password: hash });
+    if (u.error) return { status: 500, body: { success: false, error: extractErrMsg(u.error) } };
+    return { status: 200, body: { success: true } };
   };
 
   if (pathname === '/api/stats' && method === 'GET') return async function () {
