@@ -3607,7 +3607,8 @@
           alert('Settings saved successfully!');
           loadSiteSettings();
         } else {
-          alert('Error: ' + (result.error || 'Failed to save settings'));
+          const errMsg = typeof result.error === 'string' ? result.error : (result.error && result.error.message ? result.error.message : JSON.stringify(result.error));
+          alert('Error: ' + (errMsg || 'Failed to save settings'));
         }
       } catch (error) {
         alert('Error: ' + error.message);

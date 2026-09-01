@@ -46,6 +46,20 @@ function sendJson(res, status, obj) {
   res.end(JSON.stringify(obj));
 }
 
+// Extract a readable message from a Supabase error object
+function extractErrMsg(err) {
+  if (!err) return 'Unknown error';
+  if (typeof err === 'string') return err;
+  if (err.message) {
+    // err.message may itself be a JSON string from PostgREST
+    if (typeof err.message === 'string' && err.message.charAt(0) === '{') {
+      try { var parsed = JSON.parse(err.message); if (parsed.message) return parsed.message; } catch (e) {}
+    }
+    return err.message;
+  }
+  return JSON.stringify(err);
+}
+
 function matchRoute(method, pathname) {
   if (pathname === '/api/health' && method === 'GET')
     return function () { return { status: 200, body: { status: 'ok', time: new Date().toISOString() } }; };
@@ -222,14 +236,26 @@ function matchRoute(method, pathname) {
 
   if (pathname === '/api/site-settings' && method === 'GET') return async function () {
     var r = await supaQuery('site_settings', 'GET', '?select=*&limit=1');
+    if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
     return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : {} } };
   };
 
   if (pathname === '/api/site-settings' && method === 'PUT') return async function (req) {
     var body = await parseBody(req);
-    var r = await supaQuery('site_settings', 'PATCH', '?id=eq.1', body);
-    if (r.error) return { status: 500, body: { success: false, error: r.error } };
-    return { status: 200, body: { success: true, data: r.data } };
+    delete body.id;
+    // Find existing settings row (works with any id value)
+    var g = await supaQuery('site_settings', 'GET', '?select=id&limit=1');
+    if (g.error) return { status: 500, body: { success: false, error: extractErrMsg(g.error) } };
+    var existingId = Array.isArray(g.data) && g.data[0] ? g.data[0].id : null;
+    if (existingId !== null) {
+      var r = await supaQuery('site_settings', 'PATCH', '?id=eq.' + existingId, body);
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+      return { status: 200, body: { success: true, data: r.data } };
+    }
+    // No row exists -> insert (let DB assign id, avoids identity-column conflicts)
+    var r2 = await supaQuery('site_settings', 'POST', '', [body]);
+    if (r2.error) return { status: 500, body: { success: false, error: extractErrMsg(r2.error) } };
+    return { status: 200, body: { success: true, data: r2.data } };
   };
 
   if ((pathname === '/api/track' || pathname === '/api/track-visit') && method === 'POST') return async function (req) {
