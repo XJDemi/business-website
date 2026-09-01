@@ -1785,6 +1785,19 @@
   </div>
 
   <script>
+    // 增强 API 错误提示：服务端返回非 JSON（如平台 404 页面）时显示可读的 HTTP 状态和内容摘要
+    (function () {
+      const originalJson = Response.prototype.json;
+      Response.prototype.json = async function () {
+        const text = await this.clone().text();
+        try {
+          return JSON.parse(text);
+        } catch (e) {
+          throw new Error('HTTP ' + this.status + ': ' + text.substring(0, 120));
+        }
+      };
+    })();
+
     let token = null;
     let categories = {};
     let currentPage = 1;
