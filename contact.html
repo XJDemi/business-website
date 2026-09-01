@@ -461,6 +461,76 @@
     }
     loadProductOptions();
 
+    // 页面加载时自动查询 Supabase site_settings 表（id=1），
+    // 渲染三个行业联系方式（biotech / autoparts / instruments）及公司公共联系方式
+    async function loadSiteSettings() {
+      try {
+        var res = await window.SupaQuery
+          .from('site_settings')
+          .select('*')
+          .eq('id', 1)
+          .limit(1);
+        var settings = res.data && res.data[0];
+
+        // 兜底：id=1 不存在时取第一行
+        if (!settings) {
+          var res2 = await window.SupaQuery
+            .from('site_settings')
+            .select('*')
+            .order('id')
+            .limit(1);
+          settings = res2.data && res2.data[0];
+        }
+        if (!settings) return;
+
+        // 1. 渲染行业联系方式卡片
+        var fallbacks = {
+          contact_name: 'contact_name',
+          email: 'company_email',
+          phone: 'contact_phone',
+          whatsapp: 'whatsapp_link',
+          wechat: 'wechat_link'
+        };
+
+        document.querySelectorAll('[data-industry-contact]').forEach(function (el) {
+          var key = el.getAttribute('data-industry-contact'); // 例如 biotech.contact_name
+          var parts = key.split('.');
+          if (parts.length !== 2) return;
+          var dbKey = parts[0] + '_' + parts[1];
+          var value = settings[dbKey];
+          if (!value || !String(value).trim()) {
+            value = settings[fallbacks[parts[1]] || parts[1]];
+          }
+          el.textContent = (value && String(value).trim()) ? value : '-';
+        });
+
+        // 2. 渲染公司公共联系方式（右侧联系信息栏 + 页脚）
+        document.querySelectorAll('[data-site-key]').forEach(function (el) {
+          var key = el.getAttribute('data-site-key');
+          var value = settings[key];
+          if (!value || !String(value).trim()) return;
+          value = String(value).trim();
+          if (el.tagName === 'A') {
+            var href = el.getAttribute('href') || '';
+            if (href.indexOf('mailto:') === 0) {
+              el.href = 'mailto:' + value;
+            } else if (href.indexOf('tel:') === 0) {
+              el.href = 'tel:' + value;
+            } else if (href.indexOf('whatsapp.com') !== -1) {
+              var m = href.match(/text=(.+)$/);
+              el.href = 'https://api.whatsapp.com/send?phone=' + encodeURIComponent(value) + (m ? '&text=' + m[1] : '');
+            }
+            el.textContent = value;
+          } else {
+            el.textContent = value;
+          }
+        });
+      } catch (err) {
+        console.error('Failed to load site settings:', err);
+      }
+    }
+    loadSiteSettings();
+
     document.addEventListener('click', function(e) {
       var dropdown = document.getElementById('lang-dropdown');
       if (dropdown && !dropdown.contains(e.target) && !e.target.classList.contains('lang-btn')) {
