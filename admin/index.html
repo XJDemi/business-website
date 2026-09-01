@@ -1785,7 +1785,7 @@
   </div>
 
   <script>
-    let token = localStorage.getItem('token');
+    let token = null;
     let categories = {};
     let currentPage = 1;
     let pasteModes = { form: 'clean', edit: 'clean' };
@@ -2205,29 +2205,9 @@
     }
 
     async function init() {
-      if (token) {
-        const isValid = await verifyToken(token);
-        if (isValid) {
-          showDashboard();
-          await loadCategories();
-          await loadStats();
-        } else {
-          token = null;
-          localStorage.removeItem('token');
-        }
-      }
-    }
-
-    async function verifyToken(t) {
-      try {
-        const response = await fetch('/api/stats', {
-          headers: { Authorization: `Bearer ${t}` }
-        });
-        const data = await response.json();
-        return data.success;
-      } catch {
-        return false;
-      }
+      // 每次打开后台都必须重新登录（不在本地保留登录状态）
+      token = null;
+      localStorage.removeItem('token');
     }
 
     async function apiFetch(url, options = {}) {
@@ -2686,7 +2666,6 @@
       const data = await response.json();
       if (data.success) {
         token = data.token;
-        localStorage.setItem('token', token);
         localStorage.setItem('admin_username', data.user.username);
         document.getElementById('current-user').textContent = data.user.username;
         showDashboard();
