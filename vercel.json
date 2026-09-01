@@ -1,15 +1,8 @@
 {
-  "version": 2,
   "buildCommand": null,
   "outputDirectory": ".",
   "framework": null,
   "rewrites": [
-    { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/biotech", "destination": "/biotech/index.html" },
-    { "source": "/autoparts", "destination": "/autoparts/index.html" },
-    { "source": "/instruments", "destination": "/instruments/index.html" },
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/products", "destination": "/products.html" }
+    { "source": "/api/:path*", "destination": "/api/handler" }
   ]
 }
