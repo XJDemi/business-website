@@ -1072,6 +1072,10 @@
                     <input type="url" name="youtube_link" id="settings-youtube" placeholder="https://youtube.com/channel/...">
                   </div>
                   <div class="form-group">
+                    <label data-i18n="admin.settings.videoUrl">Video URL (YouTube embed link)</label>
+                    <input type="url" name="video_url" id="settings-video-url" placeholder="https://www.youtube.com/watch?v=... or /embed/...">
+                  </div>
+                  <div class="form-group">
                     <label data-i18n="admin.settings.instagram">Instagram Link</label>
                     <input type="url" name="instagram_link" id="settings-instagram" placeholder="https://instagram.com/...">
                   </div>
@@ -3526,6 +3530,7 @@
           document.getElementById('settings-wechat').value = settings.wechat_link || '';
           document.getElementById('settings-address').value = settings.company_address || '';
           document.getElementById('settings-youtube').value = settings.youtube_link || '';
+          document.getElementById('settings-video-url').value = settings.video_url || '';
           document.getElementById('settings-instagram').value = settings.instagram_link || '';
           document.getElementById('settings-facebook').value = settings.facebook_link || '';
           document.getElementById('settings-linkedin').value = settings.linkedin_link || '';
@@ -3596,6 +3601,7 @@
           wechat_link: document.getElementById('settings-wechat').value,
           company_address: document.getElementById('settings-address').value,
           youtube_link: document.getElementById('settings-youtube').value,
+          video_url: document.getElementById('settings-video-url').value,
           instagram_link: document.getElementById('settings-instagram').value,
           facebook_link: document.getElementById('settings-facebook').value,
           linkedin_link: document.getElementById('settings-linkedin').value,

@@ -46,12 +46,36 @@ document.addEventListener('DOMContentLoaded', async function() {
         const platform = icon.getAttribute('data-social-icon');
         const urlKey = platform + '_link';
         const value = settings[urlKey];
-        
+
         if (value && value.trim()) {
           icon.href = value;
           icon.style.display = '';
         } else {
           icon.style.display = 'none';
+        }
+      });
+
+      // 更新 YouTube 视频嵌入 iframe
+      const videoIframes = document.querySelectorAll('[data-video-iframe]');
+      videoIframes.forEach(function(iframe) {
+        var videoUrl = settings['video_url'];
+        if (videoUrl && videoUrl.trim()) {
+          // 支持 YouTube watch URL 和 embed URL 两种格式
+          var embedUrl = videoUrl;
+          var watchMatch = videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+          if (watchMatch) {
+            embedUrl = 'https://www.youtube.com/embed/' + watchMatch[1];
+          }
+          if (iframe.src !== embedUrl) {
+            iframe.src = embedUrl;
+          }
+          iframe.style.display = '';
+          var wrapper = iframe.closest('[data-video-wrapper]');
+          if (wrapper) wrapper.style.display = '';
+        } else {
+          iframe.style.display = 'none';
+          var wrapper = iframe.closest('[data-video-wrapper]');
+          if (wrapper) wrapper.style.display = 'none';
         }
       });
       

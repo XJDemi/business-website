@@ -101,6 +101,7 @@ ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_link TEXT DEFAULT ''
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS wechat_link TEXT DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS company_address TEXT DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS youtube_link TEXT DEFAULT '';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS video_url TEXT DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS instagram_link TEXT DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS facebook_link TEXT DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS linkedin_link TEXT DEFAULT '';
