@@ -3184,10 +3184,10 @@
             <td>${product.sort_order}</td>
             <td>
               <div class="action-btns">
-                <button class="btn btn-info" style="padding: 3px 8px; font-size: 0.7rem; margin-right: 3px;" onclick="moveProduct(${product.id}, 'up')">↑</button>
-                <button class="btn btn-info" style="padding: 3px 8px; font-size: 0.7rem; margin-right: 5px;" onclick="moveProduct(${product.id}, 'down')">↓</button>
-                <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editProduct(${product.id})" data-i18n="admin.edit">Edit</button>
-                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteProduct(${product.id})" data-i18n="admin.delete">Delete</button>
+                <button class="btn btn-info" style="padding: 3px 8px; font-size: 0.7rem; margin-right: 3px;" onclick="moveProduct('${product.id}', 'up')">↑</button>
+                <button class="btn btn-info" style="padding: 3px 8px; font-size: 0.7rem; margin-right: 5px;" onclick="moveProduct('${product.id}', 'down')">↓</button>
+                <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.8rem;" onclick="editProduct('${product.id}')" data-i18n="admin.edit">Edit</button>
+                <button class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;" onclick="deleteProduct('${product.id}')" data-i18n="admin.delete">Delete</button>
               </div>
             </td>
           `;

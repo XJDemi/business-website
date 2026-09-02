@@ -37,6 +37,122 @@ function parseBody(req) {
   });
 }
 
+// Parse multipart/form-data into a flat object of string fields (file parts are skipped;
+// images arrive as base64 data URLs in the image_data hidden field)
+function parseMultipart(req) {
+  return new Promise(function (resolve) {
+    var chunks = [];
+    req.on('data', function (c) { chunks.push(c); });
+    req.on('end', function () {
+      var fields = {};
+      try {
+        var ct = req.headers['content-type'] || '';
+        var bm = /boundary=(?:"([^"]+)"|([^;]+))/i.exec(ct);
+        if (!bm) return resolve(fields);
+        var boundary = Buffer.from('--' + (bm[1] || bm[2]));
+        var buf = Buffer.concat(chunks);
+        var start = buf.indexOf(boundary);
+        while (start !== -1) {
+          var next = buf.indexOf(boundary, start + boundary.length);
+          if (next === -1) break;
+          // part content sits between (start + boundary + CRLF) and (next - CRLF)
+          var part = buf.slice(start + boundary.length + 2, next - 2);
+          var headEnd = part.indexOf('\r\n\r\n');
+          if (headEnd !== -1) {
+            var head = part.slice(0, headEnd).toString('utf8');
+            var content = part.slice(headEnd + 4);
+            var nm = /name="([^"]*)"/.exec(head);
+            if (nm && !/filename="/.test(head)) {
+              fields[nm[1]] = content.toString('utf8');
+            }
+            // file parts ignored: the admin form sends images as base64 data URLs
+          }
+          start = next;
+        }
+      } catch (e) {}
+      resolve(fields);
+    });
+  });
+}
+
+// Accept both JSON and multipart/form-data bodies
+function parseBodyAny(req) {
+  var ct = (req.headers['content-type'] || '').toLowerCase();
+  if (ct.indexOf('multipart/form-data') !== -1) return parseMultipart(req);
+  return parseBody(req);
+}
+
+// Upload a base64 data-URL image to the Supabase public storage bucket, return public URL
+async function uploadDataUrlImage(dataUrl) {
+  var m = /^data:([^;]+);base64,(.*)$/.exec(dataUrl);
+  if (!m) return null;
+  var contentType = m[1];
+  var ext = contentType === 'image/png' ? 'png' : (contentType === 'image/jpeg' ? 'jpg' : 'webp');
+  var path = 'products/' + Date.now() + '-' + Math.random().toString(36).slice(2, 10) + '.' + ext;
+  var res = await fetch(SUPABASE_URL + '/storage/v1/object/product-images/' + path, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'Content-Type': contentType,
+      'x-upsert': 'true'
+    },
+    body: Buffer.from(m[2], 'base64')
+  });
+  if (!res.ok) {
+    var t = await res.text();
+    throw new Error('Image upload failed: ' + res.status + ' ' + t.slice(0, 200));
+  }
+  return SUPABASE_URL + '/storage/v1/object/public/product-images/' + path;
+}
+
+// Build a safe products payload from form fields (whitelist: only columns that exist).
+// seo_* fields are dropped - the products table has no such columns and no page reads them.
+async function buildProductPayload(fields, isUpdate) {
+  var body = {};
+  ['name', 'industry', 'category', 'description', 'specifications', 'price_range'].forEach(function (k) {
+    if (fields[k] !== undefined && fields[k] !== null) body[k] = String(fields[k]);
+  });
+  var imageData = typeof fields.image_data === 'string' ? fields.image_data : '';
+  if (imageData.indexOf('data:image/') === 0) {
+    var url = await uploadDataUrlImage(imageData);
+    if (url) body.image_url = url;
+    else if (!isUpdate) body.image_url = '';
+  } else if (!isUpdate) {
+    body.image_url = '';
+  }
+  // on update, leave image_url untouched unless a new image was uploaded
+  return body;
+}
+
+// Move a row up/down within its industry by swapping sort_order with the neighbor row
+async function moveRow(table, id, direction, useIndustry) {
+  var g = await supaQuery(table, 'GET', '?id=eq.' + id + '&select=*');
+  if (g.error) return { status: 500, body: { success: false, error: extractErrMsg(g.error) } };
+  if (!Array.isArray(g.data) || !g.data[0]) return { status: 404, body: { success: false, error: 'Item not found' } };
+  var row = g.data[0];
+  var qs = '?select=id,sort_order&order=sort_order.asc';
+  if (useIndustry && row.industry) qs += '&industry=eq.' + encodeURIComponent(row.industry);
+  var list = await supaQuery(table, 'GET', qs);
+  if (list.error) return { status: 500, body: { success: false, error: extractErrMsg(list.error) } };
+  var rows = Array.isArray(list.data) ? list.data : [];
+  var idx = -1;
+  for (var i = 0; i < rows.length; i++) { if (String(rows[i].id) === String(id)) { idx = i; break; } }
+  if (idx === -1) return { status: 404, body: { success: false, error: 'Item not found in list' } };
+  var swapWith = direction === 'up' ? idx - 1 : idx + 1;
+  if (swapWith < 0 || swapWith >= rows.length) return { status: 200, body: { success: true } };
+  // normalize sort_order by list position, then swap the two rows
+  var updates = [];
+  for (var j = 0; j < rows.length; j++) {
+    var target = j === idx ? swapWith : (j === swapWith ? idx : j);
+    if (rows[j].sort_order !== target) {
+      updates.push(supaQuery(table, 'PATCH', '?id=eq.' + rows[j].id, { sort_order: target }));
+    }
+  }
+  await Promise.all(updates);
+  return { status: 200, body: { success: true } };
+}
+
 function sendJson(res, status, obj) {
   res.writeHead(status, {
     'Content-Type': 'application/json',
@@ -72,36 +188,57 @@ function matchRoute(method, pathname) {
       if (q.category) qs.set('category', 'eq.' + q.category);
       qs.set('select', '*'); qs.set('order', 'sort_order.asc');
       var r = await supaQuery('products', 'GET', '?' + qs.toString());
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
-      return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+      var rows = Array.isArray(r.data) ? r.data : [];
+      return { status: 200, body: { success: true, data: rows, pagination: { currentPage: Number(q.page) || 1, totalPages: 1, totalItems: rows.length } } };
     };
 
-  var m = pathname.match(/^\/api\/products\/(\d+)$/);
+  var pmm = pathname.match(/^\/api\/products\/([^/]+)\/move$/);
+  if (pmm && method === 'POST') return async function (req) {
+    var b = await parseBody(req);
+    return moveRow('products', decodeURIComponent(pmm[1]), b.direction, true);
+  };
+
+  var m = pathname.match(/^\/api\/products\/([^/]+)$/);
   if (m) {
-    var id = m[1];
+    var id = decodeURIComponent(m[1]);
     if (method === 'GET') return async function () {
       var r = await supaQuery('products', 'GET', '?id=eq.' + id + '&select=*');
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
       return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
     };
     if (method === 'PUT') return async function (req) {
-      var body = await parseBody(req);
-      var r = await supaQuery('products', 'PATCH', '?id=eq.' + id, body);
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
-      return { status: 200, body: { success: true, data: r.data } };
+      try {
+        var body = await buildProductPayload(await parseBodyAny(req), true);
+        if (Object.keys(body).length === 0) return { status: 400, body: { success: false, error: 'No valid fields to update' } };
+        var r = await supaQuery('products', 'PATCH', '?id=eq.' + id, body);
+        if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+        return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
+      } catch (e) {
+        return { status: 500, body: { success: false, error: e.message } };
+      }
     };
     if (method === 'DELETE') return async function () {
       var r = await supaQuery('products', 'DELETE', '?id=eq.' + id);
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
       return { status: 200, body: { success: true, data: r.data } };
     };
   }
 
   if (pathname === '/api/products' && method === 'POST') return async function (req) {
-    var body = await parseBody(req);
-    var r = await supaQuery('products', 'POST', '', body);
-    if (r.error) return { status: 500, body: { success: false, error: r.error } };
-    return { status: 200, body: { success: true, data: r.data } };
+    try {
+      var fields = await parseBodyAny(req);
+      // compute next sort_order (max + 1)
+      var mx = await supaQuery('products', 'GET', '?select=sort_order&order=sort_order.desc&limit=1');
+      var maxOrder = (Array.isArray(mx.data) && mx.data[0] && typeof mx.data[0].sort_order === 'number') ? mx.data[0].sort_order : -1;
+      var body = await buildProductPayload(fields, false);
+      if (!body.sort_order) body.sort_order = maxOrder + 1;
+      var r = await supaQuery('products', 'POST', '', body);
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
+    } catch (e) {
+      return { status: 500, body: { success: false, error: e.message } };
+    }
   };
 
   if (pathname === '/api/categories' && method === 'GET') return async function (req, res, q) {
@@ -113,32 +250,48 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
   };
 
-  var cm = pathname.match(/^\/api\/categories\/(\d+)$/);
+  var cmm = pathname.match(/^\/api\/categories\/([^/]+)\/move$/);
+  if (cmm && method === 'POST') return async function (req) {
+    var b = await parseBody(req);
+    return moveRow('categories', decodeURIComponent(cmm[1]), b.direction, true);
+  };
+
+  var cm = pathname.match(/^\/api\/categories\/([^/]+)$/);
   if (cm) {
-    var cid = cm[1];
+    var cid = decodeURIComponent(cm[1]);
     if (method === 'GET') return async function () {
       var r = await supaQuery('categories', 'GET', '?id=eq.' + cid + '&select=*');
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
       return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : null } };
     };
     if (method === 'PUT') return async function (req) {
       var body = await parseBody(req);
-      var r = await supaQuery('categories', 'PATCH', '?id=eq.' + cid, body);
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
-      return { status: 200, body: { success: true, data: r.data } };
+      // whitelist: only columns that exist in the categories table
+      var payload = {};
+      ['name', 'industry', 'sort_order'].forEach(function (k) {
+        if (body[k] !== undefined && body[k] !== null) payload[k] = body[k];
+      });
+      if (Object.keys(payload).length === 0) return { status: 400, body: { success: false, error: 'No valid fields to update' } };
+      var r = await supaQuery('categories', 'PATCH', '?id=eq.' + cid, payload);
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
     };
     if (method === 'DELETE') return async function () {
       var r = await supaQuery('categories', 'DELETE', '?id=eq.' + cid);
-      if (r.error) return { status: 500, body: { success: false, error: r.error } };
+      if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
       return { status: 200, body: { success: true, data: r.data } };
     };
   }
 
   if (pathname === '/api/categories' && method === 'POST') return async function (req) {
     var body = await parseBody(req);
-    var r = await supaQuery('categories', 'POST', '', body);
-    if (r.error) return { status: 500, body: { success: false, error: r.error } };
-    return { status: 200, body: { success: true, data: r.data } };
+    var payload = {};
+    ['name', 'industry', 'sort_order'].forEach(function (k) {
+      if (body[k] !== undefined && body[k] !== null) payload[k] = body[k];
+    });
+    var r = await supaQuery('categories', 'POST', '', payload);
+    if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
+    return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
   };
 
   if (pathname === '/api/news' && method === 'GET') return async function (req, res, q) {
@@ -150,7 +303,7 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
   };
 
-  var nm = pathname.match(/^\/api\/news\/(\d+)$/);
+  var nm = pathname.match(/^\/api\/news\/([^/]+)$/);
   if (nm) {
     var nid = nm[1];
     if (method === 'GET') return async function () {
@@ -187,7 +340,7 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
   };
 
-  var csm = pathname.match(/^\/api\/case-studies\/(\d+)$/);
+  var csm = pathname.match(/^\/api\/case-studies\/([^/]+)$/);
   if (csm) {
     var csid = csm[1];
     if (method === 'GET') return async function () {
@@ -228,7 +381,7 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
   };
 
-  var im = pathname.match(/^\/api\/inquiries\/(\d+)$/);
+  var im = pathname.match(/^\/api\/inquiries\/([^/]+)$/);
   if (im && method === 'DELETE') return async function () {
     var r = await supaQuery('inquiries', 'DELETE', '?id=eq.' + im[1]);
     if (r.error) return { status: 500, body: { success: false, error: r.error } };
@@ -322,7 +475,7 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: r.data } };
   };
 
-  var sm = pathname.match(/^\/api\/snapshots\/(\d+)$/);
+  var sm = pathname.match(/^\/api\/snapshots\/([^/]+)$/);
   if (sm && method === 'DELETE') return async function () {
     var r = await supaQuery('snapshots', 'DELETE', '?id=eq.' + sm[1]);
     return { status: 200, body: { success: true } };
@@ -352,7 +505,7 @@ function matchRoute(method, pathname) {
     return { status: 200, body: { success: true, data: Array.isArray(r.data) ? r.data : [] } };
   };
 
-  var pm = pathname.match(/^\/api\/public-phrases\/(\d+)$/);
+  var pm = pathname.match(/^\/api\/public-phrases\/([^/]+)$/);
   if (pm && method === 'PUT') return async function (req) {
     var body = await parseBody(req);
     var r = await supaQuery('public_phrases', 'PATCH', '?id=eq.' + pm[1], body);
