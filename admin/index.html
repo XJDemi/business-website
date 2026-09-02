@@ -3524,53 +3524,66 @@
         const result = await response.json();
         if (result.success && result.data) {
           const settings = result.data;
-          document.getElementById('settings-id').value = settings.id || '';
-          document.getElementById('settings-contact-name').value = settings.contact_name || '';
-          document.getElementById('settings-email').value = settings.company_email || '';
-          document.getElementById('settings-phone').value = settings.contact_phone || '';
-          document.getElementById('settings-whatsapp').value = settings.whatsapp_link || '';
-          document.getElementById('settings-wechat').value = settings.wechat_link || '';
-          document.getElementById('settings-address').value = settings.company_address || '';
-          document.getElementById('settings-youtube').value = settings.youtube_link || '';
-          document.getElementById('settings-video-url').value = settings.video_url || '';
-          document.getElementById('settings-instagram').value = settings.instagram_link || '';
-          document.getElementById('settings-facebook').value = settings.facebook_link || '';
-          document.getElementById('settings-linkedin').value = settings.linkedin_link || '';
-          document.getElementById('settings-google-verification').value = settings.google_verification_code || '';
-          document.getElementById('settings-social-share').value = settings.social_share_enabled !== false ? 'true' : 'false';
-          document.getElementById('settings-whatsapp-float').value = settings.whatsapp_float_enabled !== false ? 'true' : 'false';
+          // null-safe setter: a single missing element must never abort the whole load
+          // (otherwise the remaining fields stay empty and get wiped on the next save)
+          function setVal(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.value = (val === undefined || val === null) ? '' : val;
+          }
+          setVal('settings-id', settings.id);
+          setVal('settings-contact-name', settings.contact_name);
+          setVal('settings-email', settings.company_email);
+          setVal('settings-phone', settings.contact_phone);
+          setVal('settings-whatsapp', settings.whatsapp_link);
+          setVal('settings-wechat', settings.wechat_link);
+          setVal('settings-address', settings.company_address);
+          setVal('settings-youtube', settings.youtube_link);
+          setVal('settings-video-url', settings.video_url);
+          setVal('settings-instagram', settings.instagram_link);
+          setVal('settings-facebook', settings.facebook_link);
+          setVal('settings-linkedin', settings.linkedin_link);
+          setVal('settings-google-verification', settings.google_verification_code);
+          setVal('settings-social-share', settings.social_share_enabled !== false ? 'true' : 'false');
+          setVal('settings-whatsapp-float', settings.whatsapp_float_enabled !== false ? 'true' : 'false');
 
+          // Industry contacts: element id suffix vs DB column suffix differ for the
+          // contact-person name (element: contact-name, column: contact_name).
           var industries = ['biotech', 'autoparts', 'instruments'];
-          var fields = ['contact_name', 'whatsapp', 'wechat', 'email', 'phone'];
+          var indFields = [
+            { col: 'contact_name', el: 'contact-name' },
+            { col: 'whatsapp', el: 'whatsapp' },
+            { col: 'wechat', el: 'wechat' },
+            { col: 'email', el: 'email' },
+            { col: 'phone', el: 'phone' }
+          ];
           industries.forEach(function(ind) {
-            fields.forEach(function(f) {
-              var el = document.getElementById('settings-' + ind + '-' + f);
-              if (el) el.value = settings[ind + '_' + f] || '';
+            indFields.forEach(function(f) {
+              setVal('settings-' + ind + '-' + f.el, settings[ind + '_' + f.col]);
             });
           });
-          
+
           const seoTitle = settings.homepage_seo_title || {};
           const seoDescription = settings.homepage_seo_description || {};
           const seoKeywords = settings.homepage_seo_keywords || {};
-          
-          document.getElementById('settings-seo-title-en').value = seoTitle.en || '';
-          document.getElementById('settings-seo-description-en').value = seoDescription.en || '';
-          document.getElementById('settings-seo-keywords-en').value = seoKeywords.en || '';
-          document.getElementById('settings-seo-title-zh').value = seoTitle.zh || '';
-          document.getElementById('settings-seo-description-zh').value = seoDescription.zh || '';
-          document.getElementById('settings-seo-keywords-zh').value = seoKeywords.zh || '';
-          document.getElementById('settings-seo-title-ru').value = seoTitle.ru || '';
-          document.getElementById('settings-seo-description-ru').value = seoDescription.ru || '';
-          document.getElementById('settings-seo-keywords-ru').value = seoKeywords.ru || '';
-          document.getElementById('settings-seo-title-es').value = seoTitle.es || '';
-          document.getElementById('settings-seo-description-es').value = seoDescription.es || '';
-          document.getElementById('settings-seo-keywords-es').value = seoKeywords.es || '';
-          document.getElementById('settings-seo-title-de').value = seoTitle.de || '';
-          document.getElementById('settings-seo-description-de').value = seoDescription.de || '';
-          document.getElementById('settings-seo-keywords-de').value = seoKeywords.de || '';
-          document.getElementById('settings-seo-title-fr').value = seoTitle.fr || '';
-          document.getElementById('settings-seo-description-fr').value = seoDescription.fr || '';
-          document.getElementById('settings-seo-keywords-fr').value = seoKeywords.fr || '';
+
+          setVal('settings-seo-title-en', seoTitle.en);
+          setVal('settings-seo-description-en', seoDescription.en);
+          setVal('settings-seo-keywords-en', seoKeywords.en);
+          setVal('settings-seo-title-zh', seoTitle.zh);
+          setVal('settings-seo-description-zh', seoDescription.zh);
+          setVal('settings-seo-keywords-zh', seoKeywords.zh);
+          setVal('settings-seo-title-ru', seoTitle.ru);
+          setVal('settings-seo-description-ru', seoDescription.ru);
+          setVal('settings-seo-keywords-ru', seoKeywords.ru);
+          setVal('settings-seo-title-es', seoTitle.es);
+          setVal('settings-seo-description-es', seoDescription.es);
+          setVal('settings-seo-keywords-es', seoKeywords.es);
+          setVal('settings-seo-title-de', seoTitle.de);
+          setVal('settings-seo-description-de', seoDescription.de);
+          setVal('settings-seo-keywords-de', seoKeywords.de);
+          setVal('settings-seo-title-fr', seoTitle.fr);
+          setVal('settings-seo-description-fr', seoDescription.fr);
+          setVal('settings-seo-keywords-fr', seoKeywords.fr);
         }
       } catch (error) {
         console.error('Failed to load site settings:', error);
