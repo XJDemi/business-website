@@ -3258,6 +3258,7 @@
         if (data.success) {
           const productId = data.data?.id;
           const industry = document.getElementById('form-industry').value;
+          if (data.warning) console.warn(data.warning);
           alert(GT_I18N.t('admin.login.default', 'Product added successfully!'));
           enablePreviewButton(productId, industry);
           setTimeout(() => {
@@ -3356,6 +3357,7 @@
       });
 
       if (data.success) {
+        if (data.warning) console.warn(data.warning);
         alert(GT_I18N.t('admin.login.default', 'Product updated successfully!'));
         closeEditModal();
         loadProducts(currentPage);

@@ -107,12 +107,19 @@ async function uploadDataUrlImage(dataUrl) {
 }
 
 // Build a safe products payload from form fields (whitelist: only columns that exist).
-// seo_* fields are dropped - the products table has no such columns and no page reads them.
 async function buildProductPayload(fields, isUpdate) {
   var body = {};
   ['name', 'industry', 'category', 'description', 'specifications', 'price_range'].forEach(function (k) {
     if (fields[k] !== undefined && fields[k] !== null) body[k] = String(fields[k]);
   });
+  // Multi-language SEO fields: admin form sends JSON strings like {"en":"...","zh":"..."}
+  ['seo_meta_title', 'seo_meta_description', 'seo_keywords'].forEach(function (k) {
+    if (fields[k] === undefined || fields[k] === null || fields[k] === '') return;
+    var parsed = null;
+    try { parsed = typeof fields[k] === 'string' ? JSON.parse(fields[k]) : fields[k]; } catch (e) { parsed = null; }
+    if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) body[k] = parsed;
+  });
+  if (fields.seo_image_alt !== undefined && fields.seo_image_alt !== null) body.seo_image_alt = String(fields.seo_image_alt);
   var imageData = typeof fields.image_data === 'string' ? fields.image_data : '';
   if (imageData.indexOf('data:image/') === 0) {
     var url = await uploadDataUrlImage(imageData);
@@ -123,6 +130,23 @@ async function buildProductPayload(fields, isUpdate) {
   }
   // on update, leave image_url untouched unless a new image was uploaded
   return body;
+}
+
+// Write products row; if the SEO columns are missing (migration not run yet), retry once
+// without seo_* fields so non-SEO edits still succeed, and report a readable warning.
+async function writeProduct(method, pathPart, body) {
+  var r = await supaQuery('products', method, pathPart, body);
+  if (r.error) {
+    var msg = extractErrMsg(r.error);
+    if (/seo_(meta_title|meta_description|keywords|image_alt)/.test(msg) && /does not exist|42703|column/i.test(msg)) {
+      var stripped = {};
+      Object.keys(body).forEach(function (k) { if (k.indexOf('seo_') !== 0) stripped[k] = body[k]; });
+      var r2 = await supaQuery('products', method, pathPart, stripped);
+      if (!r2.error) r2.warning = 'SEO fields were not saved: please run supabase-fix-all.sql in the Supabase SQL editor';
+      return r2;
+    }
+  }
+  return r;
 }
 
 // Move a row up/down within its industry by swapping sort_order with the neighbor row
@@ -211,9 +235,11 @@ function matchRoute(method, pathname) {
       try {
         var body = await buildProductPayload(await parseBodyAny(req), true);
         if (Object.keys(body).length === 0) return { status: 400, body: { success: false, error: 'No valid fields to update' } };
-        var r = await supaQuery('products', 'PATCH', '?id=eq.' + id, body);
+        var r = await writeProduct('PATCH', '?id=eq.' + id, body);
         if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
-        return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
+        var out = { success: true, data: r.data && r.data[0] ? r.data[0] : r.data };
+        if (r.warning) out.warning = r.warning;
+        return { status: 200, body: out };
       } catch (e) {
         return { status: 500, body: { success: false, error: e.message } };
       }
@@ -233,9 +259,11 @@ function matchRoute(method, pathname) {
       var maxOrder = (Array.isArray(mx.data) && mx.data[0] && typeof mx.data[0].sort_order === 'number') ? mx.data[0].sort_order : -1;
       var body = await buildProductPayload(fields, false);
       if (!body.sort_order) body.sort_order = maxOrder + 1;
-      var r = await supaQuery('products', 'POST', '', body);
+      var r = await writeProduct('POST', '', body);
       if (r.error) return { status: 500, body: { success: false, error: extractErrMsg(r.error) } };
-      return { status: 200, body: { success: true, data: r.data && r.data[0] ? r.data[0] : r.data } };
+      var out = { success: true, data: r.data && r.data[0] ? r.data[0] : r.data };
+      if (r.warning) out.warning = r.warning;
+      return { status: 200, body: out };
     } catch (e) {
       return { status: 500, body: { success: false, error: e.message } };
     }

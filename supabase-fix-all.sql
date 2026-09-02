@@ -204,6 +204,13 @@ CREATE POLICY users_read ON users FOR SELECT TO anon, authenticated USING (true)
 DROP POLICY IF EXISTS users_update ON users;
 CREATE POLICY users_update ON users FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
 
+-- ===== 4.1 products 表：多语言 SEO 字段（后台产品表单的 Meta Title/Description/Keywords/图片Alt） =====
+ALTER TABLE products ADD COLUMN IF NOT EXISTS seo_meta_title JSONB DEFAULT '{}';
+ALTER TABLE products ADD COLUMN IF NOT EXISTS seo_meta_description JSONB DEFAULT '{}';
+ALTER TABLE products ADD COLUMN IF NOT EXISTS seo_keywords JSONB DEFAULT '{}';
+ALTER TABLE products ADD COLUMN IF NOT EXISTS seo_image_alt TEXT DEFAULT '';
+-- 新列自动继承 products 表的 GRANT 与 products_all RLS 策略，无需额外授权
+
 -- ===== 5. 刷新 PostgREST schema 缓存（必须，否则新列不生效） =====
 NOTIFY pgrst, 'reload schema';
 
